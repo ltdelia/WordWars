@@ -3,9 +3,7 @@
 <head>
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-	
-	<title>WordWars | Game</title>
-
+	<title>WordWars</title>
 </head>
 <body>
 <nav class="navbar navbar-default" role="navigation">
@@ -20,6 +18,9 @@
 			<ul class="nav navbar-nav">
 				<li><a href="/menu">Menu</a></li>
 			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="/">Log Out</a></li>
+			</ul>
 		</div><!-- /.navbar-collapse -->
 	</div>
 </nav>
@@ -28,22 +29,25 @@
 		  <h1 class="text-center">WordWars</h1>
 		</div>
 		<div class="row">
-			<div class="col-md-12">
+			<div class="col-md-6 col-md-offset-3">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title text-center">Enter a Word</h3>
+						<h2 class="panel-title text-center">High Scores</h2>
 					</div>
 					<div class="panel-body">
-					    <div class="input-group">
-					      <input type="text" class="form-control" placeholder="Enter Word Here...">
-					      <span class="input-group-btn">
-					        <button class="btn btn-default" type="button">Submit</button>
-					      </span>
-					    </div><!-- /input-group -->
+						<div class="well">
+							<h3 class="text-center"><span class="pull-left label label-primary">1</span> Zintis <span class="pull-right label label-primary">50000</span></h3>
+						</div>
+						<div class="well">
+							<h3 class="text-center"><span class="pull-left label label-primary">2</span> Analben <span class="pull-right label label-primary">45000</span></h3> 
+						</div>
+						<div class="well">
+							<h3 class="text-center"><span class="pull-left label label-primary">3</span> Matt <span class="pull-right label label-primary">43000</span></h3> 
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>	
+	</div>
 </body>
 </html>

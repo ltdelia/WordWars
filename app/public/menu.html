@@ -8,14 +8,30 @@
 
 </head>
 <body>
+<nav class="navbar navbar-default" role="navigation">
+	<div class="container-fluid">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<a class="navbar-brand">WordWars</a>
+		</div>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse navbar-ex1-collapse">
+			<ul class="nav navbar-nav">
+				<li><a href="/scores">High Scores</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="/">Log Out</a></li>
+			</ul>
+		</div><!-- /.navbar-collapse -->
+	</div>
+</nav>
 <div class="container">
 	<div class="row">
 		<div class="col-md-4 col-md-offset-4">
-			<div class="jumbotron">
-				<div class="container">
-					<h2 class="text-center">Welcome to WordWars</h2>
-					<p class="text-center">A head-to-head typing game for 2 players.</p>
-				</div>
+			<div class="page-header">
+			  <h1 class="text-center">Welcome to WordWars</h1>
+			  <p class="text-center">A head-to-head typing game for 2 players.</p>
 			</div>
 		</div>
 	</div>
@@ -28,15 +44,15 @@
 				<div class="panel-body">
 					<div class="well">
 						Room: Betelgeuse
-						<button type="button" class="btn btn-default pull-right">Join</button>
+						<a class="btn btn-default pull-right" href="/game">Join</a>
 					</div>
 					<div class="well">
 						Room: Orion
-						<button type="button" class="btn btn-default pull-right">Join</button>
+						<a class="btn btn-default pull-right" href="/game">Join</a>
 					</div>
 					<div class="well">
 						Room: Nova
-						<button type="button" class="btn btn-default pull-right">Join</button>
+						<a class="btn btn-default pull-right" href="/game">Join</a>
 					</div>
 				</div>
 			</div>
