@@ -3,7 +3,7 @@
 <head>
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-
+  
 	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
 
@@ -47,17 +47,9 @@
 				<div class="panel-heading">
 					<h3 class="panel-title">Join a Game</h3>
 				</div>
-				<div class="panel-body">
+				<div class="panel-body" id="currentRooms">
 					<div class="well">
-						<a class="btn btn-default form-control" id="createRoom" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span> Create a Room</a>
-					</div>
-					<div class="well">
-						Room: Orion
-						<a class="btn btn-default pull-right" href="/game">Join</a>
-					</div>
-					<div class="well">
-						Room: Nova
-						<a class="btn btn-default pull-right" href="/game">Join</a>
+						<a class="btn btn-default form-control" id="createOpen" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span> Create a Room</a>
 					</div>
 				</div>
 			</div>
@@ -75,11 +67,11 @@
 					<h3 class="panel-title text-center">Chat</h3>
 				</div>
 				<div class="panel-body">
-					<h4>Chat Log...</h4>
+					<div id="chatLog"></div>
 				    <div class="input-group">
-				      <input type="text" class="form-control" placeholder="Chat Here...">
+				      <input type="text" class="form-control" id="message" placeholder="Chat Here...">
 				      <span class="input-group-btn">
-				        <button class="btn btn-default" type="button">Submit</button>
+				        <button class="btn btn-default" id="chatSubmit" type="button">Submit</button>
 				      </span>
 				    </div><!-- /input-group -->
 				</div>
@@ -98,12 +90,24 @@
 					<input type="name" class="form-control" id="roomname">		
 		      	</div>
 		      	<div class="modal-footer">
-		        	<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-ok"></span> Create</button>
+		        	<button type="button" class="btn btn-default" id="createRoom" data-dismiss="modal"><span class="glyphicon glyphicon-ok"></span> Create</button>
 		      	</div>
 		    </div>
 		  	</div>
 		</div>
 </div>
+<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCXnQJ0MgyrTy_vE6zwtHK8863bhjDKx6Y",
+    authDomain: "wordwars-b7992.firebaseapp.com",
+    databaseURL: "https://wordwars-b7992.firebaseio.com",
+    storageBucket: "wordwars-b7992.appspot.com",
+  };
+  firebase.initializeApp(config);
+
+</script>
 <script src="static/assets/js/menu.js"></script>
 </body>
 </html>
