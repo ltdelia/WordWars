@@ -1,7 +1,15 @@
 // Logic for the Menu page
 // 1a. Create a Room
+// Each room should have the room name, an id(?), the users in it, and a word array
 // 1b. Join a Room
 // 2. Chat with Users Online
+
+//TO DO
+// Handle submitting data -- Firebase pushes the words to the database after the SECOND submit
+
+// Wordnik API and URL
+var URL = "http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=true&excludePartOfSpeech=proper-noun&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=3&maxLength=10&limit=1000&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5"
+var words = [];
 
 // printRooms() - prints all rooms in Firebase to the HTML
 function printRooms(room){
@@ -25,11 +33,30 @@ function printRooms(room){
 	$('#currentRooms').append(well);
 }
 
+// printChat() -- prints out the messages posted by users
 function printChat(message){
 	var text = $('<p>');
 	text.append(message);
 	text.append('</p>');
 	$('#chatLog').append(text);
+}
+
+function generateWords(){
+	// GET request to Wordnik API
+	$.ajax({method: 'GET', url: URL})
+	.done(function(response){
+		// For the length of the response...
+		for(var i=0; i<response.length; i++){
+			// if the word begins with a capital letter...
+			if(response[i].word[0] >='A' && response[i].word[0]<='Z'){
+				// don't do anything
+			}else{
+				// push the remaining words to an array
+				words.push(response[i].word);				
+			}
+		}
+		console.log(words);
+	})
 }
 
 // Firebase References
@@ -76,10 +103,13 @@ $('#createOpen').on('click', function(){
 $('#createRoom').on('click', function(){
 	// Grab the value of the input
 	var room = $('#roomname').val();
+
+	generateWords();
+	console.log(words);
 	// Get a reference to Firebase, specifically the roomList.
 	// Push the value from the input
 	var newRoomRef = roomListRef.push();
-	newRoomRef.set({'room': room});
+	newRoomRef.set({'room': room, 'words': words});
 
 	printRooms(room);
 	// Clear the value of the input
