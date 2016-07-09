@@ -7,15 +7,15 @@ var app = express();
 
 module.exports = function(app){
 	app.get('/', function(req, res){
-		res.sendFile(path.join(__dirname + '/../public/index.html'));
-	})
-	app.get('/menu', function(req, res){
-		res.sendFile(path.join(__dirname + '/../public/menu.html'));
-	})
-	app.get('/game', function(req, res){
 		res.render('index');
 	})
+	app.get('/menu', function(req, res){
+		res.render('menu');
+	})
+	app.get('/game', function(req, res){
+		res.render('game');
+	})
 	app.get('/scores', function(req, res){
-		res.sendFile(path.join(__dirname + '/../public/scores.html'));
+		res.render('scores');
 	})
 }
