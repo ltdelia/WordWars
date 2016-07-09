@@ -13,7 +13,7 @@ module.exports = function(app){
 		res.sendFile(path.join(__dirname + '/../public/menu.html'));
 	})
 	app.get('/game', function(req, res){
-		res.sendFile(path.join(__dirname + '/../public/game.html'));
+		res.render('index');
 	})
 	app.get('/scores', function(req, res){
 		res.sendFile(path.join(__dirname + '/../public/scores.html'));

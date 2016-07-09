@@ -1,6 +1,7 @@
 // DEPENDENCIES USED
 
 var express = require('express');
+var hbs = require('express-handlebars');
 var bodyParser = require('body-parser');
 var path = require('path');
 
@@ -8,6 +9,16 @@ var path = require('path');
 
 var app = express();
 var PORT = process.env.PORT || 80;
+
+// Configuring Handlebars
+// app.engine('hbs', expressHandlebars({
+//   defaultLayout: 'main'
+// }));
+// app.set('view engine', 'hbs');
+app.engine('hbs', hbs({extname:'hbs', defaultLayout: 'main', layoutsDir: __dirname + '/app/public/views/layouts'}));
+app.set('views', path.join(__dirname, '/app/public/views'));
+app.set('view engine', 'hbs');
+
 
 // BodyParser makes it easy for our server to interpret data sent to it.
 app.use(bodyParser.json());
