@@ -1,4 +1,7 @@
 // Registering a User
+// Declaring variable for username. Will be used later.
+var username;
+console.log(username);
 // When the register button is clicked...
 $('#register').on('click', function(){
 	//Initialize the Modal
@@ -7,6 +10,7 @@ $('#register').on('click', function(){
 // When the register button (within the modal) is clicked...
 $('#registerUser').on('click', function(){
 	// Grab the values given for Email Address, Password, Confirm Password
+	username = $('#regName').val();
 	var email = $('#regEmail').val();
 	var password = $('#regPassword').val();
 	var confirmPassword = $('#confirmPassword').val();
@@ -71,9 +75,20 @@ $('#loginUser').on('click', function(){
 	})
 
 	// Check if user is logged in with Firebase
-	firebase.auth().onAuthStateChanged(function(user){
-		if(user){
-			console.log("Success! " + user.email + " is logged in!");
+	firebase.auth().onAuthStateChanged(function(userOnline){
+		if(userOnline){
+			console.log(userOnline);
+			console.log("Success! " + userOnline.email + " is logged in!");
+			if(username){
+				userOnline.updateProfile({
+					displayName: username
+				}).then(function(){
+					console.log("Username is updated! Current username: " + username);
+				}, function(error){
+					console.log("An error occurred. Username not updated.");
+				})
+			}
+
 			$('#loginUser').attr('data-dismiss', 'modal');
 			$('#logEmail').val(null);
 			$('#logPassword').val(null);
@@ -83,11 +98,3 @@ $('#loginUser').on('click', function(){
 		}
 	})
 })
-
-var user = firebase.auth().currentUser;
-var email, uid;
-if(user != null){
-	email = user.email;
-	uid = user.uid;
-	console.log("Here are the credentials: " + "Email: " + email + " ID: " + uid );
-}

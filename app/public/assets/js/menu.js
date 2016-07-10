@@ -5,11 +5,33 @@
 // 2. Chat with Users Online
 
 //TO DO
-// Handle submitting data -- Firebase pushes the words to the database after the SECOND submit
+// Fix words array pushing to Firebase Realtime Database
 
-// Wordnik API and URL
-var URL = "http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=true&excludePartOfSpeech=proper-noun&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=3&maxLength=10&limit=1000&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5"
+// GLOBAL VARIABLES
+// currentUser
+var currentUser;
 var words = [];
+// Firebase Auth 
+// Check if a user is logged in with Firebase
+firebase.auth().onAuthStateChanged(function(userOnline){
+	if(userOnline){
+		var user = firebase.auth().currentUser;
+		console.log(user);
+		var name, email;
+
+		// If user is logged in...
+		if(user != null){
+			name = user.displayName;
+			email = user.email;
+			currentUser = user.displayName;
+			// Display their credentials to the console
+			console.log("Name: ", name);
+			console.log("Email: ", email);
+		}
+	}else{
+		console.log("No one is signed in.");
+	}
+})
 
 // printRooms() - prints all rooms in Firebase to the HTML
 function printRooms(room){
@@ -34,14 +56,16 @@ function printRooms(room){
 }
 
 // printChat() -- prints out the messages posted by users
-function printChat(message){
+function printChat(username, message){
 	var text = $('<p>');
-	text.append(message);
+	text.append('<strong>'+ username + '</strong>: '+ message);
 	text.append('</p>');
 	$('#chatLog').append(text);
 }
 
-function generateWords(){
+function generateWords(wordArray){
+	// URL to Wordnik API
+	var URL = "http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=true&excludePartOfSpeech=proper-noun&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=3&maxLength=10&limit=1000&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5";
 	// GET request to Wordnik API
 	$.ajax({method: 'GET', url: URL})
 	.done(function(response){
@@ -52,12 +76,48 @@ function generateWords(){
 				// don't do anything
 			}else{
 				// push the remaining words to an array
-				words.push(response[i].word);				
+				wordArray.push(response[i].word);				
 			}
 		}
-		console.log(words);
 	})
 }
+
+
+// CLICK EVENTS
+
+// Click Event for "Create a Room" -- opens a modal
+$('#createOpen').on('click', function(){
+	//Initialize the Modal
+	$('#myModal').modal('show');
+});
+
+// Click Event for the 'Create' button inside of the modal
+$('#createRoom').on('click', function(){
+	// Grab the value of the input
+	var room = $('#roomname').val();
+
+	// Get a reference to Firebase, specifically the roomList.
+	// Push the value from the input
+	var newRoomRef = roomListRef.push();
+	var roomID = newRoomRef.key;
+	generateWords(words);
+	console.log(words);
+	newRoomRef.set({'roomID': roomID, 'user1': currentUser, 'user2': null, 'room': room, 'words': words});
+
+	printRooms(room);
+	// Clear the value of the input
+	$('#roomname').val(null);
+});
+
+// Click Event -- Submit the Chat
+$('#chatSubmit').on('click', function(){
+	var message = $('#message').val();
+	var newMessageRef = chatRef.push();
+	newMessageRef.set({'username': currentUser, 'message': message});
+	printChat(currentUser, message);
+	$('#message').val(null);
+})
+
 
 // Firebase Realtime Database References
 // The reference to our room list on Firebase
@@ -73,7 +133,6 @@ roomListRef.once('value')
 			// The value of each room
 			var roomData = childSnapshot.val();
 			var room = roomData.room;
-			console.log(roomData);
 			printRooms(room);
 		})
 	})
@@ -83,53 +142,11 @@ chatRef.once('value')
 	.then(function(snapshot){
 		snapshot.forEach(function(childSnapshot){
 			var chatData = childSnapshot.val();
+			var username = chatData.username;
 			var message = chatData.message;
-			printChat(message);
+			printChat(username, message);
 		})
 	})
 
-// Firebase Auth 
 
-// Check if a user is logged in with Firebase
-firebase.auth().onAuthStateChanged(function(user){
-	if(user){
-		console.log("Success! " + user.email + " is logged in!");
-	}else{
-		console.log("No one is signed in.");
-	}
-})
-
-// CLICK EVENTS
-
-// Click Event for "Create a Room" -- opens a modal
-$('#createOpen').on('click', function(){
-	//Initialize the Modal
-	$('#myModal').modal('show');
-});
-
-// Click Event for the 'Create' button inside of the modal
-$('#createRoom').on('click', function(){
-	// Grab the value of the input
-	var room = $('#roomname').val();
-
-	generateWords();
-	console.log(words);
-	// Get a reference to Firebase, specifically the roomList.
-	// Push the value from the input
-	var newRoomRef = roomListRef.push();
-	newRoomRef.set({'room': room, 'words': words});
-
-	printRooms(room);
-	// Clear the value of the input
-	$('#roomname').val(null);
-});
-
-// Click Event -- Submit the Chat
-$('#chatSubmit').on('click', function(){
-	var message = $('#message').val();
-	var newMessageRef = chatRef.push();
-	newMessageRef.set({'message': message});
-	printChat(message);
-	$('#message').val(null);
-})
 
