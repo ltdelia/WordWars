@@ -59,7 +59,7 @@ function generateWords(){
 	})
 }
 
-// Firebase References
+// Firebase Realtime Database References
 // The reference to our room list on Firebase
 var roomListRef = firebase.database().ref('rooms');
 // The reference to our chat
@@ -88,8 +88,16 @@ chatRef.once('value')
 		})
 	})
 
+// Firebase Auth 
 
-
+// Check if a user is logged in with Firebase
+firebase.auth().onAuthStateChanged(function(user){
+	if(user){
+		console.log("Success! " + user.email + " is logged in!");
+	}else{
+		console.log("No one is signed in.");
+	}
+})
 
 // CLICK EVENTS
 
