@@ -6,12 +6,34 @@
     <audio id="boom">
         <source src="static/assets/audio/explosion.wav" type="audio/mpeg">
     </audio>
+    <audio id="appear">
+        <source src="static/assets/audio/Appear2.wav" type="audio/mpeg">
+    </audio>
+    <audio id="boom2">
+        <source src="static/assets/audio/explosion.wav" type="audio/mpeg">
+    </audio>
+    <audio id="boom3">
+        <source src="static/assets/audio/explosion.wav" type="audio/mpeg">
+    </audio> 
     <audio id="aliens" loop>
         <source src="static/assets/audio/ufo_lowpitch3.wav" type="audio/mpeg">
     </audio>
     <audio id="zap">
         <source src="static/assets/audio/shoot.wav" type="audio/mpeg">
     </audio>
+    <audio id="321">
+        <source src="static/assets/audio/SoundEffect(11b).wav" type="audio/mpeg">
+    </audio>
+    <audio id="321go">
+        <source src="static/assets/audio/SoundEffect(16).wav" type="audio/mpeg">
+    </audio>
+    <audio id="loss">
+        <source src="static/assets/audio/Galaga-loss.wav" type="audio/mpeg">
+    </audio>
+    <audio id="win">
+        <source src="static/assets/audio/Power-Up.mp3" type="audio/mpeg">
+    </audio>    
+
 
 <div class="container-fluid" id="game_space">
   <!--  <h1 class="text-center white">Word Wars?</h1>-->
@@ -36,10 +58,13 @@
             <h4 class="white sboard">Score:</h4>
             <h4 id="score">0</h4>
         </div>
-        <div clas="col col-sm-4">
-            <h3 id="waveNum">1</h4>
-            <h3 class="white sboard">Wave:</h4>
 
+
+        <div clas="col col-sm-4">
+
+            <h3 id="waveNum">1</h3>
+            <h3 class="white sboard">Wave:</h3>
+            <img class="cityIcon" src="static/assets/images/city5.png"
         </div>
 
     </div>
@@ -138,16 +163,22 @@
 <div id="myModal" class="modal">
 
   <div class="modal-content">
-        
-    <h1 class="gameWave middle center">
-        Wave 1<span class="completed"></span>
-    </h1>    
-    <div class="messageToPlayer middle center">
-        Good Luck!
+    <div class="modal-header">    
+        <h1 class="gameWave middle center">
+            <span class="justWave"><h1>WORD WARS!</h1></span><span class="waveNum"></span><br><span class="completed"></span>
+        </h1>    
     </div>
-
-    <button class="start btn btn-danger middle">Ready</button>
-
+    <div class="modal-body">    
+        <div class="messageToPlayer middle center">
+            <ol>To play, type words into your "word gun" as they come up on the screen.</ol>
+            <ol>If you miss a word, your cities become damaged, as seen in the upper right.</ol> 
+            <ol>You can only be damaged 5 times before losing.</ol>
+            <ol>Defeat all the enemies to go to the next wave!</ol>
+        </div>
+    </div>
+    <div class="modal-footer">    
+        <button class="start btn btn-danger middle">I AM READY</button>
+    </div>
   
   </div>
 
@@ -167,7 +198,7 @@
 
     start.onclick = function() {
         modal.style.display = "none";
-        gameStart();
+        startWave();
     }
 
     <!--
