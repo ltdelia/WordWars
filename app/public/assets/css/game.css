@@ -1,0 +1,335 @@
+.spaceinvader{
+  height: 25px;
+  width: 25px;
+}
+
+/*.col{
+  border: 1px white solid;
+}*/
+
+.col-sm-4{
+  width:33%;
+
+}
+
+.col-lg-12{
+  height:70px;
+}
+.explosion{
+  position:absolute;
+  height:50px;
+  width:50px;
+
+}
+.explosion, .word-x1, .word-x2, .word-x3, .word-x4, .word-x5, .wordTargetDetails, .wordTarget, .z3{
+    z-index: 3;
+}
+
+.sboard{
+  /*float:left;*/
+}
+
+#score, #words, #missed, #waveNum{
+  color:white;
+}
+/*attempt to prepend the alien image to the word, didn't work*/
+/*.wordTarget::before {
+  height:25px;
+  width:25px;
+  background-image: url("../../public/assets/images/space_invader.png");
+}*/
+
+
+/*animation speeds*/
+.wordTargetAnimate50 {
+    position: relative;
+    z-index:1;
+    -webkit-animation: mymove .4s; /* Chrome, Safari, Opera */
+    animation: mymove .4s;
+    animation-direction:reverse;
+}
+.wordTargetAnimate51 {
+    position: relative;
+    z-index:1;
+    -webkit-animation: mymove2 .5s; /* Chrome, Safari, Opera */
+    animation: mymove2 .5s;
+}
+.wordTargetAnimate1 {
+
+    -webkit-animation: mymove 1s; /* Chrome, Safari, Opera */
+    animation: mymove 1s;
+    animation-direction:reverse;
+}
+.wordTargetAnimate2 {
+
+    -webkit-animation: mymove 2s; /* Chrome, Safari, Opera */
+    animation: mymove 2s;
+    animation-direction:reverse;
+}
+.wordTargetAnimate3 {
+
+    -webkit-animation: mymove 3s; /* Chrome, Safari, Opera */
+    animation: mymove 3s;
+    animation-direction:reverse;
+}
+.wordTargetAnimate4 {
+
+    -webkit-animation: mymove 4s; /* Chrome, Safari, Opera */
+    animation: mymove 4s;
+    animation-direction:reverse;
+}
+.wordTargetAnimate5 {
+
+    -webkit-animation: mymove 5s; /* Chrome, Safari, Opera */
+    animation: mymove 5s;
+    animation-direction:reverse;
+}
+.wordTargetAnimate6 {
+
+    -webkit-animation: mymove 6s; /* Chrome, Safari, Opera */
+    animation: mymove 6s;
+    animation-direction:reverse;
+}
+.wordTargetAnimate7 {
+
+    -webkit-animation: mymove 7s; /* Chrome, Safari, Opera */
+    animation: mymove 7s;
+    animation-direction:reverse;
+}
+.wordTargetAnimate8 {
+
+    -webkit-animation: mymove 8s; /* Chrome, Safari, Opera */
+    animation: mymove 8s;
+    animation-direction:reverse;
+}
+.wordTargetAnimate9 {
+
+    -webkit-animation: mymove 9s; /* Chrome, Safari, Opera */
+    animation: mymove 9s;
+    animation-direction:reverse;
+}
+.wordTargetAnimate10 {
+
+    -webkit-animation: mymove 10s; /* Chrome, Safari, Opera */
+    animation: mymove 10s;
+    animation-direction:reverse;
+}
+.wordTargetAnimate11 {
+
+    -webkit-animation: mymove 11s; /* Chrome, Safari, Opera */
+    animation: mymove 11s;
+    animation-direction:reverse;
+}
+.wordTargetAnimate12 {
+
+    -webkit-animation: mymove 12s; /* Chrome, Safari, Opera */
+    animation: mymove 12s;
+    animation-direction:reverse;
+}
+.wordTargetAnimate13 {
+
+    -webkit-animation: mymove 13s; /* Chrome, Safari, Opera */
+    animation: mymove 13s;
+    animation-direction:reverse;
+}
+.wordTargetAnimate14 {
+
+    -webkit-animation: mymove 14s; /* Chrome, Safari, Opera */
+    animation: mymove 14s;
+    animation-direction:reverse;
+}
+.wordTargetAnimate15 {
+
+    -webkit-animation: mymove 15s; /* Chrome, Safari, Opera */
+    animation: mymove 15s;
+    animation-direction:reverse;
+}
+
+
+/*//this places each word in a separate distance from the top of the div*/
+  /*.word-x1{top:50px;}
+  .word-x2{top:100px;}
+  .word-x3{top:150px;}
+  .word-x4{top:200px;}
+  .word-x5{top:250px;}*/
+
+
+  /* Chrome, Safari, Opera */
+  .word-x1 {-webkit-animation-timing-function: linear;}
+  .word-x5 {-webkit-animation-timing-function: ease;}
+  .word-x3 {-webkit-animation-timing-function: ease-in;}
+  .word-x4 {-webkit-animation-timing-function: ease-out;}
+  .word-x2 {-webkit-animation-timing-function: ease-in-out;}
+
+  /* Standard syntax */
+  .word-x1 {animation-timing-function: linear;}
+  .word-x5 {animation-timing-function: ease;}
+  .word-x3 {animation-timing-function: ease-in;}
+  .word-x4 {animation-timing-function: ease-out;}
+  .word-x2 {animation-timing-function: ease-in-out;}
+
+  /* Chrome, Safari, Opera */
+  @-webkit-keyframes mymove {
+      from {left: 12px;}
+      to {left: 100%;}
+  }
+
+  /* Standard syntax */
+  @keyframes mymove {
+      from {left: 12px;}
+      to {left:100%;}
+  }
+
+  /* Chrome, Safari, Opera */
+  @-webkit-keyframes mymove2 {
+      from {right: 12px;}
+      to {right: 100%;}
+  }
+
+  /* Standard syntax */
+  @keyframes mymove2 {
+      from {right: 12px;}
+      to {right:100%;}
+  }
+
+
+/*game code*/
+
+
+.center{
+  display:inline-block;
+  text-align:center;
+}
+.middle{
+  margin: 0 25% 0 25%;
+  width: 50%;
+}
+.centerAligning{
+  margin: 0 50% 0 50%;
+
+}
+.victory{
+  float:left;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  height: 50px;
+  padding: 6px 12px;
+  font-size: 40px;
+  line-height: 1.5;
+  color: yellow;
+  background-color: black;
+  background-image: none;
+  border: 3px solid yellow;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.white {
+  color:white;
+}
+.form-group{    
+  position: absolute;
+  bottom:0;
+  right:0;
+}
+
+.globe{
+  position:absolute;
+  left: 0;
+  top: 0;
+  height:100%;
+  width:70px;
+  z-index:1;
+}
+
+h1{
+  display:inline-block;
+}
+
+h4{
+  float:left;
+  margin: 0px 20px 0px 20px;
+}
+
+h3{
+  float:right;
+  margin: 0px 20px 0px 20px;
+}
+
+#victoryTable{
+  margin:left 40%;
+  width:100%;
+}
+
+.wordTarget {
+  color:white;
+  font-weight: 10;
+  font-size: 25px;
+  font-family:arial;
+}
+.wordTarget em {
+/*  background:   #F3F315;*/
+  color:red;
+/*  font-weight:  10;*/
+  font-style:   normal;
+  /*font-size: 24px;*/
+}
+
+.wordTargetDetails{
+  /*border: 1px red solid;*/
+/*    width: 150px;*/
+    height: 50px;
+    /*background-color: red;*/
+    color: white;
+/*    font-weight: bold;*/
+    position: relative;
+/*    z-index:3;*/
+    /*text-align:center;*/
+}
+
+/*Modal Code*/
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 4; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+/* The Close Button */
+.start {
+
+    font-size: px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}

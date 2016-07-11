@@ -1,4 +1,8 @@
 
+<link rel="stylesheet" href="static/assets/css/game.css">
+
+<img class="globe" src="static/assets/images/globe.png">
+
     <audio id="boom">
         <source src="static/assets/audio/explosion.wav" type="audio/mpeg">
     </audio>
@@ -16,10 +20,7 @@
   	<div id='stars3'></div>
 
     <div class="row">
-        <div clas="col col-sm-4">
-            <h4 class="white sboard">Score:</h4>
-            <h4 id="score">0</h4>
-        </div>
+
 
         <div clas="col col-sm-4">
             <h4 class="white sboard">Words:</h4>
@@ -30,6 +31,17 @@
           <h4 class="white sboard">Missed:</h4>
           <h4 id="missed">0</h4>
         </div>
+
+        <div clas="col col-sm-4">
+            <h4 class="white sboard">Score:</h4>
+            <h4 id="score">0</h4>
+        </div>
+        <div clas="col col-sm-4">
+            <h3 id="waveNum">1</h4>
+            <h3 class="white sboard">Wave:</h4>
+
+        </div>
+
     </div>
 
     <div class="row" >
@@ -72,16 +84,22 @@
     
         </div>
     </div>
+
+
+
+
     <div class="row" >
         <div class="col col-lg-12" id="row8">
     
         </div>
     </div>
-        <div class="row" >
+
+<!--  These rows temporarily removed to adjust text size
+    <div class="row" >
         <div class="col col-lg-12" id="row9">
     
         </div>
-   <!--  </div>
+   </div>
         <div class="row" >
         <div class="col col-lg-12" id="row10">
     
@@ -97,6 +115,8 @@
     
         </div>
     </div> -->
+
+
     <!-- todo: add error/success classes when typing! -->
 
     <div class="form-group">
@@ -109,9 +129,52 @@
 <div class="container">
     
     <input class="box">
-    <button class="btn btn-primary" id="pushMe">Make Div</button>
+    <button class="btn btn-primary makediv" id="pushMe">Make Div</button>
+    <button id="modalButton">Open Modal</button>
 </div>
 
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug (what does this mean??? - zintis)-->
+
+<div id="myModal" class="modal">
+
+  <div class="modal-content">
+        
+    <h1 class="gameWave middle center">
+        Wave 1<span class="completed"></span>
+    </h1>    
+    <div class="messageToPlayer middle center">
+        Good Luck!
+    </div>
+
+    <button class="start btn btn-danger middle">Ready</button>
+
+  
+  </div>
+
+</div>
 
 <script src="static/assets/js/script.js"></script>
+<script>
+    var modal = document.getElementById('myModal');
+
+    var btn = document.getElementById("modalButton");
+
+    var start = document.getElementsByClassName("start")[0];
+
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    start.onclick = function() {
+        modal.style.display = "none";
+        gameStart();
+    }
+
+    <!--
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    -->
+</script>
