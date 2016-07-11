@@ -240,6 +240,11 @@
   right:0;
 }
 
+.cityIcon{
+  height:25px;
+  float:right;
+}
+
 .globe{
   position:absolute;
   left: 0;
@@ -263,9 +268,15 @@ h3{
   margin: 0px 20px 0px 20px;
 }
 
+.fakeH1{
+  font-size:70px;
+  font-weight: 700;
+}
+
 #victoryTable{
-  margin:left 40%;
-  width:100%;
+/*  margin:left 500px;
+  width:60%;*/
+  text-align: center;
 }
 
 .wordTarget {
@@ -333,3 +344,34 @@ h3{
     text-decoration: none;
     cursor: pointer;
 }
+
+#myModal{
+/*  top:50%;
+  right:50%;
+  left:50%;
+  width:500px;*/
+  outline:none;
+}
+
+.modal-content{
+  height:500px;
+  width:500px;
+}
+
+.modal-body{
+  /*text-align: center;*/
+}
+
+.modal-footer{
+
+}
+
+td{
+  text-align:left;
+  width:100px;
+}
+.tdpad{
+  text-align: right;
+}
+
+ol {text-align: left;}
