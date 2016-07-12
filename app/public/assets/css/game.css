@@ -1,3 +1,16 @@
+@font-face {
+  font-family:  atariFull;
+  src:      url('../fonts/atariFull.woff');
+  src:      local('atariFull'),
+          url('../fonts/atariFull.ttf'),
+          format('truetype');
+}
+
+body {
+  font-family: atariFull;
+  font-size: 10px;
+}
+
 .spaceinvader{
   height: 25px;
   width: 25px;
@@ -200,10 +213,10 @@
   display:inline-block;
   text-align:center;
 }
-.middle{
+/*.middle{
   margin: 0 25% 0 25%;
   width: 50%;
-}
+}*/
 .centerAligning{
   margin: 0 50% 0 50%;
 
