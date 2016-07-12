@@ -1,49 +1,37 @@
-<link rel="stylesheet" href="static/assets/css/style.css">
-
-<div id ="body">
-<div class="container">
-
-	    <div id = "A"><img class ="imgA" alt="image" src="http://fc04.deviantart.net/fs9/i/2006/059/7/8/_ufo__by_Mrichston.gif"></div>
-
-	    
-
-	    <div id = "B"><img class ="imgB" alt="image" src="http://66.media.tumblr.com/tumblr_m9srqeu93e1roozkr.gif"></div>
-
-	 
-
-	    <div id = "C"><img class ="imgC" alt="image" src="http://67.media.tumblr.com/tumblr_m9srtsOlme1roozkr.gif"></div>
-
-		<!-- Header -->
-		<p class="Three-Dee">WORD WARS</p>
-
-		<div id ="D"><img class="imgD"alt="image" src="http://fc07.deviantart.net/fs71/f/2012/027/9/f/pixel_ufo_by_pionpi-d4nr96r.gif">
-		   
+<!-- NavBar -->
+<nav class="navbar navbar-default" role="navigation">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand">WordWars</a>
 		</div>
 
-		
-		
+		<div class="collapse navbar-collapse navbar-ex1-collapse">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="/scores">High Scores</a></li>
+			</ul>
+		</div>
+	</div>
+</nav>
+	<div class="container">
+		<!-- Header -->
+		<div class="page-header">
+		  <h1 class="text-center">WordWars</h1>
+		</div>
 		<!-- Page Content -->
-		<!--<div class="row">-->
-
-
+		<div class="row">
 			<div class="col-md-6 col-md-offset-3">
-				
-					
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title text-center">WordWars</h3>
+					</div>
 					<div class="panel-body">
 						<a class="btn btn-default form-control" id="login" data-toggle="modal"><span class="glyphicon glyphicon-user"></span> Login</a>
-					</div>
-
-					<div class="panel-body">	
 						<a class="btn btn-default form-control" id="register" data-toggle="modal"><span class="glyphicon glyphicon-pencil"></span> Register</a>
+						<a class="btn btn-default form-control" href="/game">Play Now!</a>
 					</div>
-		    </div>
-          
-          
-		
-			
-
-        
-
+				</div>
+			</div>
+		</div>
 		<!-- Register Modal -->
 		<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel">
 			<div class="modal-dialog" role="document">
@@ -53,12 +41,14 @@
 		        	<h4 class="modal-title text-center" id="registerModalLabel">Register</h4>
 		      	</div>
 		      	<div class="modal-body">
+		      		<h4>Username</h4>
+		      		<input type="name" class="form-control" id="regName">
 		      		<h4>Email Address</h4>
 					<input type="name" class="form-control" id="regEmail">		
 					<h4>Password</h4>
-					<input type="name" class="form-control" id="regPassword">
+					<input type="password" class="form-control" id="regPassword">
 					<h4>Confirm Password</h4>
-					<input type="name" class="form-control" id="confirmPassword">
+					<input type="password" class="form-control" id="confirmPassword">
 					<div id="errorMessage"></div>
 		      	</div>
 		      	<div class="modal-footer">
@@ -79,7 +69,7 @@
 		      		<h4>Email Address</h4>
 					<input type="name" class="form-control" id="logEmail">		
 					<h4>Password</h4>
-					<input type="name" class="form-control" id="logPassword">
+					<input type="password" class="form-control" id="logPassword">
 					<div id="loginError"></div>
 		      	</div>
 		      	<div class="modal-footer">
@@ -90,33 +80,16 @@
 		</div>
 
 	</div>
-	
-     
-  <div class = "sound">
-  <embed src="static/assets/audio/Radar 1.wav" autostart = "true"loop= "true"></embed>
-  </div>
+		<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
+		<script>
+		  // Initialize Firebase
+		  var config = {
+		    apiKey: "AIzaSyCXnQJ0MgyrTy_vE6zwtHK8863bhjDKx6Y",
+		    authDomain: "wordwars-b7992.firebaseapp.com",
+		    databaseURL: "https://wordwars-b7992.firebaseio.com",
+		    storageBucket: "wordwars-b7992.appspot.com",
+		  };
+		  firebase.initializeApp(config);
 
-  </div>
-	
-	<script>
-	$('#register').on('click', function(){
-	//Initialize the Modal
-	$('#registerModal').modal('show');
-});
-	$('#login').on('click', function(){
-	//Initialize the Modal
-	$('#loginModal').modal('show');
-});
-	</script>
-	<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
-<script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyCXnQJ0MgyrTy_vE6zwtHK8863bhjDKx6Y",
-    authDomain: "wordwars-b7992.firebaseapp.com",
-    databaseURL: "https://wordwars-b7992.firebaseio.com",
-    storageBucket: "wordwars-b7992.appspot.com",
-  };
-  firebase.initializeApp(config);
-
-</script>
+		</script>
+	<script src="static/assets/js/login.js"></script>

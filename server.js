@@ -8,7 +8,7 @@ var path = require('path');
 // Configuring Express
 
 var app = express();
-var PORT = process.env.PORT || 80;
+var PORT = process.env.PORT || 8080;
 
 // Configuring Handlebars
 // app.engine('hbs', expressHandlebars({
