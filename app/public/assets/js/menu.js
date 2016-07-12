@@ -1,11 +1,14 @@
+// TO DO
+// 1. Handle Firebase Realtime Database updating
+// --- when a second user joins a room, user2 should update to that user
+
 // Logic for the Menu page
 // 1a. Create a Room
 // Each room should have the room name, an id(?), the users in it, and a word array
 // 1b. Join a Room
+// When a user joins a room, Firebase should run an update() method to update user2
 // 2. Chat with Users Online
-
-//TO DO
-// Fix words array pushing to Firebase Realtime Database
+// When a user types something in and submits, their username and message will appear in the div
 
 // GLOBAL VARIABLES
 // currentUser
@@ -110,7 +113,6 @@ $('#createOpen').on('click', function(){
 // Click Event for the 'Create' button inside of the modal
 $('#createRoom').on('click', function(){
 	generateWords(words, createRoom);
-
 	console.log(words);
 });
 
@@ -121,6 +123,16 @@ $('#chatSubmit').on('click', function(){
 	newMessageRef.set({'username': currentUser, 'message': message});
 	printChat(currentUser, message);
 	$('#message').val(null);
+})
+
+// Click Event -- Sign Out the User
+$('#logOut').on('click', function(){
+	firebase.auth().signOut().then(function(){
+		alert("Sign out successful.");
+	}, function(error){
+		//An error occurred
+		console.log("An error occurred signing out.");
+	})
 })
 
 
