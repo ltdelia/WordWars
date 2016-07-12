@@ -21,7 +21,7 @@ body{
 	background-repeat: repeat;
 }
 
-#login ,#register{
+#login ,#register ,#play{
 	width: 250px;
 	height:50px;
 	border: 3px solid red;
