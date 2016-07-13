@@ -340,13 +340,29 @@ h3{
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
-/* Modal Content */
+/* Modal Content 
 .modal-content {
     background-color: gray;
     margin: auto;
     padding: 20px;
     border: 2px double yellow;
     width: 80%;
+}*/
+.modal-content{
+
+  background-color:#C0C0C2; 
+  color: gray;
+  margin: auto;
+  padding: 20px;
+  border: 10px solid gray;
+  border-image: repeating-linear-gradient( 45deg, gray, gray 1%, yellow 1%, yellow 8%) 10;
+  
+}
+
+.modal-content:hover {
+  border-image: repeating-linear-gradient( 45deg, #A60707, #A60707 1%, gray 1%, gray 8%) 10;
+  color: #A60707;
+  
 }
 
 /* The Close Button */
