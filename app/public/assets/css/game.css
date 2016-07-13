@@ -1,3 +1,21 @@
+@font-face {
+  font-family:  atariFull;
+  src:      url('../fonts/atariFull.woff');
+  src:      local('atariFull'),
+          url('../fonts/atariFull.ttf'),
+          format('truetype');
+}
+
+body {
+  font-family: atariFull;
+  font-size: 10px;
+}
+
+.modal-body {
+  background-color: black;
+  border: 2px solid yellow;
+}
+
 .spaceinvader{
   height: 25px;
   width: 25px;
@@ -200,10 +218,10 @@
   display:inline-block;
   text-align:center;
 }
-.middle{
+/*.middle{
   margin: 0 25% 0 25%;
   width: 50%;
-}
+}*/
 .centerAligning{
   margin: 0 50% 0 50%;
 
@@ -322,13 +340,29 @@ h3{
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
-/* Modal Content */
+/* Modal Content 
 .modal-content {
-    background-color: #fefefe;
+    background-color: gray;
     margin: auto;
     padding: 20px;
-    border: 1px solid #888;
+    border: 2px double yellow;
     width: 80%;
+}*/
+.modal-content{
+
+  background-color:#C0C0C2; 
+  color: gray;
+  margin: auto;
+  padding: 20px;
+  border: 10px solid gray;
+  border-image: repeating-linear-gradient( 45deg, gray, gray 1%, yellow 1%, yellow 8%) 10;
+  
+}
+
+.modal-content:hover {
+  border-image: repeating-linear-gradient( 45deg, #A60707, #A60707 1%, gray 1%, gray 8%) 10;
+  color: #A60707;
+  
 }
 
 /* The Close Button */
