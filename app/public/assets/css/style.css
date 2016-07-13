@@ -109,4 +109,20 @@ body{
     to {left:100%;}
 }
 
+/*------------------------------------------
+modal */
+.modal-content{
+
+  background-color:#C0C0C2; 
+  color: gray;
+  border: 10px solid gray;
+  border-image: repeating-linear-gradient( 45deg, gray, gray 1%, #A60707 1%, #A60707 8%) 10;
+  
+}
+
+.modal-content:hover {
+  border-image: repeating-linear-gradient( 45deg, #A60707, #A60707 1%, gray 1%, gray 8%) 10;
+  color: #A60707;
+  
+}
 
