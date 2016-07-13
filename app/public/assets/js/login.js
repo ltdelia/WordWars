@@ -4,6 +4,7 @@
 // Registering a User
 // Declaring variable for username. Will be used later.
 var username;
+console.log(username);
 
 // Check if user is logged in with Firebase
 firebase.auth().onAuthStateChanged(function(userOnline){
@@ -17,7 +18,7 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 		if(username == userOnline.displayName){
 			// Do nothing
 			console.log('User already exists as: ', username);
-		}else if(username !== userOnline.displayName && username !== undefined || username !== null){
+		}else if(username !== userOnline.displayName && username !== undefined){
 			userOnline.updateProfile({
 				displayName: username
 			}).then(function(){
