@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="static/assets/css/style.css">
 
 <div id ="body">
-<div class="container">
+	<div class="container">
 
 	    <div id = "A"><img class ="imgA" alt="image" src="http://fc04.deviantart.net/fs9/i/2006/059/7/8/_ufo__by_Mrichston.gif"></div>
 
@@ -26,22 +26,22 @@
 		<!--<div class="row">-->
 
 
-			<div class="col-md-6 col-md-offset-3">
+		<div class="col-md-6 col-md-offset-3">
+			
 				
-					
-					<div class="panel-body">
-						<a class="btn btn-default form-control" id="login" data-toggle="modal"><span class="glyphicon glyphicon-user"></span> Login</a>
-					</div>
+				<div class="panel-body">
+					<a class="btn btn-default form-control" id="login" data-toggle="modal"><span class="glyphicon glyphicon-user"></span> Login</a>
+				</div>
 
-					<div class="panel-body">	
-						<a class="btn btn-default form-control" id="register" data-toggle="modal"><span class="glyphicon glyphicon-pencil"></span> Register</a>
-					</div>
+				<div class="panel-body">	
+					<a class="btn btn-default form-control" id="register" data-toggle="modal"><span class="glyphicon glyphicon-pencil"></span> Register</a>
+				</div>
 
-					<div class="panel-body">	
-						<a class="btn btn-default form-control" id="play" data-toggle="modal"><span class="glyphicon glyphicon-pencil"></span> Play Now</a>
-					</div>
-					
-		    </div>
+				<div class="panel-body">	
+					<a class="btn btn-default form-control" id="play" href="/game"><span class="glyphicon glyphicon-pencil"></span> Play Now</a>
+				</div>
+				
+	    </div>
           
           
 		
@@ -58,16 +58,18 @@
 		        	<h4 class="modal-title text-center" id="registerModalLabel">Register</h4>
 		      	</div>
 		      	<div class="modal-body">
+		      		<h4>Username</h4>
+					<input type="name" class="form-control" id="regName">		
 		      		<h4>Email Address</h4>
 					<input type="name" class="form-control" id="regEmail">		
 					<h4>Password</h4>
-					<input type="name" class="form-control" id="regPassword">
+					<input type="password" class="form-control" id="regPassword">
 					<h4>Confirm Password</h4>
-					<input type="name" class="form-control" id="confirmPassword">
+					<input type="password" class="form-control" id="confirmPassword">
 					<div id="errorMessage"></div>
 		      	</div>
 		      	<div class="modal-footer">
-		        	<button type="button" class="btn btn-default" id="registerUser"><span class="glyphicon glyphicon-pencil"></span> Register</button>
+		        	<a class="btn btn-default" id="registerUser"><span class="glyphicon glyphicon-pencil"></span> Register</a>
 		      	</div>
 		    </div>
 		  	</div>
@@ -75,22 +77,22 @@
 		<!-- Login Modal -->
 		<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
 			<div class="modal-dialog" role="document">
-		    <div class="modal-content">
-		    	<div class="modal-header">
-		        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		        	<h4 class="modal-title text-center" id="loginModalLabel">Login</h4>
-		      	</div>
-		      	<div class="modal-body">
-		      		<h4>Email Address</h4>
-					<input type="name" class="form-control" id="logEmail">		
-					<h4>Password</h4>
-					<input type="name" class="form-control" id="logPassword">
-					<div id="loginError"></div>
-		      	</div>
-		      	<div class="modal-footer">
-		        	<button type="button" class="btn btn-default" id="loginUser"><span class="glyphicon glyphicon-pencil"></span> Login</button>
-		      	</div>
-		    </div>
+			    <div class="modal-content">
+			    	<div class="modal-header">
+			        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        	<h4 class="modal-title text-center" id="loginModalLabel">Login</h4>
+			      	</div>
+			      	<div class="modal-body">
+			      		<h4>Email Address</h4>
+						<input type="name" class="form-control" id="logEmail">		
+						<h4>Password</h4>
+						<input type="password" class="form-control" id="logPassword">
+						<div id="loginError"></div>
+			      	</div>
+			      	<div class="modal-footer">
+			        	<button type="button" class="btn btn-default" id="loginUser"><span class="glyphicon glyphicon-pencil"></span> Login</button>
+			      	</div>
+			    </div>
 		  	</div>
 		</div>
 
@@ -125,3 +127,5 @@
   firebase.initializeApp(config);
 
 </script>
+
+<script src="static/assets/js/login.js"></script>

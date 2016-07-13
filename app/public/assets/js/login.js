@@ -1,15 +1,46 @@
+// TO DO
+//// Handle redirect to menu
+
 // Registering a User
 // Declaring variable for username. Will be used later.
 var username;
 console.log(username);
+
+// Check if user is logged in with Firebase
+firebase.auth().onAuthStateChanged(function(userOnline){
+	// If someone is logged in, log the userOnline, and their email
+	if(userOnline){
+		console.log(userOnline);
+		console.log("Success! " + userOnline.displayName + " is logged in!");
+		// When a user registers an account, they will input a username
+		// Username will be grabbed when a user clicks Register in the Register Modal
+		// If there is a username value, the user profile will be updated
+		if(username == userOnline.displayName){
+			// Do nothing
+			console.log('User already exists as: ', username);
+		}else if(username !== userOnline.displayName && username !== undefined){
+			userOnline.updateProfile({
+				displayName: username
+			}).then(function(){
+				console.log("Username is updated! Current username: " + username);
+			}, function(error){
+				console.log("An error occurred. Username not updated.");
+			})
+		}
+	// Otherwise, no one is signed in.
+	}else{
+		console.log("No one is signed in.");
+	}
+})	
+
 // When the register button is clicked...
 $('#register').on('click', function(){
-	//Initialize the Modal
+	//Initialize the Register Modal
 	$('#registerModal').modal('show');
 });
-// When the register button (within the modal) is clicked...
+// When the register button (within the register modal) is clicked...
 $('#registerUser').on('click', function(){
-	// Grab the values given for Email Address, Password, Confirm Password
+	// Grab the values given for Username, Email Address, Password, Confirm Password
 	username = $('#regName').val();
 	var email = $('#regEmail').val();
 	var password = $('#regPassword').val();
@@ -19,7 +50,8 @@ $('#registerUser').on('click', function(){
 
 	// Check if the password provided matched the confirmed password
 	if(password == confirmPassword){
-		// Check if the password length is 6 or greater
+		// Check if the password length is 6 or greater. 
+		// Firebase immediately throws an error if the password length is less than 6 characters.
 		if(password.length < 6 ){
 			// append the error message to the text variable, display to the HTML
 			text.append('Please enter a password with 6 or more characters.');
@@ -28,19 +60,21 @@ $('#registerUser').on('click', function(){
 			$('#errorMessage').html(text);
 		}
 		if(password.length >=6){
+			// Create the user in Firebase with the provided credentials
+			// If there are any errors, catch them and log to the console
+			firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error){
+				var errorCode = error.code;
+				var errorMessage = error.message;
+				console.log("Here is your error: " + errorCode + " " + errorMessage);
+			})
 			// Clear the values, dismiss the modal
 			$('#registerUser').attr('data-dismiss', 'modal');
+			// $('#registerUser').attr('href', '/menu');
+			$('#regName').val(null);
 			$('#regEmail').val(null);
 			$('#regPassword').val(null);
 			$('#confirmPassword').val(null);
 		}
-		// Create the user in Firebase with the provided credentials
-		// If there are any errors, catch them and log to the console
-		firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error){
-			var errorCode = error.code;
-			var errorMessage = error.message;
-			console.log("Here is your error: " + errorCode + " " + errorMessage);
-		})
 	}else{
 			// Display this error to the HTML if the passwords provided do not match.
 			text.append('Your passwords do not match. Please try again.');
@@ -53,7 +87,7 @@ $('#registerUser').on('click', function(){
 // Log In an Existing User
 // When the Log In button is clicked...
 $('#login').on('click', function(){
-	//Initialize the modal
+	//Initialize the Log In modal
 	$('#loginModal').modal('show');
 })
 // When the user logs in...
@@ -73,28 +107,7 @@ $('#loginUser').on('click', function(){
 			text.css('color', 'red');
 			$('#loginError').html(text);
 	})
-
-	// Check if user is logged in with Firebase
-	firebase.auth().onAuthStateChanged(function(userOnline){
-		if(userOnline){
-			console.log(userOnline);
-			console.log("Success! " + userOnline.email + " is logged in!");
-			if(username){
-				userOnline.updateProfile({
-					displayName: username
-				}).then(function(){
-					console.log("Username is updated! Current username: " + username);
-				}, function(error){
-					console.log("An error occurred. Username not updated.");
-				})
-			}
-
-			$('#loginUser').attr('data-dismiss', 'modal');
-			$('#logEmail').val(null);
-			$('#logPassword').val(null);
-
-		}else{
-			console.log("No one is signed in.");
-		}
-	})
+	$('#loginUser').attr('data-dismiss', 'modal');
+	$('#logEmail').val(null);
+	$('#logPassword').val(null);
 })

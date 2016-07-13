@@ -33,10 +33,10 @@ body{
 	background-repeat: repeat;
 }
 
-/*.panel-body {
+.panel-body {
   background-color: black;
   border: 2px solid yellow;
-}*/
+}
 
 #login ,#register ,#play{
 	width: 250px;

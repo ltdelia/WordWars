@@ -1,14 +1,28 @@
+<link rel="stylesheet" href="static/assets/css/menu.css">
 
+<nav class="navbar navbar-default" role="navigation">
+	<div class="container-fluid">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<a class="navbar-brand">WordWars</a>
+		</div>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse navbar-ex1-collapse">
 			<ul class="nav navbar-nav">
 				<li><a href="/scores">High Scores</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="/" id="logOut">Log Out</a></li>
+				<li><button class="btn btn default" id="logOut">Log Out</a></li>
 			</ul>
 		</div><!-- /.navbar-collapse -->
 	</div>
 </nav>
-<div class="container">
+<div class="container-fluid" id="game_space">
+  <!--  <h1 class="text-center white">Word Wars?</h1>-->
+	<div id='stars'></div>
+  	<div id='stars2'></div>
+  	<div id='stars3'></div>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="page-header">
@@ -18,7 +32,16 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-4">
+		<div class="col-md-12">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<p>To play, type words in the missiles approaching your ship before they get there.</p>
+					<p>If you type a word that hasn't been used in the match yet, it launches a missile at your opponent with that word.</p> 
+					<p>As time progresses, more difficult words are fired automatically by the game at both players.</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h3 class="panel-title">Join a Game</h3>
@@ -30,14 +53,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-4">
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<h4 class="text-center">To play, type words in the missiles approaching your ship before they get there. If you type a word that hasn't been used in the match yet, it launches a missile at your opponent with that word. As time progresses, more difficult words are fired automatically by the game at both players.</h4>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-4">
+		<div class="col-md-6">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h3 class="panel-title text-center">Chat</h3>
@@ -53,6 +69,8 @@
 				</div>
 			</div>
 		</div>
+
+
 		<!-- Modal -->
 		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 			<div class="modal-dialog" role="document">
