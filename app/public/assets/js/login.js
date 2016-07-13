@@ -1,10 +1,5 @@
 // TO DO
-// 1. Handle Auth errors
-// --- Firebase is updating the username in this case:
-// 		a. user tries to register an account, but an account already exists
-//		b. if they've entered a username in the register modal, then try to log in...
-// 		... then the username updates... :(
-
+//// Handle redirect to menu
 
 // Registering a User
 // Declaring variable for username. Will be used later.
@@ -15,11 +10,14 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 	// If someone is logged in, log the userOnline, and their email
 	if(userOnline){
 		console.log(userOnline);
-		console.log("Success! " + userOnline.email + " is logged in!");
+		console.log("Success! " + userOnline.displayName + " is logged in!");
 		// When a user registers an account, they will input a username
 		// Username will be grabbed when a user clicks Register in the Register Modal
 		// If there is a username value, the user profile will be updated
-		if(username){
+		if(username == userOnline.displayName){
+			// Do nothing
+			console.log('User already exists as: ', username);
+		}else if(username !== userOnline.displayName && username !== undefined || username !== null){
 			userOnline.updateProfile({
 				displayName: username
 			}).then(function(){
@@ -32,7 +30,7 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 	}else{
 		console.log("No one is signed in.");
 	}
-})
+})	
 
 // When the register button is clicked...
 $('#register').on('click', function(){
@@ -70,6 +68,8 @@ $('#registerUser').on('click', function(){
 			})
 			// Clear the values, dismiss the modal
 			$('#registerUser').attr('data-dismiss', 'modal');
+			// $('#registerUser').attr('href', '/menu');
+			$('#regName').val(null);
 			$('#regEmail').val(null);
 			$('#regPassword').val(null);
 			$('#confirmPassword').val(null);
