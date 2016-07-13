@@ -1,4 +1,16 @@
+@font-face {
+  font-family:  atariFull;
+  src:      url('../fonts/atariFull.woff');
+  src:      local('atariFull'),
+          url('../fonts/atariFull.ttf'),
+          format('truetype');
+}
 
+body {
+  font-family: atariFull;
+  font-size: 10px;
+  color: yellow;
+}
 
 /*-----------------------------------------------------
 --------------------------------------------------------*/
@@ -19,6 +31,11 @@ body{
 	background-image: url("../images/carbon_fibre_v2.png");
 	/*background-image: url("../images/Simple-Minimalist-Minimal-Aero-Wallpaper-HD.jpg");*/
 	background-repeat: repeat;
+}
+
+.panel-body {
+  background-color: black;
+  border: 2px solid yellow;
 }
 
 #login ,#register ,#play{
