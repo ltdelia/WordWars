@@ -15,6 +15,10 @@ body {
 /*-----------------------------------------------------
 --------------------------------------------------------*/
 /* style for index page*/
+
+html{
+  overflow-x:hidden;
+}
 .Three-Dee{
 font-family: 'Audiowide',cursive ;
 line-height: 1em;
@@ -33,14 +37,14 @@ body{
 	background-repeat: repeat;
 }
 
-.panel-body {
+/*.panel-body {
   background-color: black;
   border: 2px solid yellow;
-}
+}*/
 
 #login ,#register ,#play{
 	width: 250px;
-	height:50px;
+	height:40px;
 	border: 3px solid red;
 	border-radius: 10px;
 	background-color: #C0C0C2;
