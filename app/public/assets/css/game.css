@@ -1,3 +1,5 @@
+
+
 @font-face {
   font-family:  atariFull;
   src:      url('../fonts/atariFull.woff');
@@ -387,10 +389,10 @@ h3{
   outline:none;
 }
 
-/*.modal-content{
+.modal-content{
   height:500px;
   width:500px;
-}*/
+}
 
 .modal-body{
   /*text-align: center;*/
