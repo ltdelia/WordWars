@@ -7,6 +7,12 @@
     <audio id="boom">
         <source src="static/assets/audio/explosion.wav" type="audio/mpeg">
     </audio>
+    <audio id="chacha">
+        <source src="static/assets/audio/chachacha.wav" type="audio/mpeg">
+    </audio>
+    <audio id="ching">
+        <source src="static/assets/audio/ching.wav" type="audio/mpeg">
+    </audio>
     <audio id="appear">
         <source src="static/assets/audio/Appear2.wav" type="audio/mpeg">
     </audio>
@@ -63,7 +69,10 @@
 
             <h3 id="waveNum">1</h3>
             <h3 class="white sboard">Wave:</h3>
-            <img class="cityIcon" src="static/assets/images/city5.png"
+            <img class="cityIcon" src="static/assets/images/city5.png">
+            <h3 id="waveTime">20</h3>
+            <h3 class="white sboard">Time Remaining:</h3>
+
         </div>
 
     </div>
@@ -140,10 +149,14 @@
     </div>
     <div class="modal-body">    
         <div class="messageToPlayer middle center">
+
             <ol>To play, type words into your "word gun" as they come up on the screen.</ol>
+
             <ol>If you miss a word, your cities become damaged, as seen in the upper right.</ol> 
+
             <ol>You can only be damaged 5 times before losing.</ol>
-            <ol>Defeat all the enemies to go to the next wave!</ol>
+
+            <ol>Survive for 30 seconds to go to the next wave!</ol>
         </div>
     </div>
     <div class="modal-footer">    
@@ -169,6 +182,7 @@
     start.onclick = function() {
         modal.style.display = "none";
         startWave();
+        $("#query").focus();
     }
 
     <!--
