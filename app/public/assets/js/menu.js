@@ -170,7 +170,12 @@ roomListRef.once('value')
 			var roomData = childSnapshot.val();
 			var room = roomData.room;
 			var roomID = roomData.roomID;
-			printRooms(room, roomID);
+			var user1 = roomData.user1;
+			var user2 = roomData.user2;
+			// Print only the rooms where one user has joined
+			if(user2 == ""){
+				printRooms(room, roomID);
+			}
 		})
 	})
 
