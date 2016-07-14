@@ -29,7 +29,7 @@
   /*float:left;*/
 }
 
-#score, #words, #missed, #waveNum{
+#score, #words, #missed, #waveNum, #waveTime{
   color:white;
 }
 /*attempt to prepend the alien image to the word, didn't work*/
@@ -334,7 +334,7 @@ h3{
 /* The Close Button */
 .start {
 
-    font-size: px;
+    /*font-size: px;*/
     font-weight: bold;
 }
 
