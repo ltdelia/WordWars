@@ -1,6 +1,6 @@
 // Logic for the Menu page
 // 1a. Create a Room
-// Each room has the room name, an id, the users in it, and a word array
+// Each room has the room name, an id, and the users in it
 // 1b. Join a Room
 // When a user joins a room, Firebase runs an update() method to update user2
 // 2. Chat with Users Online
@@ -9,8 +9,7 @@
 // GLOBAL VARIABLES
 // currentUser
 var currentUser;
-// empty words
-var words = [];
+
 // Firebase Auth
 // Check if a user is logged in with Firebase
 firebase.auth().onAuthStateChanged(function(userOnline){
@@ -83,27 +82,6 @@ function printChat(username, message){
 	$('#chatLog').append(text);
 }
 
-// generateWords() -- calls the Wordnik API, pushes words to an array
-function generateWords(wordArray, callback){
-	// URL to Wordnik API
-	var URL = "http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=true&excludePartOfSpeech=proper-noun&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=3&maxLength=10&limit=1000&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5";
-	// GET request to Wordnik API
-	$.ajax({method: 'GET', url: URL, async: false})
-	.done(function(response){
-		// For the length of the response...
-		for(var i=0; i<response.length; i++){
-			// if the word begins with a capital letter...
-			if(response[i].word[0] >='A' && response[i].word[0]<='Z'){
-				// don't do anything
-			}else{
-				// push the remaining words to an array
-				wordArray.push(response[i].word);
-			}
-		}
-	callback();
-	})
-}
-
 function createRoom(){
 	// Grab the value of the input
 	var room = $('#roomname').val();
@@ -113,8 +91,8 @@ function createRoom(){
 	// The key for the pushed ref to the 'rooms' ref. We will use this as the room ID
 	var roomID = newRoomRef.key;
 
-	// Push the roomID, user1, room name, and word array to the 'rooms' ref in Firebase
-	newRoomRef.set({'roomID': roomID, 'user1': currentUser, 'user2': "", 'room': room, 'words': words});
+	// Push the roomID, user1, user2, and room name to the 'rooms' ref in Firebase
+	newRoomRef.set({'roomID': roomID, 'user1': currentUser, 'user2': "", 'room': room});
 
 	printRooms(room);
 	// Clear the value of the input
@@ -131,8 +109,7 @@ $('#createOpen').on('click', function(){
 
 // Click Event for the 'Create' button inside of the modal
 $('#createRoom').on('click', function(){
-	generateWords(words, createRoom);
-	console.log(words);
+	createRoom();
 });
 
 // Click Event -- Submit the Chat
