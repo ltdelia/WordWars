@@ -23,9 +23,12 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 				displayName: username
 			}).then(function(){
 				console.log("Username is updated! Current username: " + username);
+
+				window.location = "/menu";
 			}, function(error){
 				console.log("An error occurred. Username not updated.");
 			})
+
 		}
 	// Otherwise, no one is signed in.
 	}else{
