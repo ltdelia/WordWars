@@ -12,6 +12,7 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 	if(userOnline){
 		console.log(userOnline);
 		console.log("Success! " + userOnline.displayName + " is logged in!");
+		window.location = "/menu";
 		// When a user registers an account, they will input a username
 		// Username will be grabbed when a user clicks Register in the Register Modal
 		// If there is a username value, the user profile will be updated
