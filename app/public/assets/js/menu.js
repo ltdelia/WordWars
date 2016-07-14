@@ -29,6 +29,8 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 		}
 	}else{
 		console.log("No one is signed in.");
+		// Redirect to the login page
+		window.location = "/";
 	}
 })
 

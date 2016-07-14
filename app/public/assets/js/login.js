@@ -12,7 +12,11 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 	if(userOnline){
 		console.log(userOnline);
 		console.log("Success! " + userOnline.displayName + " is logged in!");
-		window.location = "/menu";
+		// So long as a user has a username...
+		if(userOnline.displayName !== null){
+			// Redirect to the menu page
+			window.location = "/menu";			
+		}
 		// When a user registers an account, they will input a username
 		// Username will be grabbed when a user clicks Register in the Register Modal
 		// If there is a username value, the user profile will be updated
@@ -20,11 +24,12 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 			// Do nothing
 			console.log('User already exists as: ', username);
 		}else if(username !== userOnline.displayName && username !== undefined){
+			// Run the updateProfile() method, updating the user's displayName
 			userOnline.updateProfile({
 				displayName: username
 			}).then(function(){
 				console.log("Username is updated! Current username: " + username);
-
+				// Redirect to the menu page
 				window.location = "/menu";
 			}, function(error){
 				console.log("An error occurred. Username not updated.");
@@ -49,6 +54,7 @@ $('#registerUser').on('click', function(){
 	var email = $('#regEmail').val();
 	var password = $('#regPassword').val();
 	var confirmPassword = $('#confirmPassword').val();
+	console.log(username, email, password, confirmPassword);
 	// Declare a text variable. We will build on this later to display error messages to the HTML.
 	var text = $('<p>');
 
@@ -63,21 +69,39 @@ $('#registerUser').on('click', function(){
 			text.css('color', 'red');
 			$('#errorMessage').html(text);
 		}
-		if(password.length >=6){
+		// Check if the user has entered a username
+		if(password.length >=6 && username){
 			// Create the user in Firebase with the provided credentials
-			// If there are any errors, catch them and log to the console
+			// If there are any unspecified errors, catch them and log to the console
+			// Common error seen: E-mail not entered/badly formatted
 			firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error){
-				var errorCode = error.code;
-				var errorMessage = error.message;
-				console.log("Here is your error: " + errorCode + " " + errorMessage);
+				// If there are any other unspecified errors...
+				if(error){
+					// Find the error code and error message given by Firebase
+					var errorCode = error.code;
+					var errorMessage = error.message;
+					// console.log("Here is your error: " + errorCode + " " + errorMessage);
+					// Display the error to the HTML inside of the register modal
+					text.append(errorMessage);
+					text.append('</p>');
+					text.css('color', 'red');
+					$('#errorMessage').html(text);						
+				}else{
+					// Dismiss the modal
+					$('#registerUser').attr('data-dismiss', 'modal');
+				}
 			})
-			// Clear the values, dismiss the modal
-			$('#registerUser').attr('data-dismiss', 'modal');
-			// $('#registerUser').attr('href', '/menu');
+			// Clear the values of the modal
 			$('#regName').val(null);
 			$('#regEmail').val(null);
 			$('#regPassword').val(null);
 			$('#confirmPassword').val(null);
+		}else{
+			// Display this error to the HTML if there is no username provided.
+			text.append('Please enter a username for your account.');
+			text.append('</p>');
+			text.css('color', 'red');
+			$('#errorMessage').html(text);
 		}
 	}else{
 			// Display this error to the HTML if the passwords provided do not match.
@@ -102,6 +126,10 @@ $('#loginUser').on('click', function(){
 	var text = $('<p>');
 	// Authenticate with Firebase, catch any errors, display to the HTML
 	firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error){
+		// If there is an error...
+		if(error){
+			// Grab the error code and message provided from Firebase
+			// Display it to the HTML
 			var errorCode = error.code;
 			var errorMessage = error.message;
 			console.log("Here is your error: " + errorCode + " " + errorMessage);
@@ -109,9 +137,13 @@ $('#loginUser').on('click', function(){
 			text.append(errorMessage);
 			text.append('</p>');
 			text.css('color', 'red');
-			$('#loginError').html(text);
+			$('#loginError').html(text);				
+		}else{
+			// Dismiss the modal
+			$('#loginUser').attr('data-dismiss', 'modal');
+		}
 	})
-	$('#loginUser').attr('data-dismiss', 'modal');
+	// Clear the values
 	$('#logEmail').val(null);
 	$('#logPassword').val(null);
 })
