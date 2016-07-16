@@ -1,14 +1,20 @@
-// TO DO
-//// Handle redirect to menu
+// Login Page
+// The login page handles the following situations:
+// - Registering a user
+// - Logging in a User
+// - Catching any errors and displaying them to the HTML for both cases
+// - Redirecting to the menu page ('/menu')
 
 // Registering a User
-// Declaring variable for username. Will be used later.
+// Declaring variable for username. Will be set when a user is registered, and updated when logged in.
 var username;
 console.log(username);
 
-// Check if user is logged in with Firebase
+// firebase.auth().onAuthStateChanged()
+// This method is executed whenever the user successfully registers their account, or logs in.
+// The method checks if a user is logged in with Firebase
 firebase.auth().onAuthStateChanged(function(userOnline){
-	// If someone is logged in, log the userOnline, and their email
+	// If someone is logged in, log the userOnline
 	if(userOnline){
 		console.log(userOnline);
 		console.log("Success! " + userOnline.displayName + " is logged in!");
@@ -28,10 +34,12 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 			userOnline.updateProfile({
 				displayName: username
 			}).then(function(){
+				// Log the update to the console
 				console.log("Username is updated! Current username: " + username);
 				// Redirect to the menu page
 				window.location = "/menu";
 			}, function(error){
+				// Log the message below to the console
 				console.log("An error occurred. Username not updated.");
 			})
 
@@ -47,6 +55,7 @@ $('#register').on('click', function(){
 	//Initialize the Register Modal
 	$('#registerModal').modal('show');
 });
+
 // When the register button (within the register modal) is clicked...
 $('#registerUser').on('click', function(){
 	// Grab the values given for Username, Email Address, Password, Confirm Password
@@ -55,6 +64,7 @@ $('#registerUser').on('click', function(){
 	var password = $('#regPassword').val();
 	var confirmPassword = $('#confirmPassword').val();
 	console.log(username, email, password, confirmPassword);
+
 	// Declare a text variable. We will build on this later to display error messages to the HTML.
 	var text = $('<p>');
 
