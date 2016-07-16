@@ -6,8 +6,7 @@
 // 2. Chat with Users Online
 // When a user types something in and submits, their username and message will appear in the div
 
-// GLOBAL VARIABLES
-// currentUser
+// We declare a currentUser variable
 var currentUser;
 
 // Firebase Auth
@@ -22,6 +21,7 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 		if(user != null){
 			name = user.displayName;
 			email = user.email;
+			// Set currentUser to match the displayName stored in the logged in profile
 			currentUser = user.displayName;
 			// Display their credentials to the console
 			console.log("Name: ", name);
@@ -69,10 +69,40 @@ function printRooms(room, roomID){
 		// We have to reference the EXACT level above the value we want updated
 		// hence, 'rooms/roomID'
 		var roomRef = firebase.database().ref('rooms/'+roomID);
-		// Call Firebase.update(), passing in the userTwo object
-		roomRef.update(userTwo);
-		// Add the href to the button, triggering redirect to the game page
-		$('#'+roomID).attr('href', '/game');
+
+		// We need to access the data for that specific room node
+		roomRef.once('value')
+			.then(function(snapshot){
+				// The entire room object
+				var roomData = snapshot.val();
+				console.log(roomData);
+				// User 1 and user 2 currently in the room node
+				var user1 = roomData.user1;
+				var user2 = roomData.user2;
+				console.log("User One: ", user1);
+				console.log("User Two: ", user2);
+				// If the current user is user 1 in the room...
+				if(user1 == currentUser){
+					// Log the following error to the console.
+					console.log('Error. You can\'t join a room you\'ve already joined.');
+					// Display the error to the HTML in a modal.
+					var text = $('<p>');
+					text.append('You can\'t join a room you\'ve created. Please try joining another room.');
+					text.append('</p>');
+					text.css('color', 'red');
+					text.addClass('text-center');
+					$('#errorMessage').html(text);
+					$('#errorModal').modal('show');
+				// Otherwise, if the current user isn't already in the room...
+				}else if(user1 !== currentUser){
+					// Call Firebase.update(), passing in the userTwo object
+					// Update the specific room node with the current user, as user 2
+					roomRef.update(userTwo);
+					console.log("Room Updated!");
+					// Redirect to the game page
+					window.location = "/game";
+				}
+			})
 	})
 }
 
