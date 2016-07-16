@@ -100,7 +100,7 @@ function printRooms(room, roomID){
 					roomRef.update(userTwo);
 					console.log("Room Updated!");
 					// Redirect to the game page
-					window.location = "/game";
+					// window.location = "/game";
 				}
 			})
 	})
@@ -126,7 +126,6 @@ function createRoom(){
 	// Push the roomID, user1, user2, and room name to the 'rooms' ref in Firebase
 	newRoomRef.set({'roomID': roomID, 'user1': currentUser, 'user2': "", 'room': room});
 
-	printRooms(room);
 	// Clear the value of the input
 	$('#roomname').val(null);
 }
@@ -149,7 +148,6 @@ $('#chatSubmit').on('click', function(){
 	var message = $('#message').val();
 	var newMessageRef = chatRef.push();
 	newMessageRef.set({'username': currentUser, 'message': message});
-	printChat(currentUser, message);
 	$('#message').val(null);
 })
 
@@ -171,30 +169,28 @@ var roomListRef = firebase.database().ref('rooms');
 var chatRef = firebase.database().ref('chat');
 
 // Getting the values from our room list
-roomListRef.once('value')
-	.then(function(snapshot){
-		// .forEach(), loops through our database
-		snapshot.forEach(function(childSnapshot){
-			// The value of each room
-			var roomData = childSnapshot.val();
-			var room = roomData.room;
-			var roomID = roomData.roomID;
-			var user1 = roomData.user1;
-			var user2 = roomData.user2;
-			// Print only the rooms where one user has joined
-			if(user2 == ""){
-				printRooms(room, roomID);
-			}
-		})
-	})
+roomListRef.on('child_added', function(childSnapshot){
+	var roomData = childSnapshot.val();
+	// console.log(roomData);
+	var room = roomData.room;
+	var roomID = roomData.roomID;
+	var user1 = roomData.user1;
+	var user2 = roomData.user2;
+	if(user2 == ""){
+		printRooms(room, roomID);		
+	}
+})
+
+roomListRef.on('child_changed', function(childSnapshot){
+	var roomData = childSnapshot.val();
+	console.log("This was changed: ", roomData);
+	
+})
 
 // Getting the entire chat
-chatRef.once('value')
-	.then(function(snapshot){
-		snapshot.forEach(function(childSnapshot){
-			var chatData = childSnapshot.val();
-			var username = chatData.username;
-			var message = chatData.message;
-			printChat(username, message);
-		})
-	})
+chatRef.on('child_added', function(childSnapshot){
+	var chatData = childSnapshot.val();
+	var username = chatData.username;
+	var message = chatData.message;
+	printChat(username, message);
+})
