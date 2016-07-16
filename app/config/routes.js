@@ -18,4 +18,15 @@ module.exports = function(app){
 	app.get('/scores', function(req, res){
 		res.render('scores');
 	})
+
+	
+
+	app.get('/api/:id?', function(req, res){
+		res.json(req.body);
+		console.log("server data: ", req.body);
+	})
+
+	app.post('/api/:id?', function(req, res){
+		console.log('Data sent to the server. ', req.body)
+	})
 }

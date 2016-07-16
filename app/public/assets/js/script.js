@@ -28,6 +28,8 @@ var gameTotals = {
 	timeElapsed: 0
 }
 
+var gameData = []
+
 //invader images/ticker
 var invadertic = 0;
 var boomaudiotic = 0;
@@ -49,6 +51,8 @@ var endGameRows = [0,0,0,0,0,0,0,0,0];
 var stopMakingShips = 0;
 //holds the bonus words
 var bonusWords = [];
+
+// $('#myModal').modal({backdrop: 'static', keyboard: false})  
 
 ////////////////////////////////////////////////////////////////
 //ajax call to begin everything
@@ -452,6 +456,17 @@ function gameStart(){
 
 //makes 81 ships in a grid. most of the logic is in "newwordlifecycle"
 function gameOver(){
+	//update database on gameover.
+	console.log('Game Over log: ', gameTotals)
+	
+	$.ajax({
+	    url      : "/api",
+	    dataType : 'json', // I was pretty sure this would do the trick
+	    data     : gameTotals,
+	    type     : 'POST',
+	    complete : console.log('AJAX post: ', gameTotals)
+	});
+
 	gameState.endWaveTrigger = true;
 	tempTimeLog();
 	clearAllRows();
@@ -478,10 +493,31 @@ function startWave(x){
 	if(gameState.victory == false){
 		console.log("false victory, full reset");
 		fullReset();
+			
+		// matt's AJAXX post!
+
+
+		
 	}else{
 		console.log("true victory, partial reset");
-		gameReset();	
+		gameReset();
+		// matt's AJAXX post!
+
+
+
+		$.ajax({
+		    url      : '/api',
+		    dataType : 'json', // I was pretty sure this would do the trick
+		    data     : gameTotals,
+		    type     : 'POST',
+		    complete : console.log('Next level! AJAX post: ', gameTotals)
+		});
+		
 	}
+
+
+
+
 	$('#waveNum').html(gameState.wave);
 	gameState.go = true;
 	gameStart();
@@ -489,6 +525,10 @@ function startWave(x){
 
 //this is the victory function
 function endWave(){
+	// console.log("endwave gameTotals: ", gameTotals);
+	// console.log("endwave gameState: ", gameState);
+
+
 	gameState.endWaveTrigger = true;
 	gameState.difficulty = Math.floor(gameState.difficulty * .9);
 	tempTimeLog();
@@ -518,6 +558,8 @@ function endWave(){
 		$('.completed').html("");
 	}
 
+
+
 	//pulls up the modal
 	setTimeout(function(){
 		$('.justWave').html("Wave: ");
@@ -538,6 +580,12 @@ function endWave(){
 
 //resets basic stats
 function gameReset(){
+	console.log("gameTotals: ", gameTotals);
+
+	$.post('/api',gameTotals,function(){
+		console.log('Posted :', gameTotals)
+	});
+
 	gameState.go = true;
 	gameState.words = 0;
 	gameState.missedWords = 0;
@@ -550,11 +598,17 @@ function gameReset(){
 
 	gameHeaderUpdate();
 
+
+
+
 }
 
 function fullReset(){
 
-	console.log("gameTotals", gameTotals);
+	console.log("gameTotals: ", gameTotals);
+
+
+	
 
 	gameState.go = true;
 	gameState.victory = null;
