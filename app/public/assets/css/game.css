@@ -257,12 +257,25 @@ body {
 .form-group{    
   position: absolute;
   bottom:0;
-  right:0;
+  margin-left: 330px;
 }
 
 .cityIcon{
-  height:25px;
+  height:55px;
+  float:left;
+  margin-left:90px;
+  bottom: 0;
+}
+.button{
   float:right;
+  margin-right: 30px;
+  background-color: black;
+  border: 2px solid yellow;
+  border-radius: 5px;
+}
+.btn{
+  background-color: black;
+  color:white;
 }
 
 .globe{
@@ -361,11 +374,11 @@ h3{
   
 }
 
-.modal-content:hover {
+/*.modal-content:hover {
   border-image: repeating-linear-gradient( 45deg, #A60707, #A60707 1%, gray 1%, gray 8%) 10;
   color: #A60707;
   
-}
+}*/
 
 /* The Close Button */
 .start {

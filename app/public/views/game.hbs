@@ -69,7 +69,7 @@
 
             <h3 id="waveNum">1</h3>
             <h3 class="white sboard">Wave:</h3>
-            <img class="cityIcon" src="static/assets/images/city5.png">
+            
             <h3 id="waveTime">20</h3>
             <h3 class="white sboard">Time Remaining:</h3>
 
@@ -130,12 +130,18 @@
     </div>
 </div>
 
-<div class="container">
+<!--<div class="container">
     
     <input class="box">
     <button class="btn btn-primary makediv" id="pushMe">Make Div</button>
     <button id="modalButton">Open Modal</button>
-</div>
+</div>-->
+<div class ="cityImg">
+    <img class="cityIcon" src="static/assets/images/city5.png"
+</div> 
+<div class ="button">
+  <a class="btn btn-default" href="/menu" role="button">Go to menu</a>
+  </div>   
 
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug (what does this mean??? - zintis)-->
 
@@ -171,13 +177,13 @@
 <script>
     var modal = document.getElementById('myModal');
 
-    var btn = document.getElementById("modalButton");
+    //var btn = document.getElementById("modalButton");
 
     var start = document.getElementsByClassName("start")[0];
 
-    btn.onclick = function() {
-        modal.style.display = "block";
-    }
+    //btn.onclick = function() {
+        //modal.style.display = "block";
+    //}
 
     start.onclick = function() {
         modal.style.display = "none";
