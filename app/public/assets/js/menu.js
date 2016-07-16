@@ -35,19 +35,24 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 })
 
 // printRooms() - prints all rooms in Firebase to the HTML
-function printRooms(room, roomID){
+function printRooms(room, roomID, userInside){
 	// Dynamically create a well
 	var well = $('<div>');
 		well.attr('id, room');
 		well.attr('class', 'well clearfix');
 		well.append('<p>');
 		well.append(room);
+		well.append('<br>');
+		well.append("User Inside: ", userInside);
 		well.append('</p>');
 	// Create a Join button, dynamically, append it to the well
 	var wellButton = $('<a>');
 		wellButton.attr('class', 'btn btn-default pull-right');
 		// Give the button the respective roomID from Firebase as its ID
 		wellButton.attr('id', roomID);
+		if(currentUser == userInside){
+			wellButton.attr('data-user', userInside);
+		}
 		wellButton.append('Join');
 		wellButton.append('</a>');
 	// Append the button to the well
@@ -100,9 +105,10 @@ function printRooms(room, roomID){
 					roomRef.update(userTwo);
 					console.log("Room Updated!");
 					// Redirect to the game page
-					// window.location = "/game";
+					window.location = "/game";
 				}
 			})
+
 	})
 }
 
@@ -177,14 +183,26 @@ roomListRef.on('child_added', function(childSnapshot){
 	var user1 = roomData.user1;
 	var user2 = roomData.user2;
 	if(user2 == ""){
-		printRooms(room, roomID);		
+		printRooms(room, roomID, user1);		
 	}
-})
+})	
 
 roomListRef.on('child_changed', function(childSnapshot){
 	var roomData = childSnapshot.val();
 	console.log("This was changed: ", roomData);
-	
+	var room = roomData.room;
+	var roomID = roomData.roomID;
+	var user1 = roomData.user1;
+	var user2 = roomData.user2;	
+
+	if(user1 == currentUser){
+		window.location = "/game";
+	}
+
+	// If we have a second user, we don't want to print the room
+	// SO we only print rooms where user2 is an empty string
+	// We want to print only the open rooms
+
 })
 
 // Getting the entire chat
