@@ -1,7 +1,14 @@
-.well {
+/*.well {
   color: #727171;
+}*/
+
+tbody:hover tr:hover{
+	background-color: grey;
 }
 
+.active {
+	color: black;	
+}
 .panel-body {
  background-color: black;
  border: 2px solid yellow;
