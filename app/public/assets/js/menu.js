@@ -36,33 +36,36 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 
 // printRooms() - prints all rooms in Firebase to the HTML
 function printRooms(room, roomID, userInside){
-	// Dynamically create a well
-	var well = $('<div>');
-		well.attr('id, room');
-		well.attr('class', 'well clearfix');
-		well.append('<p>');
-		well.append(room);
-		well.append('<br>');
-		well.append("User Inside: ", userInside);
-		well.append('</p>');
-	// Create a Join button, dynamically, append it to the well
-	var wellButton = $('<a>');
-		wellButton.attr('class', 'btn btn-default pull-right');
-		// Give the button the respective roomID from Firebase as its ID
-		wellButton.attr('id', roomID);
-		if(currentUser == userInside){
-			wellButton.attr('data-user', userInside);
-		}
-		wellButton.append('Join');
-		wellButton.append('</a>');
-	// Append the button to the well
-		well.append(wellButton);
-		well.append('</div>');
-	// Append the well to the panel
-	$('#currentRooms').append(well);
-	// Click Event to Join a Room -- using the roomID as the ID selector
+	// Dynamically create a table row
+	var row = $('<tr>');
+		// Add the room name as an ID
+		row.attr('id', room);
+		// Add the room ID as a data-roomid
+		row.attr('data-roomid', roomID);
+		// Display the room name and user inside in the row
+		row.append('<td>'+room+'</td>');
+		row.append('<td>'+userInside+'</td>');
+		row.append('</tr>');
+		$('.table').append(row);
+
+		// When the row with a particular room ID is clicked...
+		$('tr[data-roomid='+roomID+']').on('click', function(){
+			// Add/remove the class 'active' to the row
+			$('tr[data-roomid='+roomID+']').toggleClass('active');
+			// Add/remove the class 'disabled' to the 'Join Room' button
+			$('#joinButton').toggleClass('disabled');
+
+			// Passing the room-ID to the joinButton
+			// if($('#joinButton').attr('data-roomid', roomID)){
+			// 	$('#joinButton').removeAttr('data-roomid', roomID);
+			// }else{
+			// 	$('#joinButton').attr('data-roomid', roomID);
+			// }
+		});
+
+	// Click Event to Join a Room 
 	// Update user2 with the current user
-	$('#'+roomID).on('click', function(){
+	$('#joinButton').on('click', function(){
 		// Declare an object with property user2, value is the currentUser
 		var userTwo = {user2: currentUser};
 		// Get the ref to Firebase. 
@@ -108,7 +111,6 @@ function printRooms(room, roomID, userInside){
 					window.location = "/game";
 				}
 			})
-
 	})
 }
 
@@ -200,9 +202,10 @@ roomListRef.on('child_changed', function(childSnapshot){
 	}
 
 	// If we have a second user, we don't want to print the room
-	// SO we only print rooms where user2 is an empty string
-	// We want to print only the open rooms
-
+	// We will remove any rooms from the DOM where a second user has joined
+	if(user2){
+		$('tr[data-roomid='+roomID+']').remove();
+	}
 })
 
 // Getting the entire chat
