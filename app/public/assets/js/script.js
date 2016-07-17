@@ -505,13 +505,13 @@ function startWave(x){
 
 
 
-		$.ajax({
-		    url      : '/api',
-		    dataType : 'json', // I was pretty sure this would do the trick
-		    data     : gameTotals,
-		    type     : 'POST',
-		    complete : console.log('Next level! AJAX post: ', gameTotals)
-		});
+		// $.ajax({
+		//     url      : '/api',
+		//     dataType : 'json', // I was pretty sure this would do the trick
+		//     data     : gameTotals,
+		//     type     : 'POST',
+		//     complete : console.log('Next level! AJAX post: ', gameTotals)
+		// });
 		
 	}
 
@@ -582,9 +582,14 @@ function endWave(){
 function gameReset(){
 	console.log("gameTotals: ", gameTotals);
 
-	$.post('/api',gameTotals,function(){
-		console.log('Posted :', gameTotals)
+	$.ajax({
+	    url      : '/api',
+	    dataType : 'json', // I was pretty sure this would do the trick
+	    data     : gameTotals,
+	    type     : 'POST',
+	    complete : console.log('Next level! AJAX post: ', gameTotals)
 	});
+
 
 	gameState.go = true;
 	gameState.words = 0;
