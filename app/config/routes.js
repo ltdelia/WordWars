@@ -21,25 +21,44 @@ module.exports = function(app){
 	})
 
 	
-
 	app.get('/api/:username?', function(req, res){
 		// res.json(req.body);
 		// console.log("server data: ", req.body);
 
-		Games.findAll().then(function(result){
-			res.json(result);
 
-		})
+
+		if(req.params.username){
+
+			// Then display the JSON for ONLY that character.
+			// (Note how we're using the ORM here to run our searches)
+			Games.findAll({
+				where: {
+					username: req.params.username
+				}
+			}).then(function(result){
+				res.json(result);
+			})
+		}
+
+		// Otherwise...
+		else{
+			// Otherwise display the data for all of the characters.
+			// (Note how we're using Sequelize here to run our searches)
+			Games.findAll().then(function(result){
+				res.json(result);
+
+			})
+		};
 	})
 
 	app.post('/api/:username?', function(req, res){
-		console.log('Data sent to the server. ', req.body);
+		// console.log('Data sent to the server. ', req.body);
 
 		Games.findAll().then(function(result) {
 			console.log(result);
 			
 			Games.create({
-				username: "matt",
+				username: "analben",
 				points: req.body.points,
 				level: req.body.finalWave,
 				enemies: req.body.enemies,

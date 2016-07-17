@@ -27,5 +27,4 @@ var Games = sequelize.define('games', {
 
 Games.sync()
 
-
 module.exports = Games;
