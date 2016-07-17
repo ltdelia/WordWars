@@ -56,11 +56,11 @@ function printRooms(room, roomID, userInside){
 			$('#joinButton').toggleClass('disabled');
 
 			// Passing the room-ID to the joinButton
-			// if($('#joinButton').attr('data-roomid', roomID)){
-			// 	$('#joinButton').removeAttr('data-roomid', roomID);
-			// }else{
-			// 	$('#joinButton').attr('data-roomid', roomID);
-			// }
+			if($('#joinButton').attr('data-roomid', roomID)){
+				$('#joinButton').removeAttr('data-roomid', roomID);
+			}else{
+				$('#joinButton').attr('data-roomid', roomID);
+			}
 		});
 
 	// Click Event to Join a Room 
@@ -83,7 +83,7 @@ function printRooms(room, roomID, userInside){
 			.then(function(snapshot){
 				// The entire room object
 				var roomData = snapshot.val();
-				console.log(roomData);
+				// console.log(roomData);
 				// User 1 and user 2 currently in the room node
 				var user1 = roomData.user1;
 				var user2 = roomData.user2;
@@ -106,9 +106,6 @@ function printRooms(room, roomID, userInside){
 					// Call Firebase.update(), passing in the userTwo object
 					// Update the specific room node with the current user, as user 2
 					roomRef.update(userTwo);
-					console.log("Room Updated!");
-					// Redirect to the game page
-					window.location = "/game";
 				}
 			})
 	})
@@ -191,6 +188,7 @@ roomListRef.on('child_added', function(childSnapshot){
 
 roomListRef.on('child_changed', function(childSnapshot){
 	var roomData = childSnapshot.val();
+	console.log("Room Updated!");
 	console.log("This was changed: ", roomData);
 	var room = roomData.room;
 	var roomID = roomData.roomID;
@@ -201,6 +199,10 @@ roomListRef.on('child_changed', function(childSnapshot){
 		window.location = "/game";
 	}
 
+	if(user2 == currentUser){
+		window.location = "/game";
+	}
+	
 	// If we have a second user, we don't want to print the room
 	// We will remove any rooms from the DOM where a second user has joined
 	if(user2){

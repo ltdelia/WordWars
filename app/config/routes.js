@@ -2,7 +2,13 @@
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
+var firebase = require('firebase');
 var Games = require('../models/games.js');
+
+firebase.initializeApp({
+	databaseURL: "https://wordwars-b7992.firebaseio.com",
+	serviceAccount: "WordWarsServiceAccount.json"
+})
 
 var app = express();
 
@@ -18,8 +24,7 @@ module.exports = function(app){
 	})
 	app.get('/scores', function(req, res){
 		res.render('scores');
-	})
-
+	})	
 	
 	app.get('/api/:username?', function(req, res){
 		// res.json(req.body);
