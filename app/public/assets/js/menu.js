@@ -114,6 +114,7 @@ function printRooms(room, roomID, userInside){
 // printChat() -- prints out the messages posted by users
 function printChat(username, message){
 	var text = $('<p>');
+	text.attr('id', message);
 	text.append('<strong>'+ username + '</strong>: '+ message);
 	text.append('</p>');
 	$('#chatLog').append(text);
@@ -209,11 +210,13 @@ roomListRef.on('child_changed', function(childSnapshot){
 		$('tr[data-roomid='+roomID+']').remove();
 	}
 })
-
-// Getting the entire chat
-chatRef.on('child_added', function(childSnapshot){
+var counter = 0;
+// Getting the entire chat ref, limiting to last ten messages
+chatRef.limitToLast(10).on('child_added', function(childSnapshot){
 	var chatData = childSnapshot.val();
 	var username = chatData.username;
 	var message = chatData.message;
+	counter++;
+	console.log(counter);
 	printChat(username, message);
 })
