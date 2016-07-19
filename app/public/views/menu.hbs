@@ -2,6 +2,7 @@
 
 <nav class="navbar navbar-default" role="navigation">
 	<div class="container-fluid">
+
 		<!-- Brand and toggle get grouped for better mobile display -->
 		<div class="navbar-header">
 			<a class="navbar-brand">WordWars</a>
@@ -10,12 +11,19 @@
 		<!-- Collect the nav links, forms, and other content for toggling -->
 		<div class="collapse navbar-collapse navbar-ex1-collapse">
 			<ul class="nav navbar-nav">
+				<li><a href="/menu">Menu</a></li>
+			</ul>
+			<ul class="nav navbar-nav">
 				<li><a href="/scores">High Scores</a></li>
+			</ul>
+			<ul class="nav navbar-nav">
+				<li><a href="/game">Play</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li><button class="btn btn default" id="logOut">Log Out</a></li>
 			</ul>
 		</div><!-- /.navbar-collapse -->
+
 	</div>
 </nav>
 <div class="container-fluid" id="game_space">
@@ -23,6 +31,7 @@
 	<div id='stars'></div>
   	<div id='stars2'></div>
   	<div id='stars3'></div>
+
 	<div class="row">
 		<div class="col-md-12">
 			<div class="page-header">
@@ -31,21 +40,37 @@
 			</div>
 		</div>
 	</div>
+	
 	<div class="row">
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-body">
-					<p>To play, type words in the missiles approaching your ship before they get there.</p>
-					<p>If you type a word that hasn't been used in the match yet, it launches a missile at your opponent with that word.</p> 
-					<p>As time progresses, more difficult words are fired automatically by the game at both players.</p>
+					<p>To play, type the words of the aliens that are attacking earth.</p>
+					<p>In multiplayer if you type a word that hasn't been used in the match yet, it launches at your opponent.</p> 
+					<p>Survive timed waves with aliens attacking faster each wave!</p>
 				</div>
 			</div>
 		</div>
 		<div class="col-md-6">
+
 			<div class="panel panel-default">
+
 				<div class="panel-heading">
-					<h3 class="panel-title text-center">Join a Game</h3>
+					<h3 class="panel-title text-center" style="padding:10px;">Join a Game</h3 >
+					<div class="row">
+						<div class="col col-md-6">
+							<a class="btn btn-default form-control" style="width:100%" id="createOpen" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span> Create Room</a>
+						</div>
+						<div class="col col-md-6">
+							<button type="submit" class="btn btn-default disabled form-control" id="joinButton"><span class="glyphicon glyphicon-transfer"></span> Join Room</a>
+						</div>
+					</div>
+
+
 				</div>
+
+
+
 				<div class="panel-body table-responsive">
 						<table class="table table-hover">
 							<thead>
@@ -57,10 +82,10 @@
 							<tfoot>
 								<tr>
 									<td>
-										<a class="btn btn-default form-control" id="createOpen" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span> Create Room</a>
+										
 									</td>
 									<td>
-										<button type="submit" class="btn btn-default disabled form-control" id="joinButton"><span class="glyphicon glyphicon-transfer"></span> Join Room</a>
+										
 									</td>								
 								</tr>
 							</tfoot>
