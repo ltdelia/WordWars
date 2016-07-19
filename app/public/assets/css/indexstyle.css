@@ -1,0 +1,89 @@
+.wordTargetAnimate3 {
+    position: relative;
+    z-index:1;
+    -webkit-animation: mymove2 2s; /* Chrome, Safari, Opera */
+    animation: mymove 2s;
+}
+
+.wordTargetAnimate3b {
+    position: relative;
+    z-index:1;
+    -webkit-animation: mymove2 2s; /* Chrome, Safari, Opera */
+    animation: mymove2 2s;
+/*        animation-direction:reverse;*/
+}
+.wordTargetAnimate4 {
+    position: relative;
+    z-index:1;
+    -webkit-animation: mymove2 3s; /* Chrome, Safari, Opera */
+    animation: mymove 3s;
+}
+.wordTargetAnimate4b {
+    position: relative;
+    z-index:1;
+    -webkit-animation: mymove2 3s; /* Chrome, Safari, Opera */
+    animation: mymove2 3s;
+        /*animation-direction:reverse;*/
+}
+.wordTargetAnimate5 {
+    position: relative;
+    z-index:1;
+    -webkit-animation: mymove2 4s; /* Chrome, Safari, Opera */
+    animation: mymove 4s;
+}
+.wordTargetAnimate5b {
+    position: relative;
+    z-index:1;
+    -webkit-animation: mymove2 4s; /* Chrome, Safari, Opera */
+    animation: mymove2 4s;
+/*animation-direction:reverse;*/
+}
+
+.wordTargetAnimate6 {
+    position: relative;
+    z-index:1;
+    -webkit-animation: mymove2 5s; /* Chrome, Safari, Opera */
+    animation: mymove 5s;
+}
+.wordTargetAnimate6b {
+    position: relative;
+    z-index:1;
+    -webkit-animation: mymove2 5s; /* Chrome, Safari, Opera */
+    animation: mymove2 5s;
+/*animation-direction:reverse;*/
+}
+
+.hundredTall{
+	height:80px;
+}
+  /* Chrome, Safari, Opera */
+  @-webkit-keyframes mymove {
+      from {left: 20%;}
+      to {left: 80%;}
+  }
+
+  /* Standard syntax */
+  @keyframes mymove {
+      from {left: 20%;}
+      to {left: 80%;}
+  }
+
+  /* Chrome, Safari, Opera */
+  @-webkit-keyframes mymove2 {
+      from {left: 80%;}
+      to {left: 20%;}
+  }
+
+  /* Standard syntax */
+  @keyframes mymove2 {
+      from {left: 80%;}
+      to {left: 20%;}
+  }
+
+  .glyphicon {
+  	text-align:left;
+  }
+
+  .login-right{
+  	width:200px;
+  }

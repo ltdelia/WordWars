@@ -73,38 +73,41 @@ body{
 }
 
 
-#A{
+/*#A{
     margin-top: 30px;
 	position: relative;
     z-index:1;
-    -webkit-animation: divmove 20s infinite ; /* Chrome, Safari, Opera */
-    animation: divmove 20s infinite ;
+    -webkit-animation: divmove 5s infinite ;
+    animation: divmove 5s infinite ;
+    animation-iteration-count:infinite;
     
 }
 
 #B {
 	position: relative;
     z-index:1;
-    -webkit-animation: divmove 20s infinite ; /* Chrome, Safari, Opera */
-    animation: divmove 20s infinite  ;
+    -webkit-animation: divmove 7s infinite ; 
+    animation: divmove 7s infinite  ;
     animation-direction:reverse;
+    animation-iteration-count:infinite;
 }
 
 #C {
 	position: relative;
     z-index:1;
-    -webkit-animation: divmove 55s infinite ; /* Chrome, Safari, Opera */
-    animation: divmove 15s infinite  ;
+    -webkit-animation: divmove 8s infinite ; 
+    animation: divmove 8s infinite  ;
+    animation-iteration-count:infinite;
     
 }
 
 #D {
 	position: relative;
     z-index:1;
-    -webkit-animation: divmove 20s infinite ; /* Chrome, Safari, Opera */
+    -webkit-animation: divmove 20s infinite ; 
     animation: divmove 20s infinite  ;
     animation-direction:reverse;
-}
+}*/
 
 .sound{
   visibility: hidden;
@@ -113,11 +116,11 @@ body{
 
 
 
- #A #C #D {-webkit-animation-timing-function: linear;}
+/* #A #C #D {-webkit-animation-timing-function: linear;}
  #B {-webkit-animation-timing-function: ease-in-out;}
 
  #A #C #D {animation-timing-function: linear;}
- #B {animation-timing-function: ease-in-out;}
+ #B {animation-timing-function: ease-in-out;}*/
 
 @-webkit-keyframes divmove {
     from {left: 0px;}

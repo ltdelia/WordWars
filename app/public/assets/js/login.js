@@ -157,3 +157,65 @@ $('#loginUser').on('click', function(){
 	$('#logEmail').val(null);
 	$('#logPassword').val(null);
 })
+
+//////////////////////////////////////////////////////////////////////////
+//this section can be rewritten using a function prototype I think, and then get called many times with different parameters instead of being rewritten over and over
+//sample:
+
+	// function enterKey(a, b, c, d, e){
+	// 	$("#" + a).keyup(function(event){
+	// 		console.log('enter1');
+	// 	    if(event.keyCode == 13 && $("#" + b).val() != "" && $("#" + c).val() != ""){
+	// 	    	$("#"+d).click();
+	// 	    	console.log('click');
+	// 	    }
+	// 	});
+	// }
+
+$("#logEmail").keyup(function(event){
+	console.log('enter1');
+    if(event.keyCode == 13 && $("#logEmail").val() != "" && $("#logPassword").val() != ""){
+    	$("#loginUser").click();
+    	console.log('click');
+    }
+});
+
+$("#logPassword").keyup(function(event){
+	console.log('enter1');
+    if(event.keyCode == 13 && $("#logEmail").val() != "" && $("#logPassword").val() != ""){
+    	$("#loginUser").click();
+    	console.log('click');
+    }
+});
+
+$("#regName").keyup(function(event){
+	console.log('enter1');
+    if(event.keyCode == 13 && $("#regName").val() != "" && $("#regEmail").val() != "" && $("#regPassword").val() != "" && $("#confirmPassword").val() != ""){
+    	$("#registerUser").click();
+    	console.log('click');
+    }
+});
+
+$("#regEmail").keyup(function(event){
+	console.log('enter1');
+    if(event.keyCode == 13 && $("#regName").val() != "" && $("#regEmail").val() != "" && $("#regPassword").val() != "" && $("#confirmPassword").val() != ""){
+    	$("#registerUser").click();
+    	console.log('click');
+    }
+});
+
+$("#regPassword").keyup(function(event){
+	console.log('enter1');
+    if(event.keyCode == 13 && $("#regName").val() != "" && $("#regEmail").val() != "" && $("#regPassword").val() != "" && $("#confirmPassword").val() != ""){
+    	$("#registerUser").click();
+    	console.log('click');
+    }
+});
+
+$("#confirmPassword").keyup(function(event){
+	console.log('enter1');
+    if(event.keyCode == 13 && $("#regName").val() != "" && $("#regEmail").val() != "" && $("#regPassword").val() != "" && $("#confirmPassword").val() != ""){
+    	$("#registerUser").click();
+    	console.log('click');
+    }
+});
