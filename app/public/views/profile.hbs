@@ -1,0 +1,15 @@
+<link rel="stylesheet" href="/static/assets/css/style.css">
+<script type="text/javascript">
+	console.log(userData);
+</script>
+
+<div class="jumbotron">
+	<div class="container-fluid">
+
+		<!--<h1>{{ this.username }}</h1>-->
+		<p>	{{#each userData}}
+				{{ this.points }}
+			{{/each}}
+		</p>
+	</div>
+</div>
