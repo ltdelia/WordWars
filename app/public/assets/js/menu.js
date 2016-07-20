@@ -8,6 +8,7 @@
 
 // We declare a currentUser variable
 var currentUser;
+var selectedRoomID;
 
 // Firebase Auth
 // Check if a user is logged in with Firebase
@@ -58,7 +59,9 @@ function printRooms(room, roomID, userInside){
 			// Passing the room-ID to the joinButton
 			$('#joinButton').attr('data-roomid', roomID);
 
-			console.log("Room ID in the row: ", roomID);
+			selectedRoomID = roomID;
+
+			console.log("Room ID in the row: ", selectedRoomID);
 		});
 
 	// Click Event to Join a Room 
@@ -75,8 +78,11 @@ function printRooms(room, roomID, userInside){
 		// To get there, we can't just reference the rooms node
 		// We have to reference the EXACT level above the value we want updated
 		// hence, 'rooms/roomID'
-		var roomRef = firebase.database().ref('rooms/'+roomID);
-		console.log("Room ID when Join Button clicked: ", roomID);
+		var referenceName = "/rooms/"+selectedRoomID+"/";
+		console.log(referenceName);
+		var roomRef = firebase.database().ref(referenceName);
+		// console.log("Room Reference in Firebase: ", roomRef);
+		// console.log("Room ID when Join Button clicked: ", selectedRoomID);
 		// We need to access the data for that specific room node
 		roomRef.once('value')
 			.then(function(snapshot){
@@ -86,8 +92,8 @@ function printRooms(room, roomID, userInside){
 				// User 1 and user 2 currently in the room node
 				var user1 = roomData.user1;
 				var user2 = roomData.user2;
-				console.log("User One: ", user1);
-				console.log("User Two: ", user2);
+				// console.log("User One: ", user1);
+				// console.log("User Two: ", user2);
 				// If the current user is user 1 in the room...
 				if(user1 == currentUser){
 					// Log the following error to the console.
@@ -105,7 +111,6 @@ function printRooms(room, roomID, userInside){
 					// Call Firebase.update(), passing in the userTwo object
 					// Update the specific room node with the current user, as user 2
 					roomRef.update(userTwo);
-					console.log('Room ID: ', roomID);					
 				}
 			})
 	})
@@ -140,7 +145,7 @@ function createRoom(){
 	$('#roomname').val(null);
 }
 
-// CLICK EVENTS
+// CLICK EVENTS & KEYUP EVENTS
 
 // Click Event for "Create a Room" -- opens a modal
 $('#createOpen').on('click', function(){
@@ -194,7 +199,6 @@ var chatRef = firebase.database().ref('chat');
 // Getting the values from our room list
 roomListRef.on('child_added', function(childSnapshot){
 	var roomData = childSnapshot.val();
-	console.log(roomData);
 	var room = roomData.room;
 	var roomID = roomData.roomID;
 	var user1 = roomData.user1;
