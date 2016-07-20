@@ -1,13 +1,13 @@
-@font-face {
+/*@font-face {
   font-family:  atariFull;
   src:      url('../fonts/atariFull.woff');
   src:      local('atariFull'),
           url('../fonts/atariFull.ttf'),
           format('truetype');
 }
-
+*/
 body {
-  font-family: atariFull;
+  font-family: 'Press Start 2P', cursive;
   font-size: 10px;
   color: yellow;
 }
@@ -37,6 +37,10 @@ body{
 	background-repeat: repeat;
 }
 
+input{
+  font-family: 'Ubuntu Mono', monospace;
+  font-size: 24px;
+}
 /*.panel-body {
   background-color: black;
   border: 2px solid yellow;

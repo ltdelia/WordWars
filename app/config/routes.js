@@ -13,6 +13,9 @@ firebase.initializeApp({
 var app = express();
 
 module.exports = function(app){
+
+	//PAGES
+
 	app.get('/', function(req, res){
 		res.render('index');
 	})
@@ -25,7 +28,26 @@ module.exports = function(app){
 	app.get('/scores', function(req, res){
 		res.render('scores');
 	})	
-	
+
+
+	app.get('/profile/:username', function(req,res){
+		
+
+		Games.findAll({
+			where: {
+				username: req.params.username
+			}
+		}).then(function(userData){
+			console.log(userData);
+
+			res.render('profile', {userData});
+		})
+
+	})
+
+
+	//DATA
+
 	app.get('/api/:username?', function(req, res){
 		// res.json(req.body);
 		// console.log("server data: ", req.body);
@@ -55,6 +77,7 @@ module.exports = function(app){
 			})
 		};
 	})
+
 
 	app.post('/api/:username?', function(req, res){
 		console.log('Data sent to the server. ', req.body);

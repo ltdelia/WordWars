@@ -19,9 +19,9 @@ var Games = sequelize.define('games', {
 	missedWords: {
 		type: Sequelize.INTEGER
 	}
-}
-// },
-// 	{timestamps: false}
+
+},
+	{timestamps: false}
 );
 
 

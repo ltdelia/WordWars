@@ -627,7 +627,7 @@ function fullReset(){
 	gameState.timeLeft = 20;
 	gameState.statusCheck = true;
 
-
+	
 	gameTotals.words = 0;
 	gameTotals.points =  0;
 	gameTotals.missedWords = 0;
