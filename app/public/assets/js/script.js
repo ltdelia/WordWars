@@ -1,3 +1,8 @@
+//this if for you lou!
+//newWordLifeCycle("Zintis", "bonusword");
+
+
+//////////////////////////////////////////////////////////////////////////
 //Basic Game Information
 var gameState = {
 	go: true,
@@ -271,6 +276,11 @@ function selectWord(){
 //this function will contain the new word lifecycle
 function newWordLifeCycle(inputContents, time){
 
+	var tempBonusWord = false;
+	if(time == "bonusword"){
+		tempBonusWord = true;
+	}
+
 	console.log("inputContents", inputContents);
 	if(time == null){time = inputContents.length;}
 
@@ -324,6 +334,9 @@ function newWordLifeCycle(inputContents, time){
 		var tempRandomNumber = Math.floor((Math.random() * 8)+2);
 		$('#row' + activeRow).append('<div class="center wordTargetDetails wordTargetAnimate'+ tempRandomNumber +' '+randomSpeed+' white"><div class="center"><img class="z3" width="35" height="35" src="'+invaders[invadertic]+'"></div><p class="wordTarget">'+inputContents+'</p></div>');
 		invaderSwap();
+	}else if(tempBonusWord == true){
+		$('#row' + activeRow).append('<div class="center wordTargetDetails wordTargetAnimate10 word-x2 white"><div class="center"><img class="z3" width="70" height="35" src="static/assets/images/saucer.gif"></div><p class="wordTarget">'+inputContents+'</p></div>');
+		AUDbonusword.play();
 	}else{
 		gameState.enemies++;
 		//this line creates the dynamic div that contains the word and a randomized alien image
@@ -768,6 +781,7 @@ var AUDloss = document.getElementById("loss");
 var AUDintro = document.getElementById("appear");
 var AUDchacha = document.getElementById("chacha");
 var AUDching = document.getElementById("ching");
+var AUDbonusword = document.getElementById("bonusword");
 
 //this function will play different explosion tracks depending on whether other explosion tracks are playing
 function playAudioBoom() { 
@@ -895,7 +909,7 @@ AUD321go.volume = .2;
 AUDwin.volume = 1;
 AUDloss.volume = 1;
 AUDintro.volume = 1;
-
+AUDbonusword.volume = .5;
 //this function is unused
 function isPlaying(x){console.log(x+".paused", x.paused);return !x.paused;}
 
