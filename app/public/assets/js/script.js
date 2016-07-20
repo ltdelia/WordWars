@@ -601,6 +601,7 @@ function gameReset(){
 	gameState.timeLeft = 20;
 	gameState.statusCheck = true;
 
+
 	gameHeaderUpdate();
 
 
@@ -633,6 +634,7 @@ function fullReset(){
 	gameTotals.missedWords = 0;
 	gameTotals.finalWave = 0;
 	gameTotals.enemies = 0;
+	gameTotals.timeElapsed = 0;
 
 	invadertic = 0;
 	activeBank = [];

@@ -91,7 +91,8 @@ module.exports = function(app){
 				level: req.body.finalWave,
 				enemies: req.body.enemies,
 				wordsTyped: req.body.words,
-				missedWords: req.body.missedWords
+				missedWords: req.body.missedWords,
+				timeElapsed: req.body.timeElapsed
 			});
 
 			res.json(true)
