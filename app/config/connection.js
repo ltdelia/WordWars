@@ -7,7 +7,7 @@ var source = {
         port: 3306,
         host: 'localhost',
         user: 'root',
-        password: '04051997',
+        password: 'Newslang14!',
         database: "WordWars"
     },
 

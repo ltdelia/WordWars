@@ -112,12 +112,16 @@ function printRooms(room, roomID, userInside){
 }
 
 // printChat() -- prints out the messages posted by users
-function printChat(username, message){
+function printChat(username, message, counter){
+	// Dynamically creates a new message
 	var text = $('<p>');
-	text.attr('id', message);
+	text.attr('id', 'chat-'+counter);
 	text.append('<strong>'+ username + '</strong>: '+ message);
 	text.append('</p>');
+	// Prints the message to the HTML
 	$('#chatLog').append(text);
+	// Animation causes the auto focus to the latest message
+	$('#chatLog').animate({scrollTop: $('#chatLog').prop("scrollHeight")}, 500);
 }
 
 function createRoom(){
@@ -150,13 +154,25 @@ $('#createRoom').on('click', function(){
 	$('#createOpen').remove();
 });
 
-// Click Event -- Submit the Chat
+// Submitting the Chat -- 2 options for the user
+// 1. Users can submit the chat by pressing enter
+$('#message').keyup(function(event){
+	if(event.keyCode == 13){
+		var message = $('#message').val();
+		var newMessageRef = chatRef.push();
+		newMessageRef.set({'username': currentUser, 'message': message});
+		$('#message').val(null);		
+	}
+});
+
+// 2. Users can submit the chat by clicking 'Submit'
 $('#chatSubmit').on('click', function(){
 	var message = $('#message').val();
 	var newMessageRef = chatRef.push();
 	newMessageRef.set({'username': currentUser, 'message': message});
-	$('#message').val(null);
-})
+	$('#message').val(null);		
+});
+
 
 // Click Event -- Sign Out the User
 $('#logOut').on('click', function(){
@@ -215,9 +231,8 @@ var counter = 0;
 // Getting the entire chat ref, limiting to last ten messages
 chatRef.limitToLast(10).on('child_added', function(childSnapshot){
 	var chatData = childSnapshot.val();
+	counter++;
 	var username = chatData.username;
 	var message = chatData.message;
-	counter++;
-	console.log(counter);
-	printChat(username, message);
+	printChat(username, message, counter);
 })
