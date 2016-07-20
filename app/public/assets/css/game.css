@@ -1,4 +1,10 @@
+.container{
 
+}
+
+.LR {
+  width:180px;
+}
 
 @font-face {
   font-family:  atariFull;
@@ -235,9 +241,9 @@ body {
 .form-control {
   display: block;
   width: 100%;
-  height: 50px;
+  height: 100px;
   padding: 6px 12px;
-  font-size: 40px;
+  font-size: 60px;
   line-height: 1.5;
   color: yellow;
   background-color: black;
@@ -254,24 +260,31 @@ body {
 .white {
   color:white;
 }
-.form-group{    
+/*.form-group{    
   position: absolute;
   bottom:0;
   margin-left: 330px;
+}*/
+
+.bottom{
+  position:absolute;
+  bottom:0;
 }
 
 .cityIcon{
-  height:55px;
-  float:left;
-  margin-left:90px;
-  bottom: 0;
+  height:100px;
+/*  float:left;*/
+/*  margin-left:90px;*/
+  /*bottom: 0;*/
 }
 .button{
-  float:right;
-  margin-right: 30px;
+  /*float:right;*/
+  /*margin-right: 30px;*/
+  height:33px;
   background-color: black;
   border: 2px solid yellow;
   border-radius: 5px;
+  width:180px;
 }
 .btn{
   background-color: black;

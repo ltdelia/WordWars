@@ -32,7 +32,7 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 //Basic Game Information
 var gameState = {
 	roomID: null,
-	go: true,
+	go: false,
 	victory: null,
 	words: 0,
 	//points are letters, but when displayed are *1000
@@ -75,7 +75,7 @@ roomRef.once('value')
 		console.log("Room ID: ", roomID);
 		console.log("User One: ", user1);
 		console.log("User Two: ", user2);
-	})
+	});
 
 
 var gameTotals = {
@@ -138,6 +138,7 @@ $.ajax({url: URL, success: function(result){
 
 	console.log("Gameloop starts", wordBank);
 	//opens up the modal automatically, but only if the ajax is successful
+	showInstructions();
 	openModal();
 
 }});
@@ -390,8 +391,10 @@ function newWordLifeCycle(inputContents, time){
 		$('#row' + activeRow).append('<div class="center wordTargetDetails wordTargetAnimate'+ tempRandomNumber +' '+randomSpeed+' white"><div class="center"><img class="z3" width="35" height="35" src="'+invaders[invadertic]+'"></div><p class="wordTarget">'+inputContents+'</p></div>');
 		invaderSwap();
 	}else if(tempBonusWord == true){
+		gameState.enemies++;
 		$('#row' + activeRow).append('<div class="center wordTargetDetails wordTargetAnimate10 word-x2 white"><div class="center"><img class="z3" width="70" height="35" src="static/assets/images/saucer.gif"></div><p class="wordTarget">'+inputContents+'</p></div>');
 		AUDbonusword.play();
+		explosionTrigger(time, activeRow, inputContents);
 	}else{
 		gameState.enemies++;
 		//this line creates the dynamic div that contains the word and a randomized alien image
@@ -454,6 +457,7 @@ function gameStatusCheck(){
 		gameState.timeEnd = new Date();
 		gameState.victory = true;
 		gameState.statusCheck = false;
+		gameState.go = false;
 		endWave();
 	}else if(gameState.missedWords >= 5 && gameState.statusCheck == true){
 		gameState.go = false;
@@ -481,45 +485,48 @@ function gameStatusCheck(){
 //beginning of game countdown, triggered by red modal button
 function gameStart(){
 
+	if(gameState.go == false){
+		gameState.go = true;
+		stopMakingShips = 82;
+		clearAllRows();
+		//difficulty level housekeeping
+		gameState.wave++;
+		gameHeaderUpdate();
+		//this is to avoid conflicts with the lose game function, not sure if necessary -zintis
 
-	stopMakingShips = 82;
-	clearAllRows();
-	//difficulty level housekeeping
-	gameState.wave++;
-	gameHeaderUpdate();
-	//this is to avoid conflicts with the lose game function, not sure if necessary -zintis
+		//sets countdown timer
+		var x = 4;
+		var countdown321 = setInterval(function(){
+			x --;
+			if (x==0){
+				//writes the GO!
+				playAudio321go('play');
+				$('#row4').html('<h1 class="centerAligning wordTargetAnimate50 word-x2 white">GO!</h1>');	
+				//2nd half of animation
+				setTimeout(function(){
+					$('#row4').html('<h1 class="centerAligning wordTargetAnimate51 word-x2 white">GO!</h1>');
+					
+				},600);
+			}else if (x < 0){
+				$('#row4').empty();
 
-	//sets countdown timer
-	var x = 4;
-	var countdown321 = setInterval(function(){
-		x --;
-		if (x==0){
-			//writes the GO!
-			playAudio321go('play');
-			$('#row4').html('<h1 class="centerAligning wordTargetAnimate50 word-x2 white">GO!</h1>');	
-			//2nd half of animation
-			setTimeout(function(){
-				$('#row4').html('<h1 class="centerAligning wordTargetAnimate51 word-x2 white">GO!</h1>');
-				
-			},600);
-		}else if (x < 0){
-			$('#row4').empty();
+				gameReset();//zzzzz
+				gameLoop(gameState.difficulty);
 
-			gameReset();//zzzzz
-			gameLoop(gameState.difficulty);
-
-			gameState.timeStart = new Date(); 
-			clearInterval(countdown321);//Zintis
-		}else{
-			//does the loop countdown
-			playAudio321('play');
-			$('#row4').html('<h1 class="centerAligning wordTargetAnimate50 word-x2 white">'+x+'</h1>');
-			//2nd half of animation
-			setTimeout(function(){
-				$('#row4').html('<h1 class="centerAligning wordTargetAnimate51 word-x2 white">'+x+'</h1>');
-			},600);
-		}
-	}, 1000);
+				gameState.timeStart = new Date(); 
+				clearInterval(countdown321);//Zintis
+			}else{
+				//does the loop countdown
+				playAudio321('play');
+				$('#row4').html('<h1 class="centerAligning wordTargetAnimate50 word-x2 white">'+x+'</h1>');
+				//2nd half of animation
+				setTimeout(function(){
+					$('#row4').html('<h1 class="centerAligning wordTargetAnimate51 word-x2 white">'+x+'</h1>');
+				},600);
+			}
+		}, 1000);
+	}
+	
 }
 
 //makes 81 ships in a grid. most of the logic is in "newwordlifecycle"
@@ -626,18 +633,12 @@ function endWave(){
 		$('.completed').html("");
 	}
 
-
-
 	//pulls up the modal
 	setTimeout(function(){
 		$('.justWave').html("Wave: ");
 		$('#waveNum').html(gameState.wave);
-
 		showStats();
 		openModal();
-		// setTimeout(function(){
-		// 	chachachaching();
-		// }, 1000);
 		$('#row4').html("");
 	},3500)
 
@@ -669,20 +670,13 @@ function gameReset(){
 	gameState.timeLeft = 20;
 	gameState.statusCheck = true;
 
-
 	gameHeaderUpdate();
-
-
-
 
 }
 
 function fullReset(){
 
 	console.log("gameTotals: ", gameTotals);
-
-
-	
 
 	gameState.go = true;
 	gameState.victory = null;
@@ -708,8 +702,6 @@ function fullReset(){
 	activeBank = [];
 	usedBank = [];
 	endGameRows = [0,0,0,0,0,0,0,0,0];
-
-
 
 	$('.start').html("I AM READY");
 
@@ -824,6 +816,12 @@ function tempTimeLog(){//temporary function to check time
 	console.log("timestart", gameState.timeStart);
 	console.log("end", gameState.timeEnd);
 	console.log("totals", gameTotals.timeElapsed);
+}
+
+function showInstructions(){
+	//zintis
+
+	$('.messageToPlayer').html("<ol>To play, type words into your 'word gun' as they come up on the screen.</ol><ol>If you miss a word, your cities become damaged, as seen in the lower left.</ol><ol>You can only miss 5 words before losing.</ol><ol>If you make a mistake, you can clear the text box by pressing ENTER.</ol><ol>Survive for "+gameState.secondsPerWave+" seconds to go to the next wave!</ol>");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -970,6 +968,7 @@ AUDwin.volume = 1;
 AUDloss.volume = 1;
 AUDintro.volume = 1;
 AUDbonusword.volume = .5;
+
 //this function is unused
 function isPlaying(x){console.log(x+".paused", x.paused);return !x.paused;}
 
