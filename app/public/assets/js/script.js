@@ -582,13 +582,13 @@ function endWave(){
 function gameReset(){
 	console.log("gameTotals: ", gameTotals);
 
-	$.ajax({
-	    url      : '/api',
-	    dataType : 'json', // I was pretty sure this would do the trick
-	    data     : gameTotals,
-	    type     : 'POST',
-	    complete : console.log('Next level! AJAX post: ', gameTotals)
-	});
+	// $.ajax({
+	//     url      : '/api',
+	//     dataType : 'json', // I was pretty sure this would do the trick
+	//     data     : gameTotals,
+	//     type     : 'POST',
+	//     complete : console.log('Next level! AJAX post: ', gameTotals)
+	// });
 
 
 	gameState.go = true;
@@ -600,6 +600,7 @@ function gameReset(){
 	gameState.endWaveTrigger = false;
 	gameState.timeLeft = 20;
 	gameState.statusCheck = true;
+
 
 	gameHeaderUpdate();
 
@@ -627,12 +628,13 @@ function fullReset(){
 	gameState.timeLeft = 20;
 	gameState.statusCheck = true;
 
-
+	
 	gameTotals.words = 0;
 	gameTotals.points =  0;
 	gameTotals.missedWords = 0;
 	gameTotals.finalWave = 0;
 	gameTotals.enemies = 0;
+	gameTotals.timeElapsed = 0;
 
 	invadertic = 0;
 	activeBank = [];

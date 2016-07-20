@@ -13,6 +13,9 @@ firebase.initializeApp({
 var app = express();
 
 module.exports = function(app){
+
+	//PAGES
+
 	app.get('/', function(req, res){
 		res.render('index');
 	})
@@ -25,7 +28,26 @@ module.exports = function(app){
 	app.get('/scores', function(req, res){
 		res.render('scores');
 	})	
-	
+
+
+	app.get('/profile/:username', function(req,res){
+		
+
+		Games.findAll({
+			where: {
+				username: req.params.username
+			}
+		}).then(function(userData){
+			console.log(userData);
+
+			res.render('profile', {userData});
+		})
+
+	})
+
+
+	//DATA
+
 	app.get('/api/:username?', function(req, res){
 		// res.json(req.body);
 		// console.log("server data: ", req.body);
@@ -40,8 +62,8 @@ module.exports = function(app){
 				where: {
 					username: req.params.username
 				}
-			}).then(function(result){
-				res.json(result);
+			}).then(function(userData){
+				res.json(userData);
 			})
 		}
 
@@ -49,18 +71,19 @@ module.exports = function(app){
 		else{
 			// Otherwise display the data for all of the characters.
 			// (Note how we're using Sequelize here to run our searches)
-			Games.findAll().then(function(result){
-				res.json(result);
+			Games.findAll().then(function(allUserData){
+				res.json(allUserData);
 
 			})
 		};
 	})
 
-	app.post('/api/:username?', function(req, res){
-		// console.log('Data sent to the server. ', req.body);
 
-		Games.findAll().then(function(result) {
-			console.log(result);
+	app.post('/api/:username?', function(req, res){
+		console.log('Data sent to the server. ', req.body);
+
+		Games.findAll().then(function(gameData) {
+			console.log(gameData);
 			
 			Games.create({
 				username: "analben",
@@ -68,7 +91,8 @@ module.exports = function(app){
 				level: req.body.finalWave,
 				enemies: req.body.enemies,
 				wordsTyped: req.body.words,
-				missedWords: req.body.missedWords
+				missedWords: req.body.missedWords,
+				timeElapsed: req.body.timeElapsed
 			});
 
 			res.json(true)
