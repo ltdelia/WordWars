@@ -1,5 +1,32 @@
+// We declare a currentUser variable
+var currentUser;
+
+// Firebase Auth
+// Check if a user is logged in with Firebase
+firebase.auth().onAuthStateChanged(function(userOnline){
+	if(userOnline){
+		var user = firebase.auth().currentUser;
+		console.log("User Online: ", user);
+		var name, email;
+
+		// If user is logged in...
+		if(user != null){
+			name = user.displayName;
+			email = user.email;
+			// Set currentUser to match the displayName stored in the logged in profile
+			currentUser = user.displayName;
+			// Display their credentials to the console
+			console.log("Name: ", name);
+			console.log("Email: ", email);
+		}
+	}else{
+		console.log("No one is signed in.");
+	}
+})
+
 //Basic Game Information
 var gameState = {
+	roomID: null,
 	go: true,
 	victory: null,
 	words: 0,
@@ -19,7 +46,35 @@ var gameState = {
 
 }
 
+var currentURL = window.location.pathname;
+if(currentURL != "/game"){
+	gameState.roomID = currentURL.toString().split("/game", 2)[1];
+	console.log(gameState.roomID);
+}
+// Firebase Realtime Database
+// Reference to our specific game room
+var roomRef = firebase.database().ref('rooms/'+gameState.roomID);
+
+// We need to access the data for that specific room node
+roomRef.once('value')
+	.then(function(snapshot){
+		// The entire room object
+		var roomData = snapshot.val();
+		// console.log(roomData);
+		var room = roomData.room;
+		var roomID = roomData.roomID;
+		// User 1 and user 2 currently in the room node
+		var user1 = roomData.user1;
+		var user2 = roomData.user2;
+		console.log("Room: ", room);
+		console.log("Room ID: ", roomID);
+		console.log("User One: ", user1);
+		console.log("User Two: ", user2);
+	})
+
+
 var gameTotals = {
+	username: currentUser,
 	words: 0,
 	points: 0,
 	missedWords: 0,
@@ -436,12 +491,12 @@ function gameStart(){
 			},600);
 		}else if (x < 0){
 			$('#row4').empty();
-			clearInterval(countdown321);
+
 			gameReset();//zzzzz
 			gameLoop(gameState.difficulty);
 
 			gameState.timeStart = new Date(); 
-
+			clearInterval(countdown321);//Zintis
 		}else{
 			//does the loop countdown
 			playAudio321('play');
@@ -481,8 +536,8 @@ function gameOver(){
 			// setTimeout(function(){
 			// 	chachachaching();
 			// }, 1000);
-			clearInterval(makingLoserShips);
 			gameState.go = false;
+			clearInterval(makingLoserShips);
 		}
 		newWordLifeCycle("You Lose!", null);
 	},25);	
@@ -706,6 +761,9 @@ function showStats(){
 // this collects your combined round data, it's called by showStats
 function pushStats(){
 	gameTotals.words += gameState.words;
+	if(gameState.points <= 0){
+		gameState.points = 0;
+	}
 	gameTotals.points += 200*gameState.points * (5 - gameState.missedWords);
 	gameTotals.missedWords += gameState.missedWords;
 	gameTotals.finalWave = gameState.wave;
