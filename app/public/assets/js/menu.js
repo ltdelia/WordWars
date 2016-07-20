@@ -56,16 +56,15 @@ function printRooms(room, roomID, userInside){
 			$('#joinButton').toggleClass('disabled');
 
 			// Passing the room-ID to the joinButton
-			if($('#joinButton').attr('data-roomid', roomID)){
-				$('#joinButton').removeAttr('data-roomid', roomID);
-			}else{
-				$('#joinButton').attr('data-roomid', roomID);
-			}
+			$('#joinButton').attr('data-roomid', roomID);
+
+			console.log("Room ID in the row: ", roomID);
 		});
 
 	// Click Event to Join a Room 
 	// Update user2 with the current user
 	$('#joinButton').on('click', function(){
+
 		// Declare an object with property user2, value is the currentUser
 		var userTwo = {user2: currentUser};
 		// Get the ref to Firebase. 
@@ -77,7 +76,7 @@ function printRooms(room, roomID, userInside){
 		// We have to reference the EXACT level above the value we want updated
 		// hence, 'rooms/roomID'
 		var roomRef = firebase.database().ref('rooms/'+roomID);
-
+		console.log("Room ID when Join Button clicked: ", roomID);
 		// We need to access the data for that specific room node
 		roomRef.once('value')
 			.then(function(snapshot){
@@ -106,6 +105,7 @@ function printRooms(room, roomID, userInside){
 					// Call Firebase.update(), passing in the userTwo object
 					// Update the specific room node with the current user, as user 2
 					roomRef.update(userTwo);
+					console.log('Room ID: ', roomID);					
 				}
 			})
 	})
@@ -147,6 +147,7 @@ $('#createOpen').on('click', function(){
 // Click Event for the 'Create' button inside of the modal
 $('#createRoom').on('click', function(){
 	createRoom();
+	$('#createOpen').remove();
 });
 
 // Click Event -- Submit the Chat
@@ -177,7 +178,7 @@ var chatRef = firebase.database().ref('chat');
 // Getting the values from our room list
 roomListRef.on('child_added', function(childSnapshot){
 	var roomData = childSnapshot.val();
-	// console.log(roomData);
+	console.log(roomData);
 	var room = roomData.room;
 	var roomID = roomData.roomID;
 	var user1 = roomData.user1;
@@ -197,11 +198,11 @@ roomListRef.on('child_changed', function(childSnapshot){
 	var user2 = roomData.user2;	
 
 	if(user1 == currentUser){
-		window.location = "/game";
+		window.location = "/game"+roomID;
 	}
 
 	if(user2 == currentUser){
-		window.location = "/game";
+		window.location = "/game"+roomID;
 	}
 	
 	// If we have a second user, we don't want to print the room

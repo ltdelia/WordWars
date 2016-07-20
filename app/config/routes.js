@@ -12,6 +12,8 @@ firebase.initializeApp({
 
 var app = express();
 
+// var roomRef = firebase.database.ref('rooms');
+
 module.exports = function(app){
 
 	//PAGES
@@ -22,7 +24,7 @@ module.exports = function(app){
 	app.get('/menu', function(req, res){
 		res.render('menu');
 	})
-	app.get('/game', function(req, res){
+	app.get('/game:roomID?', function(req, res){
 		res.render('game');
 	})
 	app.get('/scores', function(req, res){
@@ -86,7 +88,7 @@ module.exports = function(app){
 			console.log(gameData);
 			
 			Games.create({
-				username: "analben",
+				username: req.body.username,
 				points: req.body.points,
 				level: req.body.finalWave,
 				enemies: req.body.enemies,
