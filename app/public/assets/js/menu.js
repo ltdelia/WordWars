@@ -9,6 +9,7 @@
 // We declare a currentUser variable
 var currentUser;
 var selectedRoomID;
+var roomCounter = 1;
 
 // Firebase Auth
 // Check if a user is logged in with Firebase
@@ -36,7 +37,7 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 })
 
 // printRooms() - prints all rooms in Firebase to the HTML
-function printRooms(room, roomID, userInside){
+function printRooms(room, roomID, userInside, roomCounter){
 	// Dynamically create a table row
 	var row = $('<tr>');
 		// Add the room name as an ID
@@ -67,9 +68,11 @@ function printRooms(room, roomID, userInside){
 	// Click Event to Join a Room 
 	// Update user2 with the current user
 	$('#joinButton').on('click', function(){
-
+		roomCounter++;
 		// Declare an object with property user2, value is the currentUser
 		var userTwo = {user2: {name: currentUser, wordAttack: ""}};
+
+		var inRoom = {'inRoom': roomCounter};
 		// Get the ref to Firebase. 
 		// We've structured our schema like so:
 		// rooms
@@ -111,6 +114,7 @@ function printRooms(room, roomID, userInside){
 					// Call Firebase.update(), passing in the userTwo object
 					// Update the specific room node with the current user, as user 2
 					roomRef.update(userTwo);
+					roomRef.update(inRoom);
 				}
 			})
 	})
@@ -139,7 +143,7 @@ function createRoom(){
 	var roomID = newRoomRef.key;
 
 	// Push the roomID, user1, user2, and room name to the 'rooms' ref in Firebase
-	newRoomRef.set({'roomID': roomID, 'user1': {name: currentUser, wordAttack: ""}, 'user2': {name: "", wordAttack: ""}, 'room': room});
+	newRoomRef.set({'inRoom': 1, 'roomID': roomID, 'user1': {name: currentUser, wordAttack: ""}, 'user2': {name: "", wordAttack: ""}, 'room': room});
 
 	// Clear the value of the input
 	$('#roomname').val(null);
@@ -204,7 +208,7 @@ roomListRef.on('child_added', function(childSnapshot){
 	var user1 = roomData.user1.name;
 	var user2 = roomData.user2.name;
 	if(user2 == ""){
-		printRooms(room, roomID, user1);		
+		printRooms(room, roomID, user1, roomCounter);		
 	}
 })	
 
@@ -213,15 +217,16 @@ roomListRef.on('child_changed', function(childSnapshot){
 	console.log("Room Updated!");
 	console.log("This was changed: ", roomData);
 	var room = roomData.room;
+	var inRoom = roomData.inRoom;
 	var roomID = roomData.roomID;
 	var user1 = roomData.user1.name;
 	var user2 = roomData.user2.name;	
 
-	if(user1 == currentUser){
+	if(user1 == currentUser && inRoom == 2){
 		window.location = "/game"+roomID;
 	}
 
-	if(user2 == currentUser){
+	if(user2 == currentUser && inRoom == 2){
 		window.location = "/game"+roomID;
 	}
 	
@@ -231,12 +236,12 @@ roomListRef.on('child_changed', function(childSnapshot){
 		$('tr[data-roomid='+roomID+']').remove();
 	}
 })
-var counter = 0;
+var chatCounter = 0;
 // Getting the entire chat ref, limiting to last ten messages
 chatRef.limitToLast(10).on('child_added', function(childSnapshot){
 	var chatData = childSnapshot.val();
-	counter++;
+	chatCounter++;
 	var username = chatData.username;
 	var message = chatData.message;
-	printChat(username, message, counter);
+	printChat(username, message, chatCounter);
 })
