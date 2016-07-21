@@ -226,10 +226,7 @@ body {
   display:inline-block;
   text-align:center;
 }
-/*.middle{
-  margin: 0 25% 0 25%;
-  width: 50%;
-}*/
+
 .centerAligning{
   margin: 0 50% 0 50%;
 
@@ -368,6 +365,7 @@ h3{
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
+
 /* Modal Content 
 .modal-content {
     background-color: gray;
@@ -434,7 +432,7 @@ h3{
 
 td{
   text-align:left;
-  width:100px;
+  width:200px;
 }
 .tdpad{
   text-align: right;

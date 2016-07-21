@@ -56,6 +56,20 @@ $('#register').on('click', function(){
 	$('#registerModal').modal('show');
 });
 
+//somehow managed to already do all this elsewhere in the code --zintis :(
+// $(document).keyup(function(event){
+// 	console.log('start');
+// 	console.log(event.keycode);
+// 	if(event.keycode == 13){
+// 		console.log('pushed enter');
+// 		if($('#registerModal').data('bs.modal') == null){
+// 			console.log("closed!")
+// 		}else if($('#loginModal').data('bs.modal') == null){
+// 			console.log("closed!2")
+// 		}
+// 	}
+// });
+
 // When the register button (within the register modal) is clicked...
 $('#registerUser').on('click', function(){
 	// Grab the values given for Username, Email Address, Password, Confirm Password
