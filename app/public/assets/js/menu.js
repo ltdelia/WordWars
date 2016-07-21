@@ -72,7 +72,7 @@ function printRooms(room, roomID, userInside, roomCounter){
 		// Declare an object with property user2, value is the currentUser
 		var userTwo = {user2: {name: currentUser, wordAttack: ""}};
 
-		var inRoom = {'inRoom': roomCounter};
+		// var inRoom = {'inRoom': roomCounter};
 		// Get the ref to Firebase. 
 		// We've structured our schema like so:
 		// rooms
@@ -114,7 +114,7 @@ function printRooms(room, roomID, userInside, roomCounter){
 					// Call Firebase.update(), passing in the userTwo object
 					// Update the specific room node with the current user, as user 2
 					roomRef.update(userTwo);
-					roomRef.update(inRoom);
+					// roomRef.update(inRoom);
 				}
 			})
 	})
@@ -143,7 +143,7 @@ function createRoom(){
 	var roomID = newRoomRef.key;
 
 	// Push the roomID, user1, user2, and room name to the 'rooms' ref in Firebase
-	newRoomRef.set({'inRoom': 1, 'roomID': roomID, 'user1': {name: currentUser, wordAttack: ""}, 'user2': {name: "", wordAttack: ""}, 'room': room});
+	newRoomRef.set({'inRoom': 0, 'roomID': roomID, 'user1': {name: currentUser, wordAttack: ""}, 'user2': {name: "", wordAttack: ""}, 'room': room});
 
 	// Clear the value of the input
 	$('#roomname').val(null);
@@ -229,11 +229,11 @@ roomListRef.on('child_changed', function(childSnapshot){
 	var user1 = roomData.user1.name;
 	var user2 = roomData.user2.name;	
 
-	if(user1 == currentUser && inRoom == 2){
+	if(user1 == currentUser){
 		window.location = "/game"+roomID;
 	}
 
-	if(user2 == currentUser && inRoom == 2){
+	if(user2 == currentUser){
 		window.location = "/game"+roomID;
 	}
 	
