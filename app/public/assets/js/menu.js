@@ -139,7 +139,7 @@ function createRoom(){
 	var roomID = newRoomRef.key;
 
 	// Push the roomID, user1, user2, and room name to the 'rooms' ref in Firebase
-	newRoomRef.set({'ready': 0, 'roomID': roomID, 'user1': {name: currentUser, wordAttack: ""}, 'user2': {name: "", wordAttack: ""}, 'room': room});
+	newRoomRef.set({'ready': 0, 'room': room, 'roomID': roomID, 'user1': {name: currentUser, wordAttack: ""}, 'user2': {name: "", wordAttack: ""}, 'words': "" });
 
 	// Clear the value of the input
 	$('#roomname').val(null);
