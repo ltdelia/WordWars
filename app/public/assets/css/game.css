@@ -428,6 +428,10 @@ h3{
 
 }
 
+.modal-backdrop{
+  z-index:0;
+}
+
 td{
   text-align:left;
   width:100px;
