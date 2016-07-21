@@ -541,14 +541,14 @@ function gameOver(){
 	    complete : console.log('AJAX post: ', gameTotals)
 	});
 
-	$('#WWtitle').text("DEFEATED!");
+	$('#WWtitle').text("Wave: ");
 
 	gameState.endWaveTrigger = true;
 	tempTimeLog();
 	clearAllRows();
 	stopMakingShips = 0;
 	$('.start').html("TRY AGAIN");
-	// $('.completed').html("DEFEATED!");
+	$('.completed').html("DEFEATED!");
 	var makingLoserShips = setInterval(function(){
 		stopMakingShips++;
 		// console.log(gameState,gameTotals);
@@ -760,15 +760,15 @@ function showStats(){
 	}
 	//write all the temporarily held stats into the modal
 	$('.messageToPlayer').html("");
-	$('#WWtitle').text(winLoseBanana);
+	$('#WWtitle').text("Wave: ");
 	console.log("winLoseBanana", winLoseBanana);
 	console.log("wavenum gamestate.wave", gameState.wave);
-	// $('.waveNum').html(gameState.wave);
+	$('.waveNum').html(gameState.wave);
 	$('.messageToPlayer').append("<h5><em>"+winLoseBanana+"</em></h5>" );
-	$('.messageToPlayer').append("<tr><td><h5><em>Points:</em></td><td class='tdpad'><h5>"+tempStats[0]*200*(5-gameState.missedWords)+"</h5></td></tr>" );
-	$('.messageToPlayer').append("<tr><td><h5><em>Enemies:</em></td><td class='tdpad'><h5>" +tempStats[1]+"</h5></td></tr>" );
-	$('.messageToPlayer').append("<tr><td><h5><em>Enemies Destroyed:</em></td><td class='tdpad'><h5>" +tempStats[2]+"</h5></td></tr>" );
-	$('.messageToPlayer').append("<tr><td><h5><em>Damage:</em></td><td class='tdpad'><h5>" +tempStats[3]+"</h5></td></tr>");	
+	$('.messageToPlayer').append("<tr><td><em>Points:</em></td><td class='tdpad'><h5>"+tempStats[0]*200*(5-gameState.missedWords)+"</h5></td></tr>" );
+	$('.messageToPlayer').append("<tr><td><em>Enemies:</em></td><td class='tdpad'><h5>" +tempStats[1]+"</h5></td></tr>" );
+	$('.messageToPlayer').append("<tr><td><em>Enemies Destroyed:</em></td><td class='tdpad'><h5>" +tempStats[2]+"</h5></td></tr>" );
+	$('.messageToPlayer').append("<tr><td><em>Damage:</em></td><td class='tdpad'><h5>" +tempStats[3]+"</h5></td></tr>");	
 }
 
 // this collects your combined round data, it's called by showStats
@@ -796,7 +796,7 @@ function closeModal(){
 }
 
 function gameHeaderUpdate(){
-	$('#waveNum').html(gameTotals.wave);
+	$('#waveNum').html(gameState.wave);
 	$('#score').html(gameTotals.points);
 	$('#words').html(gameState.words);
 	$('#missed').html(gameState.missedWords);
@@ -1010,7 +1010,15 @@ function isPlaying(x){console.log(x+".paused", x.paused);return !x.paused;}
 
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
+$(document).keyup(function(event){
+	if(event.keyCode==13){
+		console.log("document enter");
+		closeModal();
+		$("#query").focus();
+		$(".start").click();
 
+	}
+});
 
 // new code to capture enter keypress and do some stuff
 $("#query").keyup(function(event){

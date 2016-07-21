@@ -151,6 +151,13 @@ function createRoom(){
 $('#createOpen').on('click', function(){
 	//Initialize the Modal
 	$('#myModal').modal('show');
+	setTimeout(function(){$('#roomname').focus();
+		$("#roomname").keyup(function(event){
+			if(event.keyCode==13){
+				$('#createRoom').click();
+			}
+		})
+	},500);
 });
 
 // Click Event for the 'Create' button inside of the modal
