@@ -606,13 +606,15 @@ function gameOver(){
 	//update database on gameover.
 	console.log('Game Over log: ', gameTotals)
 	
-	$.ajax({
-	    url      : "/api",
-	    dataType : 'json', // I was pretty sure this would do the trick
-	    data     : gameTotals,
-	    type     : 'POST',
-	    complete : console.log('AJAX post: ', gameTotals)
-	});
+	if(currentUser !== "anonymous"){
+		$.ajax({
+		    url      : "/api",
+		    dataType : 'json', // I was pretty sure this would do the trick
+		    data     : gameTotals,
+		    type     : 'POST',
+		    complete : console.log('AJAX post: ', gameTotals)
+		});
+	}
 
 	$('#WWtitle').text("Wave: ");
 	readyCounter = 0;
