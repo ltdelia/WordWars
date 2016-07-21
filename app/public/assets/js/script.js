@@ -72,8 +72,8 @@ roomRef.once('value')
 		var room = roomData.room;
 		var roomID = roomData.roomID;
 		// User 1 and user 2 currently in the room node
-		var user1 = roomData.user1;
-		var user2 = roomData.user2;
+		var user1 = roomData.user1.name;
+		var user2 = roomData.user2.name;
 		console.log("Room: ", room);
 		console.log("Room ID: ", roomID);
 		console.log("User One: ", user1);
@@ -82,7 +82,15 @@ roomRef.once('value')
 
 // Tracking changes to the wordAttack
 roomRef.on('child_changed', function(childSnapshot){
-	var roomData = snapshot.val();
+	var roomData = childSnapshot.val();
+	var user = roomData.name;
+	var wordAttack = roomData.wordAttack;
+	// If the user logged in matches the user in the database
+	if(user == currentUser){
+		// We'll call the newWordLifeCycle() method with "bonusword"
+		// This will fire that specific word at the opposing team's screen
+		newWordLifeCycle(wordAttack, "bonusword")	
+	}
 	console.log("Changed: ", roomData);
 })
 
@@ -1026,9 +1034,33 @@ $("#query").keyup(function(event){
 			if(activeBank.indexOf(wordMissile) == -1 && usedBank.indexOf(wordMissile) == -1 && gameState.multiPlayer == true){
 				if(wordBank.indexOf(wordMissile) >= 0){
 
-					//LOU! update firebase value, don't shoot yourself in the face
-					newWordLifeCycle(wordMissile, "bonusword");
-				
+					//LOU! update firebase value, don't shoot yourself in the facec
+					// newWordLifeCycle(wordMissile, "bonusword");
+
+					var userInfo = {name: currentUser, wordAttack: wordMissile};
+
+					var user1Ref = firebase.database().ref('rooms/'+gameState.roomID+'/'+'user1/');
+					var user2Ref = firebase.database().ref('rooms/'+gameState.roomID+'/'+'user2/');
+
+					user1Ref.once('value')
+						.then(function(snapshot){
+							var userData = snapshot.val();
+							var name = userData.name;
+
+							if(name !== currentUser){
+								user1Ref.update(userInfo);
+							}
+						})
+
+					user2Ref.once('value')
+						.then(function(snapshot){
+							var userData = snapshot.val();
+							var name = userData.name;
+							if(name !== currentUser){
+								user2Ref.update(userInfo);
+							}
+						})
+
 				}else{
 
 					URL = "http://api.wordnik.com:80/v4/word.json/"+wordMissile+"/definitions?limit=1&includeRelated=true&sourceDictionaries=all&useCanonical=false&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5";
@@ -1036,8 +1068,31 @@ $("#query").keyup(function(event){
 					$.ajax({url: URL, success: function(result){
 
 						//LOU put firebase code here
-						newWordLifeCycle(result[0].word, "bonusword");
+						// newWordLifeCycle(result[0].word, "bonusword");
 
+
+						var user1Ref = firebase.database().ref('rooms/'+gameState.roomID+'/'+'user1/');
+						var user2Ref = firebase.database().ref('rooms/'+gameState.roomID+'/'+'user2/');
+
+						user1Ref.once('value')
+							.then(function(snapshot){
+								var userData = snapshot.val();
+								var name = userData.name;
+								if(name !== currentUser){
+									var userInfo = {name: name, wordAttack: result[0].word};									
+									user1Ref.update(userInfo);
+								}
+							})
+
+						user2Ref.once('value')
+							.then(function(snapshot){
+								var userData = snapshot.val();
+								var name = userData.name;
+								if(name !== currentUser){
+									var userInfo = {name: name, wordAttack: result[0].word};									
+									user2Ref.update(userInfo);
+								}
+							})
 						
 					}});
 				}
