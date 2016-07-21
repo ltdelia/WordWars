@@ -102,6 +102,10 @@ roomRef.once('value')
 // Tracking changes throughout our room ref
 roomRef.on('child_changed', function(childSnapshot){
 	var roomData = childSnapshot.val();
+
+	var words = roomData.words;
+	console.log("Words in this Room: ", words);
+
 	var ready = roomData.ready;
 
 	// When 1 user is ready...
@@ -212,6 +216,9 @@ $.ajax({url: URL, success: function(result){
 		}
 	}
 
+	var wordsObject = {'words': wordBank};
+
+	roomRef.update(wordsObject);
 	console.log("Gameloop starts", wordBank);
 	//opens up the modal automatically, but only if the ajax is successful
 	showInstructions();
