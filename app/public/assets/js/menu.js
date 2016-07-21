@@ -8,6 +8,7 @@
 
 // We declare a currentUser variable
 var currentUser;
+var selectedRoomID;
 
 // Firebase Auth
 // Check if a user is logged in with Firebase
@@ -58,7 +59,9 @@ function printRooms(room, roomID, userInside){
 			// Passing the room-ID to the joinButton
 			$('#joinButton').attr('data-roomid', roomID);
 
-			console.log("Room ID in the row: ", roomID);
+			selectedRoomID = roomID;
+
+			console.log("Room ID in the row: ", selectedRoomID);
 		});
 
 	// Click Event to Join a Room 
@@ -66,7 +69,7 @@ function printRooms(room, roomID, userInside){
 	$('#joinButton').on('click', function(){
 
 		// Declare an object with property user2, value is the currentUser
-		var userTwo = {user2: currentUser};
+		var userTwo = {user2: {name: currentUser, wordAttack: ""}};
 		// Get the ref to Firebase. 
 		// We've structured our schema like so:
 		// rooms
@@ -75,8 +78,11 @@ function printRooms(room, roomID, userInside){
 		// To get there, we can't just reference the rooms node
 		// We have to reference the EXACT level above the value we want updated
 		// hence, 'rooms/roomID'
-		var roomRef = firebase.database().ref('rooms/'+roomID);
-		console.log("Room ID when Join Button clicked: ", roomID);
+		var referenceName = "/rooms/"+selectedRoomID+"/";
+		console.log(referenceName);
+		var roomRef = firebase.database().ref(referenceName);
+		// console.log("Room Reference in Firebase: ", roomRef);
+		// console.log("Room ID when Join Button clicked: ", selectedRoomID);
 		// We need to access the data for that specific room node
 		roomRef.once('value')
 			.then(function(snapshot){
@@ -86,10 +92,10 @@ function printRooms(room, roomID, userInside){
 				// User 1 and user 2 currently in the room node
 				var user1 = roomData.user1;
 				var user2 = roomData.user2;
-				console.log("User One: ", user1);
-				console.log("User Two: ", user2);
+				// console.log("User One: ", user1);
+				// console.log("User Two: ", user2);
 				// If the current user is user 1 in the room...
-				if(user1 == currentUser){
+				if(user1.name == currentUser){
 					// Log the following error to the console.
 					console.log('Error. You can\'t join a room you\'ve already joined.');
 					// Display the error to the HTML in a modal.
@@ -101,23 +107,26 @@ function printRooms(room, roomID, userInside){
 					$('#errorMessage').html(text);
 					$('#errorModal').modal('show');
 				// Otherwise, if the current user isn't already in the room...
-				}else if(user1 !== currentUser){
+				}else if(user1.name !== currentUser){
 					// Call Firebase.update(), passing in the userTwo object
 					// Update the specific room node with the current user, as user 2
 					roomRef.update(userTwo);
-					console.log('Room ID: ', roomID);					
 				}
 			})
 	})
 }
 
 // printChat() -- prints out the messages posted by users
-function printChat(username, message){
+function printChat(username, message, counter){
+	// Dynamically creates a new message
 	var text = $('<p>');
-	text.attr('id', message);
+	text.attr('id', 'chat-'+counter);
 	text.append('<strong>'+ username + '</strong>: '+ message);
 	text.append('</p>');
+	// Prints the message to the HTML
 	$('#chatLog').append(text);
+	// Animation causes the auto focus to the latest message
+	$('#chatLog').animate({scrollTop: $('#chatLog').prop("scrollHeight")}, 500);
 }
 
 function createRoom(){
@@ -130,13 +139,13 @@ function createRoom(){
 	var roomID = newRoomRef.key;
 
 	// Push the roomID, user1, user2, and room name to the 'rooms' ref in Firebase
-	newRoomRef.set({'roomID': roomID, 'user1': currentUser, 'user2': "", 'room': room});
+	newRoomRef.set({'roomID': roomID, 'user1': {name: currentUser, wordAttack: ""}, 'user2': {name: "", wordAttack: ""}, 'room': room});
 
 	// Clear the value of the input
 	$('#roomname').val(null);
 }
 
-// CLICK EVENTS
+// CLICK EVENTS & KEYUP EVENTS
 
 // Click Event for "Create a Room" -- opens a modal
 $('#createOpen').on('click', function(){
@@ -150,13 +159,25 @@ $('#createRoom').on('click', function(){
 	$('#createOpen').remove();
 });
 
-// Click Event -- Submit the Chat
+// Submitting the Chat -- 2 options for the user
+// 1. Users can submit the chat by pressing enter
+$('#message').keyup(function(event){
+	if(event.keyCode == 13){
+		var message = $('#message').val();
+		var newMessageRef = chatRef.push();
+		newMessageRef.set({'username': currentUser, 'message': message});
+		$('#message').val(null);		
+	}
+});
+
+// 2. Users can submit the chat by clicking 'Submit'
 $('#chatSubmit').on('click', function(){
 	var message = $('#message').val();
 	var newMessageRef = chatRef.push();
 	newMessageRef.set({'username': currentUser, 'message': message});
-	$('#message').val(null);
-})
+	$('#message').val(null);		
+});
+
 
 // Click Event -- Sign Out the User
 $('#logOut').on('click', function(){
@@ -178,11 +199,10 @@ var chatRef = firebase.database().ref('chat');
 // Getting the values from our room list
 roomListRef.on('child_added', function(childSnapshot){
 	var roomData = childSnapshot.val();
-	console.log(roomData);
 	var room = roomData.room;
 	var roomID = roomData.roomID;
-	var user1 = roomData.user1;
-	var user2 = roomData.user2;
+	var user1 = roomData.user1.name;
+	var user2 = roomData.user2.name;
 	if(user2 == ""){
 		printRooms(room, roomID, user1);		
 	}
@@ -194,8 +214,8 @@ roomListRef.on('child_changed', function(childSnapshot){
 	console.log("This was changed: ", roomData);
 	var room = roomData.room;
 	var roomID = roomData.roomID;
-	var user1 = roomData.user1;
-	var user2 = roomData.user2;	
+	var user1 = roomData.user1.name;
+	var user2 = roomData.user2.name;	
 
 	if(user1 == currentUser){
 		window.location = "/game"+roomID;
@@ -215,9 +235,8 @@ var counter = 0;
 // Getting the entire chat ref, limiting to last ten messages
 chatRef.limitToLast(10).on('child_added', function(childSnapshot){
 	var chatData = childSnapshot.val();
+	counter++;
 	var username = chatData.username;
 	var message = chatData.message;
-	counter++;
-	console.log(counter);
-	printChat(username, message);
+	printChat(username, message, counter);
 })

@@ -13,3 +13,9 @@ tbody:hover tr:hover{
     background-color: black;
     border: 2px solid yellow;
 }
+
+#chatLog {
+	overflow-y: auto;
+	overflow-x: hidden;
+	height: 260px;
+}
