@@ -22,6 +22,8 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 		}
 	}else{
 		console.log("No one is signed in.");
+		currentUser = "anonymous";
+		gameTotals.username = "anonymous";
 	}
 })
 
@@ -106,8 +108,15 @@ roomRef.on('child_changed', function(childSnapshot){
 	if(roomData == 1){
 		// Make sure the readyCounter is equal to 1
 		readyCounter = roomData;
-		// Change the button state, so everyone knows that someone is waiting for the other user
-		startButtonState('wait');
+		if(gameState.multiPlayer == true){
+			// Change the button state, so everyone knows that someone is waiting for the other user
+			startButtonState('wait');
+		}
+		if(gameState.multiPlayer == false){
+			// Start the game
+			startWave();
+		    $("#query").focus();
+		}
 	}
 
 	// When both users are ready...
@@ -928,8 +937,9 @@ function startButtonState(onoff){
    		if(gameState.multiPlayer == true){
 	    	readyCounter++;
 	    	var readyObject = {ready: readyCounter}; 
-	    	console.log(readyCounter);
+	    	// console.log(readyCounter);
 	    	gameState.playersReady = readyCounter;
+	    	// console.log(gameState.playersReady);
 	    	roomRef.update(readyObject);
     	}
     });
