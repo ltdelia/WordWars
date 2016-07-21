@@ -33,7 +33,7 @@ setTimeout(function(){
 //Basic Game Information
 var gameState = {
 	roomID: null,
-	playersInRoom: 1,
+	playersReady: 0,
 	player1: null,
 	player2: null,
 	go: true,
@@ -74,7 +74,7 @@ console.log("State of Game: ", gameState.multiPlayer);
 // Reference to our specific game room
 var roomRef = firebase.database().ref('rooms/'+gameState.roomID);
 
-// We need to access the data for that specific room node
+// Getting the values of the room
 roomRef.once('value')
 	.then(function(snapshot){
 		// The entire room object
@@ -86,28 +86,33 @@ roomRef.once('value')
 		gameState.player1 = roomData.user1.name;
 		gameState.player2 = roomData.user2.name;
 
-		var inRoom = roomData.inRoom;
-		gameState.playersInRoom = roomData.inRoom;
+		var ready = roomData.ready;
+		gameState.playersReady = roomData.ready;
 		console.log("--------------------");
 		console.log("Room: ", room);
 		console.log("Room ID: ", roomID);
-		console.log("Players in Room: ", gameState.playersInRoom);
+		console.log("Players in Room: ", gameState.playersReady);
 		console.log("User One: ", gameState.player1);
 		console.log("User Two: ", gameState.player2);
 	});
 
 
-// Tracking changes to the wordAttack
+// Tracking changes throughout our room ref
 roomRef.on('child_changed', function(childSnapshot){
 	var roomData = childSnapshot.val();
-	var inRoom = roomData.inRoom;
+	var ready = roomData.ready;
 
+	// When 1 user is ready...
 	if(roomData == 1){
+		// Make sure the readyCounter is equal to 1
 		readyCounter = roomData;
+		// Change the button state, so everyone knows that someone is waiting for the other user
 		startButtonState('wait');
 	}
 
+	// When both users are ready...
 	if(roomData == 2){
+		// Start the game
 		startWave();
 	    $("#query").focus();
 	}
@@ -594,7 +599,7 @@ function gameOver(){
 	});
 
 	$('#WWtitle').text("Wave: ");
-
+	readyCounter = 0;
 	gameState.endWaveTrigger = true;
 	tempTimeLog();
 	clearAllRows();
@@ -670,6 +675,7 @@ function endWave(){
 
 	if(gameState.victory == true){
 		var endWaveTicker = 0;
+		readyCounter = 0;
 		$('#row4').html('<div id="victoryTable" class=" white"></div>');
 
 		$('.completed').html("Completed!");
@@ -683,6 +689,7 @@ function endWave(){
 		}
 	}else if(gameState.victory == false){
 		$('.completed').html("Defeated!");
+		readyCounter = 0;
 	}else{
 		$('.completed').html("");
 	}
@@ -912,16 +919,18 @@ function startButtonState(onoff){
 	var start = $('.start');
 	console.log(start);
     start.on('click', function() {
+    	// For 1-player game. Starts the game immediately.
     	if(gameState.multiPlayer == false){
     		startWave();
 	    	$("#query").focus();
     	}
+    	// For 2-player game. Handles synchronizing the start.
    		if(gameState.multiPlayer == true){
 	    	readyCounter++;
-	    	var inRoom = {inRoom: readyCounter}; 
+	    	var readyObject = {ready: readyCounter}; 
 	    	console.log(readyCounter);
-	    	gameState.playersInRoom = readyCounter;
-	    	roomRef.update(inRoom);
+	    	gameState.playersReady = readyCounter;
+	    	roomRef.update(readyObject);
     	}
     });
 }
