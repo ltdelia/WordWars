@@ -59,6 +59,9 @@ if(currentURL != "/game"){
 	console.log(gameState.roomID);
 	gameState.multiPlayer = true;
 }
+
+var playersInRoom;
+
 // Firebase Realtime Database
 // Reference to our specific game room
 var roomRef = firebase.database().ref('rooms/'+gameState.roomID);
@@ -68,21 +71,34 @@ roomRef.once('value')
 	.then(function(snapshot){
 		// The entire room object
 		var roomData = snapshot.val();
-		// console.log(roomData);
+		console.log(roomData);
 		var room = roomData.room;
 		var roomID = roomData.roomID;
 		// User 1 and user 2 currently in the room node
-		var user1 = roomData.user1;
-		var user2 = roomData.user2;
+		var user1 = roomData.user1.name;
+		var user2 = roomData.user2.name;
+		var inRoom = roomData.inRoom;
+		var playersInRoom = roomData.inRoom;
+		console.log("--------------------");
 		console.log("Room: ", room);
 		console.log("Room ID: ", roomID);
+		console.log("Players in Room: ", inRoom);
+		console.log("Players in Room (Global): ", playersInRoom);
 		console.log("User One: ", user1);
 		console.log("User Two: ", user2);
 	});
 
 // Tracking changes to the wordAttack
 roomRef.on('child_changed', function(childSnapshot){
-	var roomData = snapshot.val();
+	var roomData = childSnapshot.val();
+	var user = roomData.name;
+	var wordAttack = roomData.wordAttack;
+	// If the user logged in matches the user in the database
+	if(user == currentUser){
+		// We'll call the newWordLifeCycle() method with "bonusword"
+		// This will fire that specific word at the opposing team's screen
+		newWordLifeCycle(wordAttack, "bonusword");	
+	}
 	console.log("Changed: ", roomData);
 })
 
@@ -97,6 +113,32 @@ var gameTotals = {
 }
 
 var gameData = [];
+
+// Migrated from game.hbs
+
+var modal = document.getElementById('myModal');
+
+//var btn = document.getElementById("modalButton");
+
+var start = document.getElementsByClassName("start")[0];
+
+//btn.onclick = function() {
+    //modal.style.display = "block";
+//}
+
+start.onclick = function() {
+    modal.style.display = "none";
+    // if(playersInRoom == 2){
+	    startWave();
+	    $("#query").focus();
+    // }
+}
+
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
 
 //invader images/ticker
 var invadertic = 0;
@@ -765,10 +807,11 @@ function showStats(){
 	console.log("wavenum gamestate.wave", gameState.wave);
 	$('.waveNum').html(gameState.wave);
 	$('.messageToPlayer').append("<h5><em>"+winLoseBanana+"</em></h5>" );
-	$('.messageToPlayer').append("<tr><td><em>Points:</em></td><td class='tdpad'><h5>"+tempStats[0]*200*(5-gameState.missedWords)+"</h5></td></tr>" );
-	$('.messageToPlayer').append("<tr><td><em>Enemies:</em></td><td class='tdpad'><h5>" +tempStats[1]+"</h5></td></tr>" );
-	$('.messageToPlayer').append("<tr><td><em>Enemies Destroyed:</em></td><td class='tdpad'><h5>" +tempStats[2]+"</h5></td></tr>" );
-	$('.messageToPlayer').append("<tr><td><em>Damage:</em></td><td class='tdpad'><h5>" +tempStats[3]+"</h5></td></tr>");	
+	$('.messageToPlayer').append("<tr><td><h5><em>Points:</em></td><td class='tdpad'><h5>"+tempStats[0]*200*(5-gameState.missedWords)+"</h5></td></tr>" );
+	$('.messageToPlayer').append("<tr><td><h5><em>Enemies:</em></td><td class='tdpad'><h5>" +tempStats[1]+"</h5></td></tr>" );
+	$('.messageToPlayer').append("<tr><td><h5><em>Enemies Destroyed:</em></td><td class='tdpad'><h5>" +tempStats[2]+"</h5></td></tr>" );
+	$('.messageToPlayer').append("<tr><td><h5><em>Damage:</em></td><td class='tdpad'><h5>" +tempStats[3]+"</h5></td></tr>");	
+	$('.modal-footer').html("Press Enter to Continue");
 }
 
 // this collects your combined round data, it's called by showStats
@@ -1034,18 +1077,58 @@ $("#query").keyup(function(event){
 			if(activeBank.indexOf(wordMissile) == -1 && usedBank.indexOf(wordMissile) == -1 && gameState.multiPlayer == true){
 				if(wordBank.indexOf(wordMissile) >= 0){
 
-					//LOU! update firebase value, don't shoot yourself in the face
-					newWordLifeCycle(wordMissile, "bonusword");
-				
+					var user1Ref = firebase.database().ref('rooms/'+gameState.roomID+'/'+'user1/');
+					var user2Ref = firebase.database().ref('rooms/'+gameState.roomID+'/'+'user2/');
+
+					user1Ref.once('value')
+						.then(function(snapshot){
+							var userData = snapshot.val();
+							var name = userData.name;
+							if(name !== currentUser){
+								var userInfo = {name: name, wordAttack: result[0].word};									
+								user1Ref.update(userInfo);
+							}
+						})
+
+					user2Ref.once('value')
+						.then(function(snapshot){
+							var userData = snapshot.val();
+							var name = userData.name;
+							if(name !== currentUser){
+								var userInfo = {name: name, wordAttack: result[0].word};									
+								user2Ref.update(userInfo);
+							}
+						})
+
+
 				}else{
 
 					URL = "http://api.wordnik.com:80/v4/word.json/"+wordMissile+"/definitions?limit=1&includeRelated=true&sourceDictionaries=all&useCanonical=false&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5";
 
 					$.ajax({url: URL, success: function(result){
 
-						//LOU put firebase code here
-						newWordLifeCycle(result[0].word, "bonusword");
+						var user1Ref = firebase.database().ref('rooms/'+gameState.roomID+'/'+'user1/');
+						var user2Ref = firebase.database().ref('rooms/'+gameState.roomID+'/'+'user2/');
 
+						user1Ref.once('value')
+							.then(function(snapshot){
+								var userData = snapshot.val();
+								var name = userData.name;
+								if(name !== currentUser){
+									var userInfo = {name: name, wordAttack: result[0].word};									
+									user1Ref.update(userInfo);
+								}
+							})
+
+						user2Ref.once('value')
+							.then(function(snapshot){
+								var userData = snapshot.val();
+								var name = userData.name;
+								if(name !== currentUser){
+									var userInfo = {name: name, wordAttack: result[0].word};									
+									user2Ref.update(userInfo);
+								}
+							})
 						
 					}});
 				}
