@@ -48,7 +48,8 @@ var gameState = {
 	secondsPerWave: 20,
 	wordsPerWave: 20, 
 	timeLeft: 20,
-	statusCheck: true
+	statusCheck: true,
+	multiPlayer: false
 
 }
 
@@ -56,6 +57,7 @@ var currentURL = window.location.pathname;
 if(currentURL != "/game"){
 	gameState.roomID = currentURL.toString().split("/game", 2)[1];
 	console.log(gameState.roomID);
+	gameState.multiPlayer = true;
 }
 // Firebase Realtime Database
 // Reference to our specific game room
@@ -76,7 +78,7 @@ roomRef.once('value')
 		console.log("Room ID: ", roomID);
 		console.log("User One: ", user1);
 		console.log("User Two: ", user2);
-	})
+	});
 
 // Tracking changes to the wordAttack
 roomRef.on('child_changed', function(childSnapshot){
@@ -94,9 +96,7 @@ var gameTotals = {
 	timeElapsed: 0
 }
 
-
-
-var gameData = []
+var gameData = [];
 
 //invader images/ticker
 var invadertic = 0;
@@ -105,7 +105,7 @@ var invaders = [
 "static/assets/images/space_invader1.gif",
 "static/assets/images/space_invader2.gif",
 "static/assets/images/space_invader3.gif"
-]
+];
 
 //Holds api words
 var wordBank = [];
@@ -146,12 +146,15 @@ $.ajax({url: URL, success: function(result){
 
 	console.log("Gameloop starts", wordBank);
 	//opens up the modal automatically, but only if the ajax is successful
+	showInstructions();
 	openModal();
+	startButtonState('on');
 
 }});
 /////////////////////////////////////////////////////////////////////////////
 //sets up the jquery targets
 $(document).ready(function(){
+
 	$SearchField = $('#query');		// 	the text field. This is where the game is played.
 	$targets = $('.wordTargetDetails');	//	the word targets. Each one will have the class "wordTarget."
 
@@ -254,18 +257,6 @@ function wordGun(node){
 	// }
 };
 
-// new code to capture enter keypress and do some stuff
-$("#query").keyup(function(event){
-	console.log('enter1');
-    if(event.keyCode == 13){
-		console.log('enter2');
-		if($('#query').val() != "" && gameState.go == true){
-	        bonusWords.push($("#query").val());
-			$("#query").val('');
-			console.log(bonusWords);
-		}
-    }
-});
 
 //probably unnecessary - zintis
 // $(document).keyup(function(event){
@@ -291,7 +282,7 @@ function gameLoop(xxyy){
 	},gameState.secondsPerWave*1000);
 
 	var gameClock = setInterval(function(){
-		console.log(gameState.timeLeft);
+		// console.log(gameState.timeLeft);
 		gameState.timeLeft--;
 		$('#waveTime').html(gameState.timeLeft);
 		if(gameState.timeLeft <= 0 || gameState.go == false){
@@ -344,7 +335,7 @@ function newWordLifeCycle(inputContents, time){
 		tempBonusWord = true;
 	}
 
-	console.log("inputContents", inputContents);
+	// console.log("inputContents", inputContents);
 	if(time == null){time = inputContents.length;}
 
 	//this finds the row that has no word in it currently
@@ -398,8 +389,10 @@ function newWordLifeCycle(inputContents, time){
 		$('#row' + activeRow).append('<div class="center wordTargetDetails wordTargetAnimate'+ tempRandomNumber +' '+randomSpeed+' white"><div class="center"><img class="z3" width="35" height="35" src="'+invaders[invadertic]+'"></div><p class="wordTarget">'+inputContents+'</p></div>');
 		invaderSwap();
 	}else if(tempBonusWord == true){
+		gameState.enemies++;
 		$('#row' + activeRow).append('<div class="center wordTargetDetails wordTargetAnimate10 word-x2 white"><div class="center"><img class="z3" width="70" height="35" src="static/assets/images/saucer.gif"></div><p class="wordTarget">'+inputContents+'</p></div>');
 		AUDbonusword.play();
+		explosionTrigger(10, activeRow, inputContents);
 	}else{
 		gameState.enemies++;
 		//this line creates the dynamic div that contains the word and a randomized alien image
@@ -411,6 +404,8 @@ function newWordLifeCycle(inputContents, time){
 		explosionTrigger(time, activeRow, inputContents);
 	}
 }
+
+// newWordLifeCycle("Zintis", "bonusword");
 
 /////////////////////////////////////////////////////////////////
 
@@ -462,6 +457,7 @@ function gameStatusCheck(){
 		gameState.timeEnd = new Date();
 		gameState.victory = true;
 		gameState.statusCheck = false;
+		// gameState.go = false; //was needed for denatured start button
 		endWave();
 	}else if(gameState.missedWords >= 5 && gameState.statusCheck == true){
 		gameState.go = false;
@@ -490,44 +486,46 @@ function gameStatusCheck(){
 function gameStart(){
 
 
-	stopMakingShips = 82;
-	clearAllRows();
-	//difficulty level housekeeping
-	gameState.wave++;
-	gameHeaderUpdate();
-	//this is to avoid conflicts with the lose game function, not sure if necessary -zintis
+		stopMakingShips = 82;
+		clearAllRows();
+		//difficulty level housekeeping
+		gameState.wave++;
+		gameHeaderUpdate();
+		//this is to avoid conflicts with the lose game function, not sure if necessary -zintis
 
-	//sets countdown timer
-	var x = 4;
-	var countdown321 = setInterval(function(){
-		x --;
-		if (x==0){
-			//writes the GO!
-			playAudio321go('play');
-			$('#row4').html('<h1 class="centerAligning wordTargetAnimate50 word-x2 white">GO!</h1>');	
-			//2nd half of animation
-			setTimeout(function(){
-				$('#row4').html('<h1 class="centerAligning wordTargetAnimate51 word-x2 white">GO!</h1>');
-				
-			},600);
-		}else if (x < 0){
-			$('#row4').empty();
+		//sets countdown timer
+		var x = 4;
+		var countdown321 = setInterval(function(){
+			x --;
+			if (x==0){
+				//writes the GO!
+				playAudio321go('play');
+				$('#row4').html('<h1 class="centerAligning wordTargetAnimate50 word-x2 white">GO!</h1>');	
+				//2nd half of animation
+				setTimeout(function(){
+					$('#row4').html('<h1 class="centerAligning wordTargetAnimate51 word-x2 white">GO!</h1>');
+					
+				},600);
+			}else if (x < 0){
+				$('#row4').empty();
 
-			gameReset();//zzzzz
-			gameLoop(gameState.difficulty);
+				gameReset();//zzzzz
+				gameLoop(gameState.difficulty);
 
-			gameState.timeStart = new Date(); 
-			clearInterval(countdown321);//Zintis
-		}else{
-			//does the loop countdown
-			playAudio321('play');
-			$('#row4').html('<h1 class="centerAligning wordTargetAnimate50 word-x2 white">'+x+'</h1>');
-			//2nd half of animation
-			setTimeout(function(){
-				$('#row4').html('<h1 class="centerAligning wordTargetAnimate51 word-x2 white">'+x+'</h1>');
-			},600);
-		}
-	}, 1000);
+				gameState.timeStart = new Date(); 
+				clearInterval(countdown321);//Zintis
+			}else{
+				//does the loop countdown
+				playAudio321('play');
+				$('#row4').html('<h1 class="centerAligning wordTargetAnimate50 word-x2 white">'+x+'</h1>');
+				//2nd half of animation
+				setTimeout(function(){
+					$('#row4').html('<h1 class="centerAligning wordTargetAnimate51 word-x2 white">'+x+'</h1>');
+				},600);
+			}
+		}, 1000);
+	
+	
 }
 
 //makes 81 ships in a grid. most of the logic is in "newwordlifecycle"
@@ -543,14 +541,17 @@ function gameOver(){
 	    complete : console.log('AJAX post: ', gameTotals)
 	});
 
+	$('#WWtitle').text("DEFEATED!");
+
 	gameState.endWaveTrigger = true;
 	tempTimeLog();
 	clearAllRows();
 	stopMakingShips = 0;
 	$('.start').html("TRY AGAIN");
+	// $('.completed').html("DEFEATED!");
 	var makingLoserShips = setInterval(function(){
 		stopMakingShips++;
-		console.log(gameState,gameTotals);
+		// console.log(gameState,gameTotals);
 		if(stopMakingShips > 81){
 			showStats();
 			openModal();
@@ -558,6 +559,7 @@ function gameOver(){
 			// 	chachachaching();
 			// }, 1000);
 			gameState.go = false;
+			startButtonState('on');
 			clearInterval(makingLoserShips);
 		}
 		newWordLifeCycle("You Lose!", null);
@@ -566,20 +568,19 @@ function gameOver(){
 
 //begin a new wave, start the game. it actually gets called in game.hbs right now (7/11/16)
 function startWave(x){
+
+	startButtonState('off');
+
 	if(gameState.victory == false){
 		console.log("false victory, full reset");
 		fullReset();
 			
 		// matt's AJAXX post!
 
-
-		
 	}else{
 		console.log("true victory, partial reset");
 		gameReset();
 		// matt's AJAXX post!
-
-
 
 		// $.ajax({
 		//     url      : '/api',
@@ -591,10 +592,7 @@ function startWave(x){
 		
 	}
 
-
-
-
-	$('#waveNum').html(gameState.wave);
+	// $('#waveNum').html(gameState.wave);
 	gameState.go = true;
 	gameStart();
 }
@@ -616,10 +614,13 @@ function endWave(){
 	// usedBank = [];
 
 	//conditional loop victory statement 3 outcomes depending on gamestate.victory
+	console.log("gameState.victory", gameState.victory);
+
 	if(gameState.victory == true){
 		var endWaveTicker = 0;
 		$('#row4').html('<div id="victoryTable" class=" white"></div>');
-		$('.completed').html(" Completed!");
+
+		$('.completed').html("Completed!");
 		for(j = 0;j<8;j++){
 			setTimeout(function(){
 					var completed = "Victory!"
@@ -634,19 +635,14 @@ function endWave(){
 		$('.completed').html("");
 	}
 
-
-
 	//pulls up the modal
 	setTimeout(function(){
 		$('.justWave').html("Wave: ");
 		$('#waveNum').html(gameState.wave);
-
 		showStats();
 		openModal();
-		// setTimeout(function(){
-		// 	chachachaching();
-		// }, 1000);
 		$('#row4').html("");
+		startButtonState('next');
 	},3500)
 
 }
@@ -677,20 +673,13 @@ function gameReset(){
 	gameState.timeLeft = 20;
 	gameState.statusCheck = true;
 
-
 	gameHeaderUpdate();
-
-
-
 
 }
 
 function fullReset(){
 
 	console.log("gameTotals: ", gameTotals);
-
-
-	
 
 	gameState.go = true;
 	gameState.victory = null;
@@ -716,8 +705,6 @@ function fullReset(){
 	activeBank = [];
 	usedBank = [];
 	endGameRows = [0,0,0,0,0,0,0,0,0];
-
-
 
 	$('.start').html("I AM READY");
 
@@ -761,7 +748,7 @@ function showStats(){
 
 		break;
 		case false: 
-			winLoseBanana = "Defeat!";
+			winLoseBanana = "DEFEATED!";
 			tempStats[0] = gameTotals.points;
 			tempStats[1] = gameTotals.enemies;
 			tempStats[2] = gameTotals.words;
@@ -773,7 +760,10 @@ function showStats(){
 	}
 	//write all the temporarily held stats into the modal
 	$('.messageToPlayer').html("");
-	$('.waveNum').html(gameState.wave);
+	$('#WWtitle').text(winLoseBanana);
+	console.log("winLoseBanana", winLoseBanana);
+	console.log("wavenum gamestate.wave", gameState.wave);
+	// $('.waveNum').html(gameState.wave);
 	$('.messageToPlayer').append("<h5><em>"+winLoseBanana+"</em></h5>" );
 	$('.messageToPlayer').append("<tr><td><h5><em>Points:</em></td><td class='tdpad'><h5>"+tempStats[0]*200*(5-gameState.missedWords)+"</h5></td></tr>" );
 	$('.messageToPlayer').append("<tr><td><h5><em>Enemies:</em></td><td class='tdpad'><h5>" +tempStats[1]+"</h5></td></tr>" );
@@ -784,8 +774,8 @@ function showStats(){
 // this collects your combined round data, it's called by showStats
 function pushStats(){
 	gameTotals.words += gameState.words;
-	if(gameState.points <= 0){
-		gameState.points = 0;
+	if(gameState.missedWords <= 0){
+		gameState.missedWords = 0;
 	}
 	gameTotals.points += 200*gameState.points * (5 - gameState.missedWords);
 	gameTotals.missedWords += gameState.missedWords;
@@ -796,7 +786,9 @@ function pushStats(){
 
 function openModal(){
 	console.log(gameState.difficulty);
+	$('.modal-backdrop').remove();
 	modal.style.display = 'block';
+
 }
 
 function closeModal(){
@@ -832,6 +824,40 @@ function tempTimeLog(){//temporary function to check time
 	console.log("timestart", gameState.timeStart);
 	console.log("end", gameState.timeEnd);
 	console.log("totals", gameTotals.timeElapsed);
+}
+
+function showInstructions(){
+	//zintis
+	var tempMessage = "";
+	tempMessage += "<ol>To play, type words into your 'word gun' as they come up on the screen.</ol>";
+	tempMessage += "<ol>If you miss a word, your cities become damaged, as seen in the lower left.</ol>";
+	tempMessage += "<ol>You can only miss 5 words before losing.</ol>";
+	tempMessage += "<ol>If you make a mistake, you can clear the text box by pressing ENTER.</ol>";
+	tempMessage += "<ol>If you are playing against someone, you can enter a word and click ENTER to send it to their screen.</ol>";
+	tempMessage += "<ol>Survive for "+gameState.secondsPerWave+" seconds to go to the next wave!</ol>";
+
+	$('.messageToPlayer').html(tempMessage);
+}
+
+function startButtonState(onoff){
+	console.log("onoff", onoff);
+	var tempButton;
+	if(onoff == "on"){
+		tempButton = '<button class="start btn btn-danger middle button" style="background-color:red;">I AM READY</button>';
+	}else if(onoff == "off"){
+		tempButton = "<button class='btn btn-primary middle button' style='background-color:gray;'>X</button>";
+	}else if(onoff == "next"){
+		tempButton = '<button class="start btn btn-danger middle button" style="background-color:red;">Next Wave</button>';
+	}
+	
+	$('#button1').html(tempButton);
+
+	var start = $('.start');
+	console.log(start);
+    start.on('click', function() {
+        startWave();
+        $("#query").focus();
+    });
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -978,9 +1004,50 @@ AUDwin.volume = 1;
 AUDloss.volume = 1;
 AUDintro.volume = 1;
 AUDbonusword.volume = .5;
+
 //this function is unused
 function isPlaying(x){console.log(x+".paused", x.paused);return !x.paused;}
 
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 
+
+// new code to capture enter keypress and do some stuff
+$("#query").keyup(function(event){
+	// console.log('enter1');
+    if(event.keyCode == 13){
+		// console.log('enter2');
+		if($('#query').val() != "" && gameState.go == true){
+	        var wordMissile = $("#query").val();
+			$("#query").val('');
+			console.log(wordMissile);
+
+
+			if(activeBank.indexOf(wordMissile) == -1 && usedBank.indexOf(wordMissile) == -1 && gameState.multiPlayer == true){
+				if(wordBank.indexOf(wordMissile) >= 0){
+
+					//LOU! update firebase value, don't shoot yourself in the face
+					newWordLifeCycle(wordMissile, "bonusword");
+				
+				}else{
+
+					URL = "http://api.wordnik.com:80/v4/word.json/"+wordMissile+"/definitions?limit=1&includeRelated=true&sourceDictionaries=all&useCanonical=false&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5";
+
+					$.ajax({url: URL, success: function(result){
+
+						//LOU put firebase code here
+						newWordLifeCycle(result[0].word, "bonusword");
+
+						
+					}});
+				}
+			}
+
+		}else if ($('#query').val() == ""){
+			console.log("clicker");
+			$(".start").click();
+			closeModal();
+
+		}
+    }
+});
