@@ -78,6 +78,11 @@ roomRef.once('value')
 		console.log("User Two: ", user2);
 	})
 
+// Tracking changes to the wordAttack
+roomRef.on('child_changed', function(childSnapshot){
+	var roomData = snapshot.val();
+	console.log("Changed: ", roomData);
+})
 
 var gameTotals = {
 	username: null,
