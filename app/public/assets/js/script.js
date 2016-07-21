@@ -33,6 +33,9 @@ setTimeout(function(){
 //Basic Game Information
 var gameState = {
 	roomID: null,
+	playersInRoom: 1,
+	player1: null,
+	player2: null,
 	go: true,
 	victory: null,
 	words: 0,
@@ -53,14 +56,19 @@ var gameState = {
 
 }
 
+// Checking the pathname to determine if this is a single- or multi-player game
 var currentURL = window.location.pathname;
+// If the path isn't just '/game'...
 if(currentURL != "/game"){
+	// Get anything following /game
 	gameState.roomID = currentURL.toString().split("/game", 2)[1];
+	// Set that as the room ID
 	console.log(gameState.roomID);
+	// Set multiplayer to true
 	gameState.multiPlayer = true;
 }
 
-var playersInRoom;
+console.log("State of Game: ", gameState.multiPlayer);
 
 // Firebase Realtime Database
 // Reference to our specific game room
@@ -75,22 +83,35 @@ roomRef.once('value')
 		var room = roomData.room;
 		var roomID = roomData.roomID;
 		// User 1 and user 2 currently in the room node
-		var user1 = roomData.user1.name;
-		var user2 = roomData.user2.name;
+		gameState.player1 = roomData.user1.name;
+		gameState.player2 = roomData.user2.name;
+
 		var inRoom = roomData.inRoom;
-		var playersInRoom = roomData.inRoom;
+		gameState.playersInRoom = roomData.inRoom;
 		console.log("--------------------");
 		console.log("Room: ", room);
 		console.log("Room ID: ", roomID);
-		console.log("Players in Room: ", inRoom);
-		console.log("Players in Room (Global): ", playersInRoom);
-		console.log("User One: ", user1);
-		console.log("User Two: ", user2);
+		console.log("Players in Room: ", gameState.playersInRoom);
+		console.log("User One: ", gameState.player1);
+		console.log("User Two: ", gameState.player2);
 	});
+
 
 // Tracking changes to the wordAttack
 roomRef.on('child_changed', function(childSnapshot){
 	var roomData = childSnapshot.val();
+	var inRoom = roomData.inRoom;
+
+	if(roomData == 1){
+		readyCounter = roomData;
+		startButtonState('wait');
+	}
+
+	if(roomData == 2){
+		startWave();
+	    $("#query").focus();
+	}
+
 	var user = roomData.name;
 	var wordAttack = roomData.wordAttack;
 	// If the user logged in matches the user in the database
@@ -120,25 +141,16 @@ var modal = document.getElementById('myModal');
 
 //var btn = document.getElementById("modalButton");
 
-var start = document.getElementsByClassName("start")[0];
-
 //btn.onclick = function() {
     //modal.style.display = "block";
 //}
-
-start.onclick = function() {
-    modal.style.display = "none";
-    // if(playersInRoom == 2){
-	    startWave();
-	    $("#query").focus();
-    // }
-}
 
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
 }
+
 
 //invader images/ticker
 var invadertic = 0;
@@ -446,8 +458,6 @@ function newWordLifeCycle(inputContents, time){
 		explosionTrigger(time, activeRow, inputContents);
 	}
 }
-
-// newWordLifeCycle("Zintis", "bonusword");
 
 /////////////////////////////////////////////////////////////////
 
@@ -882,6 +892,8 @@ function showInstructions(){
 	$('.messageToPlayer').html(tempMessage);
 }
 
+var readyCounter = 0;
+
 function startButtonState(onoff){
 	console.log("onoff", onoff);
 	var tempButton;
@@ -889,6 +901,8 @@ function startButtonState(onoff){
 		tempButton = '<button class="start btn btn-danger middle button" style="background-color:red;">I AM READY</button>';
 	}else if(onoff == "off"){
 		tempButton = "<button class='btn btn-primary middle button' style='background-color:gray;'>X</button>";
+	}else if(onoff == "wait"){
+		tempButton = "<button class='start btn btn-primary middle button' style='background-color:orange;'>!</button>";		
 	}else if(onoff == "next"){
 		tempButton = '<button class="start btn btn-danger middle button" style="background-color:red;">Next Wave</button>';
 	}
@@ -898,8 +912,17 @@ function startButtonState(onoff){
 	var start = $('.start');
 	console.log(start);
     start.on('click', function() {
-        startWave();
-        $("#query").focus();
+    	if(gameState.multiPlayer == false){
+    		startWave();
+	    	$("#query").focus();
+    	}
+   		if(gameState.multiPlayer == true){
+	    	readyCounter++;
+	    	var inRoom = {inRoom: readyCounter}; 
+	    	console.log(readyCounter);
+	    	gameState.playersInRoom = readyCounter;
+	    	roomRef.update(inRoom);
+    	}
     });
 }
 
