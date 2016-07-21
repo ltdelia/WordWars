@@ -15,8 +15,9 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 			email = user.email;
 			// Set currentUser to match the displayName stored in the logged in profile
 			currentUser = user.displayName;
+			gameTotals.username = currentUser;
 			// Display their credentials to the console
-			console.log("Name: ", name);
+			console.log("Name: ", currentUser);
 			console.log("Email: ", email);
 		}
 	}else{
@@ -24,9 +25,9 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 	}
 })
 
-//this if for you lou!
-//newWordLifeCycle("Zintis", "bonusword");
-
+setTimeout(function(){
+	console.log("The Username in the gameTotals object: ", gameTotals.username);
+},3000);
 
 //////////////////////////////////////////////////////////////////////////
 //Basic Game Information
@@ -79,7 +80,7 @@ roomRef.once('value')
 
 
 var gameTotals = {
-	username: currentUser,
+	username: null,
 	words: 0,
 	points: 0,
 	missedWords: 0,
@@ -87,6 +88,8 @@ var gameTotals = {
 	enemies: 0,
 	timeElapsed: 0
 }
+
+
 
 var gameData = []
 

@@ -69,7 +69,7 @@ function printRooms(room, roomID, userInside){
 	$('#joinButton').on('click', function(){
 
 		// Declare an object with property user2, value is the currentUser
-		var userTwo = {user2: currentUser};
+		var userTwo = {user2: {name: currentUser, wordAttack: ""}};
 		// Get the ref to Firebase. 
 		// We've structured our schema like so:
 		// rooms
@@ -95,7 +95,7 @@ function printRooms(room, roomID, userInside){
 				// console.log("User One: ", user1);
 				// console.log("User Two: ", user2);
 				// If the current user is user 1 in the room...
-				if(user1 == currentUser){
+				if(user1.name == currentUser){
 					// Log the following error to the console.
 					console.log('Error. You can\'t join a room you\'ve already joined.');
 					// Display the error to the HTML in a modal.
@@ -107,7 +107,7 @@ function printRooms(room, roomID, userInside){
 					$('#errorMessage').html(text);
 					$('#errorModal').modal('show');
 				// Otherwise, if the current user isn't already in the room...
-				}else if(user1 !== currentUser){
+				}else if(user1.name !== currentUser){
 					// Call Firebase.update(), passing in the userTwo object
 					// Update the specific room node with the current user, as user 2
 					roomRef.update(userTwo);
@@ -139,7 +139,7 @@ function createRoom(){
 	var roomID = newRoomRef.key;
 
 	// Push the roomID, user1, user2, and room name to the 'rooms' ref in Firebase
-	newRoomRef.set({'roomID': roomID, 'user1': currentUser, 'user2': "", 'room': room});
+	newRoomRef.set({'roomID': roomID, 'user1': {name: currentUser, wordAttack: ""}, 'user2': {name: "", wordAttack: ""}, 'room': room});
 
 	// Clear the value of the input
 	$('#roomname').val(null);
@@ -201,8 +201,8 @@ roomListRef.on('child_added', function(childSnapshot){
 	var roomData = childSnapshot.val();
 	var room = roomData.room;
 	var roomID = roomData.roomID;
-	var user1 = roomData.user1;
-	var user2 = roomData.user2;
+	var user1 = roomData.user1.name;
+	var user2 = roomData.user2.name;
 	if(user2 == ""){
 		printRooms(room, roomID, user1);		
 	}
@@ -214,8 +214,8 @@ roomListRef.on('child_changed', function(childSnapshot){
 	console.log("This was changed: ", roomData);
 	var room = roomData.room;
 	var roomID = roomData.roomID;
-	var user1 = roomData.user1;
-	var user2 = roomData.user2;	
+	var user1 = roomData.user1.name;
+	var user2 = roomData.user2.name;	
 
 	if(user1 == currentUser){
 		window.location = "/game"+roomID;
