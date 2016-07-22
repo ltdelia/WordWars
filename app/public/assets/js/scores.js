@@ -11,6 +11,7 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 			name = user.displayName;
 			email = user.email;
 			currentUser = user.displayName;
+			$('#currentUser').html('Welcome, '+currentUser+"! ");
 			// Display their credentials to the console
 			console.log("Name: ", name);
 			console.log("Email: ", email);
