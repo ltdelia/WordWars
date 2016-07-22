@@ -197,7 +197,7 @@ var bonusWords = [];
 
 ////////////////////////////////////////////////////////////////
 //ajax call to begin everything
-var URL = "https://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=true&excludePartOfSpeech=proper-noun&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=3&maxLength=10&limit=1000&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5"
+var URL = "http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=true&excludePartOfSpeech=proper-noun&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=3&maxLength=10&limit=1000&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5"
 
 $.ajax({url: URL, success: function(result){
 
@@ -1155,7 +1155,7 @@ $("#query").keyup(function(event){
 
 				}else{
 
-					URL = "https://api.wordnik.com:80/v4/word.json/"+wordMissile+"/definitions?limit=1&includeRelated=true&sourceDictionaries=all&useCanonical=false&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5";
+					URL = "http://api.wordnik.com:80/v4/word.json/"+wordMissile+"/definitions?limit=1&includeRelated=true&sourceDictionaries=all&useCanonical=false&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5";
 
 					$.ajax({url: URL, success: function(result){
 
