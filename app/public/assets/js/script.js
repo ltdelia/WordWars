@@ -219,7 +219,9 @@ $.ajax({url: URL, success: function(result){
 
 	var wordsObject = {'words': wordBank};
 
-	roomRef.update(wordsObject);
+	if(currentUser !== "anonymous" && gameState.multiPlayer == true){
+		roomRef.update(wordsObject);
+	}
 	console.log("Gameloop starts", wordBank);
 	//opens up the modal automatically, but only if the ajax is successful
 	showInstructions();
