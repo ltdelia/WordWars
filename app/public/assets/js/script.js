@@ -16,6 +16,7 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 			// Set currentUser to match the displayName stored in the logged in profile
 			currentUser = user.displayName;
 			gameTotals.username = currentUser;
+			$('#currentUser').html('Player: '+currentUser);
 			// Display their credentials to the console
 			console.log("Name: ", currentUser);
 			console.log("Email: ", email);
@@ -76,71 +77,72 @@ console.log("State of Game: ", gameState.multiPlayer);
 // Reference to our specific game room
 var roomRef = firebase.database().ref('rooms/'+gameState.roomID);
 
-// Getting the values of the room
-roomRef.once('value')
-	.then(function(snapshot){
-		// The entire room object
-		var roomData = snapshot.val();
-		console.log(roomData);
-		var room = roomData.room;
-		var roomID = roomData.roomID;
-		// User 1 and user 2 currently in the room node
-		gameState.player1 = roomData.user1.name;
-		gameState.player2 = roomData.user2.name;
+if(gameState.multiPlayer == true){
+	// Getting the values of the room
+	roomRef.once('value')
+		.then(function(snapshot){
+			// The entire room object
+			var roomData = snapshot.val();
+			console.log(roomData);
+			var room = roomData.room;
+			var roomID = roomData.roomID;
+			// User 1 and user 2 currently in the room node
+			gameState.player1 = roomData.user1.name;
+			gameState.player2 = roomData.user2.name;
+
+			var ready = roomData.ready;
+			gameState.playersReady = roomData.ready;
+			console.log("--------------------");
+			console.log("Room: ", room);
+			console.log("Room ID: ", roomID);
+			console.log("Players in Room: ", gameState.playersReady);
+			console.log("User One: ", gameState.player1);
+			console.log("User Two: ", gameState.player2);
+		});
+
+	// Tracking changes throughout our room ref
+	roomRef.on('child_changed', function(childSnapshot){
+		var roomData = childSnapshot.val();
+
+		var words = roomData.words;
+		// wordBank = roomData.words;
+		console.log("Words in this Room: ", words);
 
 		var ready = roomData.ready;
-		gameState.playersReady = roomData.ready;
-		console.log("--------------------");
-		console.log("Room: ", room);
-		console.log("Room ID: ", roomID);
-		console.log("Players in Room: ", gameState.playersReady);
-		console.log("User One: ", gameState.player1);
-		console.log("User Two: ", gameState.player2);
-	});
 
-
-// Tracking changes throughout our room ref
-roomRef.on('child_changed', function(childSnapshot){
-	var roomData = childSnapshot.val();
-
-	var words = roomData.words;
-	// wordBank = roomData.words;
-	console.log("Words in this Room: ", words);
-
-	var ready = roomData.ready;
-
-	// When 1 user is ready...
-	if(roomData == 1){
-		// Make sure the readyCounter is equal to 1
-		readyCounter = roomData;
-		if(gameState.multiPlayer == true){
-			// Change the button state, so everyone knows that someone is waiting for the other user
-			startButtonState('wait');
+		// When 1 user is ready...
+		if(roomData == 1){
+			// Make sure the readyCounter is equal to 1
+			readyCounter = roomData;
+			if(gameState.multiPlayer == true){
+				// Change the button state, so everyone knows that someone is waiting for the other user
+				startButtonState('wait');
+			}
+			if(gameState.multiPlayer == false){
+				// Start the game
+				startWave();
+			    $("#query").focus();
+			}
 		}
-		if(gameState.multiPlayer == false){
+
+		// When both users are ready...
+		if(roomData == 2){
 			// Start the game
 			startWave();
 		    $("#query").focus();
 		}
-	}
 
-	// When both users are ready...
-	if(roomData == 2){
-		// Start the game
-		startWave();
-	    $("#query").focus();
-	}
-
-	var user = roomData.name;
-	var wordAttack = roomData.wordAttack;
-	// If the user logged in matches the user in the database
-	if(user == currentUser){
-		// We'll call the newWordLifeCycle() method with "bonusword"
-		// This will fire that specific word at the opposing team's screen
-		newWordLifeCycle(wordAttack, "bonusword");	
-	}
-	console.log("Changed: ", roomData);
-})
+		var user = roomData.name;
+		var wordAttack = roomData.wordAttack;
+		// If the user logged in matches the user in the database
+		if(user == currentUser){
+			// We'll call the newWordLifeCycle() method with "bonusword"
+			// This will fire that specific word at the opposing team's screen
+			newWordLifeCycle(wordAttack, "bonusword");	
+		}
+		console.log("Changed: ", roomData);
+	})
+}
 
 var gameTotals = {
 	username: null,
