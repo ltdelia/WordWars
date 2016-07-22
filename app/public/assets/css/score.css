@@ -17,28 +17,23 @@ body {
   font-size: 10px;
   color: yellow;
 }
-button {
-    background-color: Transparent;
-    background-repeat:no-repeat;
-    border: none;
-    cursor:pointer;
-    overflow: hidden;
-    outline:none;
-    color:blue;
-    font-size: 20px;
-}
+
 
 .well{
   background-color: Transparent;
   border: none;
 }
 
-#logOut{
-  margin-top: 10px;
-  
-}
 
 caption {
   color: yellow;
   font-size: 24px;
+}
+
+#currentUser {
+    color: grey;
+}
+
+.table-hover > tbody > tr:hover {
+    color: #727171;
 }
