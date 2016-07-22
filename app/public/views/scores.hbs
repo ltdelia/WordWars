@@ -1,100 +1,75 @@
+<link rel="stylesheet" type="text/css" href="static/assets/css/menu.css">
+
 <link rel="stylesheet" type="text/css" href="static/assets/css/score.css">
 
-<body class = "scorebg">
+<nav class="navbar navbar-default" role="navigation">
+	<div class="container-fluid">
 
-	<nav class="navbar navbar-default" role="navigation">
-		<div class="container-fluid">
-		
-			<!-- Brand and toggle get grouped for better mobile display -->
-			<div class="navbar-header">
-				<a class="navbar-brand">WordWars</a>
-			</div>
-
-			<!-- Collect the nav links, forms, and other content for toggling -->
-			<div class="collapse navbar-collapse navbar-ex1-collapse">
-				<ul class="nav navbar-nav">
-					<li><a href="/menu">Menu</a></li>
-				</ul>
-				<ul class="nav navbar-nav">
-					<li><a href="/scores">High Scores</a></li>
-				</ul>
-				<ul class="nav navbar-nav">
-					<li><a href="/game">Play</a></li>
-				</ul>
-				<ul class="nav navbar-nav navbar-right">
-					<li><button class="btn btn default" id="logOut">Log Out</a></li>
-				</ul>
-			</div><!-- /.navbar-collapse -->
-
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<a class="navbar-brand">WordWars</a>
 		</div>
-	</nav>
 
-	<div class="container">
-
-
-
-		<div class="row">
-			<div class="col-md-6 col-md-6">
-
-				<div class="page-header">
-				  <h1 class="text-center">High Scores</h1>
-				</div>
-				
-				<!--<div class="panel panel-default">
-					<div class="panel-heading">
-						<h2 class="panel-title text-center">High Scores</h2>
-					</div>
-					<div class="panel-body">-->
-
-				<div class="well">
-					<h3 class="text-center"><span class="pull-left label label-primary">1</span> Zintis <span class="pull-right label label-primary">50000</span></h3>
-				</div>
-				<div class="well">
-					<h3 class="text-center"><span class="pull-left label label-primary">2</span> Analben <span class="pull-right label label-primary">45000</span></h3> 
-				</div>
-				<div class="well">
-					<h3 class="text-center"><span class="pull-left label label-primary">3</span> Matt <span class="pull-right label label-primary">43000</span></h3> 
-				</div>
-			</div>
-			<div class="col-md-6 col-md-6">
-
-				<div class="page-header">
-				  <h1 class="text-center">Personal Best</h1>
-				</div>
-				
-				<!--<div class="panel panel-default">
-					<div class="panel-heading">
-						<h2 class="panel-title text-center">High Scores</h2>
-					</div>
-					<div class="panel-body">-->
-
-				<div class="well">
-					<h3 class="text-center"><span class="pull-left label label-primary">1</span> Zintis <span class="pull-right label label-primary">50000</span></h3>
-				</div>
-				<div class="well">
-					<h3 class="text-center"><span class="pull-left label label-primary">2</span> Analben <span class="pull-right label label-primary">45000</span></h3> 
-				</div>
-				<div class="well">
-					<h3 class="text-center"><span class="pull-left label label-primary">3</span> Matt <span class="pull-right label label-primary">43000</span></h3> 
-				</div>
-			</div>
-		</div>
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse navbar-ex1-collapse">
+			<ul class="nav navbar-nav">
+				<li><a href="/menu">Menu</a></li>
+			</ul>
+			<ul class="nav navbar-nav">
+				<li><a href="/scores">High Scores</a></li>
+			</ul>
+			<ul class="nav navbar-nav">
+				<li><a href="/game">Play</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><h5 id="currentUser">Welcome</h5></li>
+				<li><button class="btn btn default" id="logOut">Log Out</a></li>
+			</ul>
+		</div><!-- /.navbar-collapse -->
 	</div>
+</nav>
+<div class="container">
 
-
-
-<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
-<script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyCXnQJ0MgyrTy_vE6zwtHK8863bhjDKx6Y",
-    authDomain: "wordwars-b7992.firebaseapp.com",
-    databaseURL: "https://wordwars-b7992.firebaseio.com",
-    storageBucket: "wordwars-b7992.appspot.com",
-  };
-  firebase.initializeApp(config);
-
-</script>
-
-<script src="static/assets/js/scores.js"></script>
-</body>
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-hover">
+				<caption>High Scores</caption>
+				<thead>
+					<tr>
+						<th> Rank </th>
+						<th> User </th>
+						<th> Score </th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#each highScores}}
+					<tr>
+						<th><span class="badge">{{ @index }}</span></th>
+						<th>{{ username }} </th>
+						<th><span class="badge">{{ points }}</span></th>
+					</tr>
+					{{/each}}
+				</tbody>
+			</table>
+		</div>
+		{{!-- <div class="col-md-6">
+			<table class="table table-hover">
+				<caption>Personal Best</caption>
+				<thead>
+					<tr>
+						<th>Game</th>
+						<th>Score</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#each yourScores}}
+					<tr>
+						<th></th>
+						<th></th>
+					</tr>
+					{{/each}}
+				</tbody>
+			</table>
+		</div> --}}
+	</div>
+</div>

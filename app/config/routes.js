@@ -28,7 +28,14 @@ module.exports = function(app){
 		res.render('game');
 	})
 	app.get('/scores', function(req, res){
-		res.render('scores');
+		Games.findAll({
+			order: 'points DESC',
+			limit: 10
+		}).then(function(highScores){
+			console.log(highScores);
+
+			res.render('scores', {highScores});
+		})
 	})	
 
 
