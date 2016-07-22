@@ -24,6 +24,7 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 			email = user.email;
 			// Set currentUser to match the displayName stored in the logged in profile
 			currentUser = user.displayName;
+			$('#currentUser').html('Welcome, '+currentUser+"! ");
 			// Display their credentials to the console
 			console.log("Name: ", name);
 			console.log("Email: ", email);

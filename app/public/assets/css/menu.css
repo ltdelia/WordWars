@@ -19,3 +19,11 @@ tbody:hover tr:hover{
 	overflow-x: hidden;
 	height: 260px;
 }
+
+#currentUser {
+	color: grey;
+}
+
+.navbar-right {
+	padding-top: 7px;
+}
