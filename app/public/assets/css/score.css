@@ -34,6 +34,10 @@ caption {
     color: grey;
 }
 
+.navbar-right {
+  padding-top: 7px;
+}
+
 .table-hover > tbody > tr:hover {
     color: #727171;
 }
