@@ -22,6 +22,7 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 			console.log("Email: ", email);
 		}
 	}else{
+		// If no one is logged in, set the currentUser as anonymous. Scores won't be tracked.
 		console.log("No one is signed in.");
 		currentUser = "anonymous";
 		gameTotals.username = "anonymous";
