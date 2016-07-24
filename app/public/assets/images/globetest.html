@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+	.image {
+    position: absolute;
+    height: 150%;
+    
+    left:-63%;
+    top:-24%;
+    margin:-60px 0 0 -60px;
+    -webkit-animation:spin 4s linear infinite;
+    -moz-animation:spin 4s linear infinite;
+    animation:spin 600s linear infinite;
+}
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+</style>
+	<title></title>
+</head>
+<body>
+
+<img src="bigglobe.png" class="image">
+
+</body>
+</html>
