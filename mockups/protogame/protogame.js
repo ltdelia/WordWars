@@ -79,7 +79,7 @@ function stringTextBreaker(x){
 
 // this is the menu function
 function beginGame(){
-
+	playInstance ++;
 	points = 0;
 	logger();
 	console.log("Welcome to NodeType");
@@ -98,7 +98,7 @@ function beginGame(){
 				//reset the game
 				loseGame = 0;
 				points = 0;
-				playInstance ++;
+
 				//it starts the player prompt; they can now enter words
 				wordEntry(playInstance);
 				//I think this line is meant to clear a bug where the previous userInput value is stored between uses.
@@ -112,11 +112,22 @@ function beginGame(){
 					countDown();
 					//console logs the gamestate
 					gameStateLog();	
+
 					if (loseGame >= 5){
-						clearInterval(iterate);console.log("game ended");beginGame();
+						clearInterval(iterate);
+						console.log("game over");
+						console.log("Enter your Name");
+
+						prompt.get(['userName'], function(er, result){
+
+							highScores.push({name: result.userName, score: points});
+
+							beginGame();
+							resetGame();
+						})
 					}
 
-				}, 1000);
+				}, 2000);
 				break;
 
 			case '2':
@@ -166,18 +177,27 @@ function gameStateLog(){
 
 //this is a recursive function which checks if your word is in an array, deletes it if it is, and starts itself anew
 function wordEntry(currentGame){
-	prompt.get(['userWord'],function(err, result){
-		var whereIsWord = words.indexOf(result.userWord);
-		
-		if (whereIsWord>=0){
-			console.log(words[whereIsWord]);
-			points+=words[whereIsWord].length;
-			spliceTimeWord(whereIsWord);
-		}
-		if(currentGame == playInstance){
+
+	if(currentGame == playInstance){
+
+		prompt.get(['userWord'],function(err, result){
+
+			var whereIsWord = words.indexOf(result.userWord);
+			
+			if (whereIsWord>=0){
+				console.log(words[whereIsWord]);
+				points+=words[whereIsWord].length;
+				spliceTimeWord(whereIsWord);
+			}
+
+			console.log('currentGame', currentGame);
+			console.log('playInstance', playInstance);
+
+			
 			wordEntry(currentGame);
-		}
-	});
+		
+		});
+	}
 }
 
 // every x seconds it ticks down the timer array and deletes words that have 0 seconds on the timer
@@ -192,20 +212,23 @@ function countDown(){
 			loseGame += 1;
 			spliceTimeWord(x);
 
+
 			if (loseGame >= 5) {
 
 				// clearInterval(iterate);
-				console.log("Enter your Name");
-				prompt.get(['userName'],function(err, result){
 
-					highScores.push({name: result.userName ,score: points});
-					resetGame();
-				});
 
-				logger();
-				console.log("YOU LOSE, YOU HAD ", points, " POINTS!");
-				logger();
-				// beginGame();
+			// 	logger();
+			// 	console.log("YOU LOSE, YOU HAD ", points, " POINTS!");
+			// 	logger();
+
+			// 	console.log("Enter your Name");
+			// 	prompt.get(['userName'],function(err, result){
+
+			// 		highScores.push({name: result.userName ,score: points});
+			// 		resetGame();
+			// 	});
+			// 	// beginGame();
 			}
 
 		}
