@@ -40,7 +40,6 @@ module.exports = function(app){
 
 
 	app.get('/profile/:username', function(req,res){
-		
 
 		Games.findAll({
 			where: {
@@ -87,7 +86,6 @@ module.exports = function(app){
 		};
 	})
 
-
 	app.post('/api/:username?', function(req, res){
 		console.log('Data sent to the server. ', req.body);
 
@@ -102,6 +100,8 @@ module.exports = function(app){
 				wordsTyped: req.body.words,
 				missedWords: req.body.missedWords,
 				timeElapsed: req.body.timeElapsed
+
+				// todo: add more data to this object for profiles.
 			});
 
 			res.json(true)

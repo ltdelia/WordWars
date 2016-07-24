@@ -300,10 +300,10 @@ function wordGun(node){
 				targetCounter++;
 
 				//makes a var that is the part fo the word that matches your word
-				var inputHighlight = targetWord.slice(inputSoFar);
+				var restOfWord = targetWord.slice(inputSoFar);
 				
 				//rewrites the word as "what i've input" + what is left
-				$(this).html("<em>" +  myInput + "</em>" + inputHighlight);
+				$(this).html("<em>" +  myInput + "</em>" + restOfWord);
 
 				// this marks the completion of a typed word and
 				if($SearchField.val() == targetWord){
@@ -331,7 +331,6 @@ function wordGun(node){
 					
 					playAudioZap('play');
 				}
-
 			} 
 		});
 	// }
@@ -1194,6 +1193,7 @@ $("#query").keyup(function(event){
 			console.log("clicker");
 			$(".start").click();
 			closeModal();
+
 
 		}
     }
