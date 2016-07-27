@@ -5,3 +5,11 @@
 .userStats {
 	font-size: 2em;
 }
+
+#currentUser {
+	color: grey;
+}
+
+.navbar-right {
+	padding-top: 7px;
+}
