@@ -1,15 +1,68 @@
-<link rel="stylesheet" href="/static/assets/css/style.css">
+<link rel="stylesheet" href="/static/assets/css/profile.css">
 <script type="text/javascript">
 	console.log(userData);
 </script>
 
-<div class="jumbotron">
+<nav class="navbar navbar-default" role="navigation">
 	<div class="container-fluid">
 
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<a class="navbar-brand">WordWars</a>
+		</div>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse navbar-ex1-collapse">
+			<ul class="nav navbar-nav">
+				<li><a href="/menu">Menu</a></li>	
+			</ul>
+			<ul class="nav navbar-nav">
+				<li><a href="/scores">High Scores</a></li>
+			</ul>
+			<ul class="nav navbar-nav">
+				<li><a href="/game">Play</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><h5 id="currentUser">Welcome</h5></li>
+				<li><button class="btn btn default" id="logOut">Log Out</a></li>
+			</ul>
+		</div><!-- /.navbar-collapse -->
+	</div>
+</nav>
+<div class="jumbotron">
+	<div class="container-fluid">
+		<h1>{{username}}</h1>
+
 		<!--<h1>{{ this.username }}</h1>-->
-		<p>	{{#each userData}}
-				{{ this.points }}
-			{{/each}}
-		</p>
+	</div>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table userStats">
+				<tbody>
+					<tr>
+						<td>Total Points</td>
+						<td>{{totalPoints}}</td>
+					</tr>
+					<tr>
+						<td>Games Played</td>
+						<td>{{gamesPlayed}}</td>
+					</tr>
+					<tr>
+						<td>Points Per Game</td>
+						<td>{{pointsPerGame}}</td>
+					</tr>
+					<tr>
+						<td>Words Typed</td>
+						<td>{{wordsTyped}}</td>
+					</tr>
+					<tr>
+						<td>Words Missed</td>
+						<td>{{wordsMissed}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>

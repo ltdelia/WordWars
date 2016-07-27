@@ -11,11 +11,7 @@ var app = express();
 var PORT = process.env.PORT || 8080;
 
 // Configuring Handlebars
-// app.engine('hbs', expressHandlebars({
-//   defaultLayout: 'main'
-// }));
-// app.set('view engine', 'hbs');
-
+ 
 app.engine('hbs', hbs({extname:'hbs', defaultLayout: 'main', layoutsDir: __dirname + '/app/public/views/layouts'}));
 app.set('views', path.join(__dirname, '/app/public/views'));
 app.set('view engine', 'hbs');
