@@ -1,3 +1,6 @@
+
+var globalTimeVar = 30;
+var globalDifficulty = 1200;
 // We declare a currentUser variable
 var currentUser;
 var currentOpponent;
@@ -48,13 +51,13 @@ var gameState = {
 	missedWords: 0,
 	wave: 0,
 	enemies: 0,
-	difficulty: 2000,
+	difficulty: globalDifficulty,
 	timeStart: 0,
 	timeEnd: 0,
 	endWaveTrigger: false,
-	secondsPerWave: 5,
+	secondsPerWave: globalTimeVar,
 	wordsPerWave: 20, 
-	timeLeft: 5,
+	timeLeft: globalTimeVar,
 	statusCheck: true,
 	multiPlayer: false
 
@@ -795,7 +798,7 @@ function endWave(){
 		var endWaveTicker = 0;
 		readyCounter = 0;
 		$('#row4').html('<div id="victoryTable" class=" white"></div>');
-		$('#row5').html('<div id="victoryTable2" class=" white"></div>');
+		$('#row6').html('<div id="victoryTable2" class=" white"></div>');
 
 		$('.completed').html("Completed!");
 		for(j = 0;j<50;j++){
@@ -804,7 +807,7 @@ function endWave(){
 				var opponent = "vs. " + currentOpponent;
 
 				//-zzzz
-				if(gameState.multiPlayer == true && opponent[endWaveTicker] != null){
+				if(gameState.multiPlayer == true && opponent[endWaveTicker] != null && gameState.multiPlayer == true){
 					$('#victoryTable2').append('<em class="fakeH1 wordTargetAnimate50 word-x2 white">'+opponent[endWaveTicker]+'</em>');
 				}
 			
@@ -822,10 +825,6 @@ function endWave(){
 			}, j*200);
 		}
 
-
-
-
-
 	}else if(gameState.victory == false){
 		$('.completed').html("Defeated!");
 		readyCounter = 0;
@@ -840,7 +839,7 @@ function endWave(){
 		showStats();
 		openModal();
 		$('#row4').html("");
-		$('#row5').html("");
+		$('#row6').html("");
 		startButtonState('next');
 	},3500)
 
@@ -869,7 +868,7 @@ function gameReset(){
 	gameState.timeStart = 0;
 	gameState.timeEnd = 0;
 	gameState.endWaveTrigger = false;
-	gameState.timeLeft = 20;
+	gameState.timeLeft = globalTimeVar;
 	gameState.statusCheck = true;
 	gameReset.enemies = 0;
 
@@ -890,9 +889,9 @@ function fullReset(){
 	gameState.missedWords = 0;
 	gameState.wave = 0;
 	gameState.enemies = 0;
-	gameState.difficulty = 2000;
+	gameState.difficulty = globalDifficulty;
 	gameState.endWaveTrigger = false;
-	gameState.timeLeft = 20;
+	gameState.timeLeft = globalTimeVar;
 	gameState.statusCheck = true;
 
 	
