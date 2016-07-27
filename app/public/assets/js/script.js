@@ -1,6 +1,9 @@
+
+var globalTimeVar = 30;
+var globalDifficulty = 2000;
 // We declare a currentUser variable
 var currentUser;
-
+var currentOpponent;
 // Firebase Auth
 // Check if a user is logged in with Firebase
 firebase.auth().onAuthStateChanged(function(userOnline){
@@ -48,13 +51,13 @@ var gameState = {
 	missedWords: 0,
 	wave: 0,
 	enemies: 0,
-	difficulty: 2000,
+	difficulty: globalDifficulty,
 	timeStart: 0,
 	timeEnd: 0,
 	endWaveTrigger: false,
-	secondsPerWave: 20,
+	secondsPerWave: globalTimeVar,
 	wordsPerWave: 20, 
-	timeLeft: 20,
+	timeLeft: globalTimeVar,
 	statusCheck: true,
 	multiPlayer: false
 
@@ -76,30 +79,67 @@ console.log("State of Game: ", gameState.multiPlayer);
 
 // Firebase Realtime Database
 // Reference to our specific game room
-var roomRef = firebase.database().ref('rooms/'+gameState.roomID);
+var roomRef;
 
 if(gameState.multiPlayer == true){
-	// Getting the values of the room
-	roomRef.once('value')
-		.then(function(snapshot){
-			// The entire room object
-			var roomData = snapshot.val();
-			console.log(roomData);
-			var room = roomData.room;
-			var roomID = roomData.roomID;
-			// User 1 and user 2 currently in the room node
-			gameState.player1 = roomData.user1.name;
-			gameState.player2 = roomData.user2.name;
 
-			var ready = roomData.ready;
-			gameState.playersReady = roomData.ready;
-			console.log("--------------------");
-			console.log("Room: ", room);
-			console.log("Room ID: ", roomID);
-			console.log("Players in Room: ", gameState.playersReady);
-			console.log("User One: ", gameState.player1);
-			console.log("User Two: ", gameState.player2);
-		});
+	roomRef = firebase.database().ref('rooms/'+gameState.roomID);
+	// Getting the values of the room
+	roomRef.once('value').then(function(snapshot){
+		// The entire room object
+		var roomData = snapshot.val();
+		console.log(roomData);
+		var room = roomData.room;
+		var roomID = roomData.roomID;
+		// User 1 and user 2 currently in the room node
+		gameState.player1 = roomData.user1.name;
+		gameState.player2 = roomData.user2.name;
+
+		if(currentUser == gameState.player1){
+			currentOpponent = gameState.player2;
+		}else{
+			currentOpponent = gameState.player1;
+		}
+
+		var ready = roomData.ready;
+		gameState.playersReady = roomData.ready;
+		console.log("--------------------");
+		console.log("Room: ", room);
+		console.log("Room ID: ", roomID);
+		console.log("Players in Room: ", gameState.playersReady);
+		console.log("User One: ", gameState.player1);
+		console.log("User Two: ", gameState.player2);
+
+		if(currentUser == gameState.player1){
+			userBasedTimeout = 1;
+		}else if(currentUser == gameState.player2){
+			userBasedTimeout = 1500;
+		}
+
+		// setTimeout(function(){
+
+		// 	setInterval(function(){
+
+		// 		console.log(roomData,currentUser, currentOpponent);
+		// 		if(roomData.stillPlaying == currentUser){
+		// 			alert("Opponent has left, returning to menu");
+		// 			window.location = '/menu';
+		// 		}else if(roomData.stillPlaying == currentOpponent){
+		// 			console.log("roomData.stillPlaying",roomData.stillPlaying, typeof roomData.stillPlaying);
+		// 			var tempStillPlaying = {'stillPlaying': currentUser};
+		// 			roomRef.update(tempStillPlaying);
+		// 		}else if (roomData.stillPlaying == ""){
+		// 			console.log("roomData.stillPlaying",roomData.stillPlaying, typeof roomData.stillPlaying);
+		// 			var tempStillPlaying = {'stillPlaying': currentUser};
+		// 			roomRef.update(tempStillPlaying);
+		// 		}
+
+		// 	},3000);
+
+		// }, userBasedTimeout)
+		
+
+	});
 
 	// Tracking changes throughout our room ref
 	roomRef.on('child_changed', function(childSnapshot){
@@ -109,7 +149,10 @@ if(gameState.multiPlayer == true){
 		// wordBank = roomData.words;
 		console.log("Words in this Room: ", words);
 
-		var ready = roomData.ready;
+		//this line should probably be deleted -zintis
+		// var ready = roomData.ready;
+
+
 
 		// When 1 user is ready...
 		if(roomData == 1){
@@ -141,10 +184,53 @@ if(gameState.multiPlayer == true){
 			// This will fire that specific word at the opposing team's screen
 			newWordLifeCycle(wordAttack, "bonusword");	
 		}
-		console.log("Changed: ", roomData);
+		console.log("Child Changed roomData: ", roomData);
+		
+		//attempt to 
+
+
+
 	})
 }
 
+var stillPlayingRef = firebase.database().ref('rooms/'+gameState.roomID+'/stillPlaying');
+
+//zintis trying to make someone win by default
+stillPlayingRef.on('value', function(snapshot){
+
+	var tempSnapshot = snapshot.val();
+
+	if(tempSnapshot == currentOpponent){
+		console.log("tempSnapshot", tempSnapshot);
+		console.log("currentOpponent",currentOpponent);
+		gameState.endWaveTrigger = true;
+	}
+
+});
+
+var someoneLost = firebase.database().ref('rooms/'+gameState.roomID+'/loser');
+
+//zintis trying to make someone win by default
+someoneLost.on('value', function(snapshot){
+
+	var tempSnapshot = snapshot.val();
+
+	console.log("tempSnapshot",tempSnapshot);
+
+	if(tempSnapshot == currentOpponent){
+		console.log("tempSnapshot", tempSnapshot);
+		console.log("currentOpponent",currentOpponent);
+		gameState.endWaveTrigger = true;
+	}
+
+});
+
+//mutliplayer loss indicator
+// roomRef.on('child_changed'){
+
+// }
+
+//
 var gameTotals = {
 	username: null,
 	words: 0,
@@ -357,7 +443,7 @@ function wordGun(node){
 //this starts an interval which selects words, checks if you've lost, or won
 function gameLoop(xxyy){
 	//this is the timer per round
-	//DELIA - declare a var and make it equal to the following function
+	//this function needs to be improved so that it doesn't trigger on future waves -zintis
 	setTimeout(function(){
 		gameState.endWaveTrigger = true;
 
@@ -367,7 +453,7 @@ function gameLoop(xxyy){
 		// console.log(gameState.timeLeft);
 		gameState.timeLeft--;
 		$('#waveTime').html(gameState.timeLeft);
-		if(gameState.timeLeft <= 0 || gameState.go == false){
+		if(gameState.timeLeft <= 0 || gameState.go == false || gameState.endWaveTrigger == true){
 			$('#waveTime').html(0);
 			clearInterval(gameClock);
 		}
@@ -490,7 +576,7 @@ function newWordLifeCycle(inputContents, time){
 /////////////////////////////////////////////////////////////////
 
 function explosionTrigger(time, row, word){
-
+	console.log("explosiontrigger");
 	setTimeout(function(){
 
 			if(activeBank[row] == word){
@@ -532,6 +618,7 @@ function explosionTrigger(time, row, word){
 
 //causes the end game if true triggered by finishing word
 function gameStatusCheck(){
+	console.log("gamestatuscheck");
 
 	if(gameState.go == true && gameState.endWaveTrigger == true && gameState.missedWords < 6 && gameState.statusCheck == true){
 		gameState.timeEnd = new Date();
@@ -610,6 +697,14 @@ function gameStart(){
 
 //makes 81 ships in a grid. most of the logic is in "newwordlifecycle"
 function gameOver(){
+	console.log('gameover');
+	var tempLoserObject = {'loser': currentUser};
+//-zzzz
+	if(gameState.multiPlayer == true){
+		console.log("multiplayer loserobject", tempLoserObject);
+		roomRef.update(tempLoserObject);
+	}
+
 	//update database on gameover.
 	console.log('Game Over log: ', gameTotals)
 	
@@ -681,6 +776,7 @@ function startWave(x){
 
 //this is the victory function
 function endWave(){
+	console.log('endWave');
 	// console.log("endwave gameTotals: ", gameTotals);
 	// console.log("endwave gameState: ", gameState);
 
@@ -702,16 +798,33 @@ function endWave(){
 		var endWaveTicker = 0;
 		readyCounter = 0;
 		$('#row4').html('<div id="victoryTable" class=" white"></div>');
+		$('#row6').html('<div id="victoryTable2" class=" white"></div>');
 
 		$('.completed').html("Completed!");
-		for(j = 0;j<8;j++){
+		for(j = 0;j<50;j++){
 			setTimeout(function(){
-					var completed = "Victory!"
-					// console.log(completed[endWaveTicker]);
+				var completed = "Victory!";
+				var opponent = "vs. " + currentOpponent;
+
+				//-zzzz
+				if(gameState.multiPlayer == true && opponent[endWaveTicker] != null && gameState.multiPlayer == true){
+					$('#victoryTable2').append('<em class="fakeH1 wordTargetAnimate50 word-x2 white">'+opponent[endWaveTicker]+'</em>');
+				}
+			
+				// console.log(completed[endWaveTicker]);
+				if(completed[endWaveTicker] != null){
 					$('#victoryTable').append('<em class="fakeH1 wordTargetAnimate50 word-x2 white">'+completed[endWaveTicker]+'</em>');
-					endWaveTicker++;
+				}
+
+				if(opponent[endWaveTicker] == null && completed[endWaveTicker] == null){
+					j = 50;
+				}
+
+				endWaveTicker++;
+
 			}, j*200);
 		}
+
 	}else if(gameState.victory == false){
 		$('.completed').html("Defeated!");
 		readyCounter = 0;
@@ -726,6 +839,7 @@ function endWave(){
 		showStats();
 		openModal();
 		$('#row4').html("");
+		$('#row6').html("");
 		startButtonState('next');
 	},3500)
 
@@ -754,14 +868,17 @@ function gameReset(){
 	gameState.timeStart = 0;
 	gameState.timeEnd = 0;
 	gameState.endWaveTrigger = false;
-	gameState.timeLeft = 20;
+	gameState.timeLeft = globalTimeVar;
 	gameState.statusCheck = true;
+	gameReset.enemies = 0;
 
 	gameHeaderUpdate();
 
 }
 
 function fullReset(){
+
+
 
 	console.log("gameTotals: ", gameTotals);
 
@@ -772,9 +889,9 @@ function fullReset(){
 	gameState.missedWords = 0;
 	gameState.wave = 0;
 	gameState.enemies = 0;
-	gameState.difficulty = 2000;
+	gameState.difficulty = globalDifficulty;
 	gameState.endWaveTrigger = false;
-	gameState.timeLeft = 20;
+	gameState.timeLeft = globalTimeVar;
 	gameState.statusCheck = true;
 
 	
@@ -961,6 +1078,10 @@ function startButtonState(onoff){
 	    	roomRef.update(readyObject);
     	}
     });
+}
+
+function resetFirebase(){
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1203,3 +1324,4 @@ $("#query").keyup(function(event){
 		}
     }
 });
+
