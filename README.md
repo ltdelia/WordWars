@@ -11,7 +11,7 @@ WordWars uses Firebase Authentication for user authentication. Users register fo
 For a brief demonstration of the game at a high level, see [here](https://www.youtube.com/watch?v=dw0R03qUS3A).
 
 # High Level Diagram
-![alt tag](https://raw.githubusercontent.com/ltdelia/WordWars/master/mockups/readme_images/WordWars_High_Level_Diagram.png)
+![alt tag](https://raw.githubusercontent.com/ltdelia/WordWars/master/mockups/readme_images/WordWars High Level Diagram.png)
 
 The diagram above demonstrates the logic occurring throughout the game, both on the client side and the server side.
 
