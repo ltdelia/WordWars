@@ -11,13 +11,17 @@ firebase.auth().onAuthStateChanged(function(userOnline){
 			name = user.displayName;
 			email = user.email;
 			currentUser = user.displayName;
-			var userProfileLink = $('<a>');
-			userProfileLink.attr('href', 'profile/'+currentUser+'');
-			userProfileLink.append('Welcome,'+currentUser+'!');
-			userProfileLink.css('color', 'grey')
-			userProfileLink.append('</a>');
+			if(window.location.pathname != "/scores"){
+				$('#currentUser').html('Welcome,'+currentUser+'!');
+			}else if(window.location.pathname == "/scores"){
+				var userProfileLink = $('<a>');
+				userProfileLink.attr('href', 'profile/'+currentUser+'');
+				userProfileLink.append('Welcome,'+currentUser+'!');
+				userProfileLink.css('color', 'grey')
+				userProfileLink.append('</a>');
+				$('#currentUser').html(userProfileLink);
+			}
 
-			$('#currentUser').html(userProfileLink);
 			// Display their credentials to the console
 			console.log("Name: ", name);
 			console.log("Email: ", email);
