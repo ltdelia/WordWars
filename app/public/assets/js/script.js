@@ -358,8 +358,10 @@ function wordGun(node){
 //this starts an interval which selects words, checks if you've lost, or won
 function gameLoop(xxyy){
 	//this is the timer per round
+	//DELIA - declare a var and make it equal to the following function
 	setTimeout(function(){
 		gameState.endWaveTrigger = true;
+
 	},gameState.secondsPerWave*1000);
 
 	var gameClock = setInterval(function(){
@@ -844,8 +846,8 @@ function showStats(){
 	//write all the temporarily held stats into the modal
 	$('.messageToPlayer').html("");
 	$('#WWtitle').text("Wave: ");
-	console.log("winLoseBanana", winLoseBanana);
-	console.log("wavenum gamestate.wave", gameState.wave);
+	// console.log("winLoseBanana", winLoseBanana);
+	// console.log("wavenum gamestate.wave", gameState.wave);
 	$('.waveNum').html(gameState.wave);
 	$('.messageToPlayer').append("<h5><em>"+winLoseBanana+"</em></h5>" );
 	$('.messageToPlayer').append("<tr><td><h5><em>Points:</em></td><td class='tdpad'><h5>"+tempStats[0]*200*(5-gameState.missedWords)+"</h5></td></tr>" );
@@ -866,6 +868,8 @@ function pushStats(){
 	gameTotals.finalWave = gameState.wave;
 	gameTotals.enemies +=  gameState.enemies;
 	gameTotals.timeElapsed +=  gameState.timeEnd - gameState.timeStart;
+	//-DELIA gameTotals.winner = whomever the winner is
+	//-DELIA gameTotals.loser = whomever the other player is
 }
 
 function openModal(){
