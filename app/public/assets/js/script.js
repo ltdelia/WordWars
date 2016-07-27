@@ -387,10 +387,10 @@ function wordGun(node){
 				targetCounter++;
 
 				//makes a var that is the part fo the word that matches your word
-				var inputHighlight = targetWord.slice(inputSoFar);
+				var restOfWord = targetWord.slice(inputSoFar);
 				
 				//rewrites the word as "what i've input" + what is left
-				$(this).html("<em>" +  myInput + "</em>" + inputHighlight);
+				$(this).html("<em>" +  myInput + "</em>" + restOfWord);
 
 				// this marks the completion of a typed word and
 				if($SearchField.val() == targetWord){
@@ -418,7 +418,6 @@ function wordGun(node){
 					
 					playAudioZap('play');
 				}
-
 			} 
 		});
 	// }
@@ -447,6 +446,7 @@ function gameLoop(xxyy){
 	//this function needs to be improved so that it doesn't trigger on future waves -zintis
 	setTimeout(function(){
 		gameState.endWaveTrigger = true;
+
 	},gameState.secondsPerWave*1000);
 
 	var gameClock = setInterval(function(){
@@ -962,8 +962,8 @@ function showStats(){
 	//write all the temporarily held stats into the modal
 	$('.messageToPlayer').html("");
 	$('#WWtitle').text("Wave: ");
-	console.log("winLoseBanana", winLoseBanana);
-	console.log("wavenum gamestate.wave", gameState.wave);
+	// console.log("winLoseBanana", winLoseBanana);
+	// console.log("wavenum gamestate.wave", gameState.wave);
 	$('.waveNum').html(gameState.wave);
 	$('.messageToPlayer').append("<h5><em>"+winLoseBanana+"</em></h5>" );
 	$('.messageToPlayer').append("<tr><td><h5><em>Points:</em></td><td class='tdpad'><h5>"+tempStats[0]*200*(5-gameState.missedWords)+"</h5></td></tr>" );
@@ -984,6 +984,8 @@ function pushStats(){
 	gameTotals.finalWave = gameState.wave;
 	gameTotals.enemies +=  gameState.enemies;
 	gameTotals.timeElapsed +=  gameState.timeEnd - gameState.timeStart;
+	//-DELIA gameTotals.winner = whomever the winner is
+	//-DELIA gameTotals.loser = whomever the other player is
 }
 
 function openModal(){
@@ -1317,6 +1319,7 @@ $("#query").keyup(function(event){
 			console.log("clicker");
 			$(".start").click();
 			closeModal();
+
 
 		}
     }
