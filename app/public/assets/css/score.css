@@ -41,3 +41,15 @@ caption {
 .table-hover > tbody > tr:hover {
     color: #727171;
 }
+
+.highScores{
+  font-size:1.5em;
+}
+
+.highScores a {
+  color: yellow;
+}
+
+.highScores tr:hover a{
+  color: #727171;
+}

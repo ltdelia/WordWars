@@ -47,11 +47,33 @@ module.exports = function(app){
 			}
 		}).then(function(userData){
 			console.log(userData);
+				
+			var totalPoints = 0,
+				wordsTyped = 0,
+				wordsMissed = 0;
 
-			res.render('profile', {userData});
-		})
+			for(i=0;i<userData.length;i++){
+				totalPoints += userData[i].points;
+				wordsTyped += userData[i].wordsTyped;
+				wordsMissed += userData[i].missedWords;
+			}
 
+			console.log('total user points: ', totalPoints);
+
+			res.render('profile', {
+				username: req.params.username,
+				totalPoints: totalPoints,
+				gamesPlayed: userData.length,
+				pointsPerGame: function(){
+					return parseFloat((this.totalPoints)/(this.gamesPlayed)).toFixed(2);
+				},
+				wordsTyped: wordsTyped,
+				wordsMissed: wordsMissed
+			});
+		});
+		
 	})
+
 
 
 	//DATA
@@ -71,6 +93,15 @@ module.exports = function(app){
 					username: req.params.username
 				}
 			}).then(function(userData){
+				var totalPoints = 0;
+
+				for(i=0;i<userData.length;i++){
+					totalPoints += userData[i].points;
+				}
+
+				console.log('total user points: ', totalPoints);
+				
+
 				res.json(userData);
 			})
 		}
