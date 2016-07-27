@@ -1,6 +1,6 @@
 
 var globalTimeVar = 30;
-var globalDifficulty = 1200;
+var globalDifficulty = 2000;
 // We declare a currentUser variable
 var currentUser;
 var currentOpponent;
