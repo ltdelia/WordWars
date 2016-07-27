@@ -16,13 +16,15 @@ var Games = sequelize.define('games', {
 	enemies: {
 		type: Sequelize.INTEGER
 	},
+	wordsTyped: {
+		type: Sequelize.INTEGER
+	},
 	missedWords: {
 		type: Sequelize.INTEGER
 	},
 	timeElapsed: {
 		type: Sequelize.INTEGER
 	}
-
 },
 	{timestamps: false}
 );
